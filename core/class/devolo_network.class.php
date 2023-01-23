@@ -18,7 +18,7 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
-class template extends eqLogic {
+class devolo_network extends eqLogic {
   /*     * *************************Attributs****************************** */
 
   /*
@@ -141,7 +141,7 @@ class template extends eqLogic {
 
 }
 
-class templateCmd extends cmd {
+class devolo_networkCmd extends cmd {
   /*     * *************************Attributs****************************** */
 
   /*

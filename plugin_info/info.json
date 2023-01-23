@@ -1,6 +1,6 @@
 {
-	"id" : "template",
-	"name" : "Template",
+	"id" : "devolo_network",
+	"name" : "Devolo network",
 	"specialAttributes" : {
 		"object" : {
 			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "input"},
@@ -20,10 +20,10 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
-	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
+	"changelog" : "https://jeedom.github.io/plugin-devolo_network/#language#/changelog",
+	"documentation" : "https://jeedom.github.io/plugin-devolo_network/#language#/",
+	"changelog_beta" : "https://jeedom.github.io/plugin-devolo_network/#language#/beta/changelog",
+	"documentation_beta" : "https://jeedom.github.io/plugin-devolo_network/#language#/beta/",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"
