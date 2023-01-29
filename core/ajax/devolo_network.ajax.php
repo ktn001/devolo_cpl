@@ -28,7 +28,17 @@ try {
     En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
   */
     ajax::init();
+    $action = init('action');
+    log::add("devolo_network","debug","  Ajax devolo_network: action: " . $action);
 
+    if ($action == 'syncDevolo'){
+	    try {
+		    devolo_network::syncDevolo();
+		    ajax::success();
+	    } catch (Exception $e){
+		    ajax::error(displayException($e), $e->getCode());
+	    }
+    }
 
 
     throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));

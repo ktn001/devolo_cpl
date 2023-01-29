@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=65", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [
+    { name = "Markus Bong", email = "m.bong@famabo.de" },
+    { name = "Guido Schmitz", email = "guido.schmitz@fedaix.de"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+description = "devolo PLC devices in Python"
+dependencies = [
+    "httpx>=0.21.0",
+    "protobuf",
+    "zeroconf>=0.32.0",
+]
+dynamic = [
+    "version",
+]
+license = { file = "LICENSE" }
+name = "devolo_plc_api"
+readme = "README.md"
+requires-python = ">= 3.8"
+urls = {changelog = "https://github.com/2Fake/devolo_plc_api/docs/CHANGELOG.md", homepage = "https://github.com/2Fake/devolo_plc_api"}
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "mypy>=0.981"
+]
+test = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-httpx>=0.18.0",
+    "typing-extensions",
+]
+
+[tool.black]
+line-length = 127
+force-exclude = '.*_pb2\.py|.*\.pyi'
+
+[tool.isort]
+filter_files = true
+ignore_whitespace = true
+line_length = 127
+multi_line_output = 1
+order_by_type = true
+profile = "black"
+skip_glob = "*_pb2.py"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint.design]
+max-attributes = 8
+
+[tool.pylint.format]
+ignore-patterns = ".*_pb2.py"
+max-line-length = 127
+
+[tool.pylint.messages_control]
+good-names = "e,ip"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.setuptools]
+packages = { find = {exclude=["docs*", "script*", "tests*"]} }
+
+[tool.setuptools_scm]

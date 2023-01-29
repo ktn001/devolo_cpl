@@ -24,6 +24,26 @@ $("#table_cmd").sortable({
   forcePlaceholderSize: true
 })
 
+$('#bt_syncDevolo').on('click',function(){
+	$.ajax({
+		type: 'POST',
+		url: '/plugins/devolo_network/core/ajax/devolo_network.ajax.php',
+		data: {
+			action: 'syncDevolo'
+		},
+		dataType: 'json',
+		error: function(request, status, error) {
+			handleAjaxError(request, status, error)
+		},
+		success: function(data){
+			if (data.state != 'ok') {
+				$.fn.showAlert({message: data.result, level: "danger"})
+				return
+			}
+		}
+	})
+})
+
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
   if (!isset(_cmd)) {

@@ -1,25 +1,16 @@
 {
 	"id" : "devolo_network",
 	"name" : "Devolo network",
-	"specialAttributes" : {
-		"object" : {
-			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "input"},
-			"toto2" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial number"},"type" : "number"}
-		},
-		"user" : {
-			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "select","values" : [{"value" : "1", "name" : "valeur 1"},{"value" : "plop", "name" : "valeur plop"}]}
-		}
-	},
 	"description" : {
-		"fr_FR": "Template servant de base à la création de plugins pour Jeedom"
+		"fr_FR": "Plugin pour les réseaux CPL de Devolo"
 	},
 	"licence" : "AGPL",
-	"author" : "Jeedom SAS",
+	"author" : "ktn",
 	"require" : "4.2.0",
-	"category" : "programming",
-	"hasDependency" : false,
-	"hasOwnDeamon" : false,
-	"maxDependancyInstallTime" : 0,
+	"category" : "communication",
+	"hasDependency" : true,
+	"hasOwnDeamon" : true,
+	"maxDependancyInstallTime" : 5,
 	"changelog" : "https://jeedom.github.io/plugin-devolo_network/#language#/changelog",
 	"documentation" : "https://jeedom.github.io/plugin-devolo_network/#language#/",
 	"changelog_beta" : "https://jeedom.github.io/plugin-devolo_network/#language#/beta/changelog",

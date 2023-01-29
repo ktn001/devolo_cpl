@@ -19,13 +19,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<br>
 				<span>{{Ajouter}}</span>
 			</div>
+			<div id="bt_syncDevolo" class="cursor eqLogicAction logoSecondary">
+				<i class="fas fa-sync-alt"></i>
+				<br>
+				<span>{{Synchronisation}}</span> 
+			</div>
 			<div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
 				<i class="fas fa-wrench"></i>
 				<br>
 				<span>{{Configuration}}</span>
 			</div>
 		</div>
-		<legend><i class="fas fa-table"></i> {{Mes devolo_networks}}</legend>
+		<legend><i class="fas fa-table"></i> {{Mes équipements Devolo}}</legend>
 		<?php
 		if (count($eqLogics) == 0) {
 			echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Template trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
