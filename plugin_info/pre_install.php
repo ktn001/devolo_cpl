@@ -19,5 +19,5 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement avant la mise à jour du plugin
-function devolo_network_pre_update() {
+function devolo_cpl_pre_update() {
 }

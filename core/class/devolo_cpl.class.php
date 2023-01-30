@@ -18,7 +18,7 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
-class devolo_network extends eqLogic {
+class devolo_cpl extends eqLogic {
     /*     * *************************Attributs****************************** */
 
     /*
@@ -70,91 +70,33 @@ class devolo_network extends eqLogic {
     public static function cronDaily() {}
     */
 
-    public static function dependancy_install() {
-        log::remove(__CLASS__ . '_update');
-        return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__) . '/dependency', 'log' => log::getPathToLog(__CLASS__ . '_update'));
-    }
+   // public static function dependancy_install() {
+   //     log::remove(__CLASS__ . '_update');
+   //     return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__) . '/dependency', 'log' => log::getPathToLog(__CLASS__ . '_update'));
+   // }
 
-    public static function dependancy_info() {
-        $return = array();
-        $return['log'] = log::getPathToLog(__CLASS__ . '_update');
-        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
-        if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
-            $return['state'] = 'in_progress';
-        } else {
-            if (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "devolo-plc-api"') < 1) {
-                $return['state'] = 'nok';
-            } else {
-                $return['state'] = 'ok';
-            }
-        }
-        return $return;
-    }
-
-    public static function deamon_info() {
-        $return = array();
-        $return['log'] = __CLASS__;
-        $return['state'] = 'nok';
-        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
-        if (file_exists($pid_file)) {
-            if (@posix_getsid(trim(file_get_contents($pid_file)))) {
-                $return['state'] = 'ok';
-            } else {
-                shell_exec(system::getCmdSudo() . 'rm -rf ' . $pid_file . ' 2>&1 > /dev/null');
-            }
-        }
-        $return['launchable'] = 'ok';
-        return $return;
-    }
-
-    public static function deamon_start() {
-        self::deamon_stop();
-        $deamon_info = self::deamon_info();
-        if ($deamon_info['launchable'] != 'ok') {
-            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
-        }
-
-        $path = realpath(dirname(__FILE__) . '/../../resources/bin');
-        $cmd = 'python3 ' . $path . '/devolo_networkd.py';
-        $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
-        $cmd .= ' --socketport ' . config::byKey('daemon::port', __CLASS__, '55209');
-        $cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_network/core/php/jeedevolo_network.php';
-        $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__); // l'apikey pour authentifier les échanges suivants
-        $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
-        log::add(__CLASS__, 'info', 'Lancement démon');
-        $result = exec($cmd . ' >> ' . log::getPathToLog('devolo_network_daemon') . ' 2>&1 &');
-        $i = 0;
-        while ($i < 20) {
-            $deamon_info = self::deamon_info();
-            if ($deamon_info['state'] == 'ok') {
-                break;
-            }
-            sleep(1);
-            $i++;
-        }
-        if ($i >= 30) {
-            log::add(__CLASS__, 'error', __('Impossible de lancer le démon, vérifiez le log', __FILE__), 'unableStartDeamon');
-            return false;
-        }
-        message::removeAll(__CLASS__, 'unableStartDeamon');
-        return true;
-    }
-
-    public static function deamon_stop() {
-        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
-        if (file_exists($pid_file)) {
-            $pid = intval(trim(file_get_contents($pid_file)));
-            system::kill($pid);
-        }
-        system::kill('devolo_networkd.py');
-        sleep(1);
-    }
+   // public static function dependancy_info() {
+   //     $return = array();
+   //     $return['log'] = log::getPathToLog(__CLASS__ . '_update');
+   //     $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
+   //     if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
+   //         $return['state'] = 'in_progress';
+   //     } else {
+   //         if (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "devolo-plc-api"') < 1) {
+   //             $return['state'] = 'nok';
+   //         } else {
+   //             $return['state'] = 'ok';
+   //         }
+   //     }
+   //     return $return;
+   // }
 
     public static function syncDevolo() {
         $path = realpath(dirname(__FILE__) . '/../../resources/bin');
-        $cmd = $path . '/syncDevolo.py';
+        $cmd = $path . '/devolo_cpl.py';
+        $cmd .= ' --syncDevolo';
         $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
-        $cmd .= ' 2>>' . log::getPathToLog('devolo_network_out');
+        $cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_out');
 	$lines = [];
         $result = exec($cmd ,$lines, $exitStatus);
 	if ($result === false) {
@@ -236,7 +178,7 @@ class devolo_network extends eqLogic {
 
 }
 
-class devolo_networkCmd extends cmd {
+class devolo_cplCmd extends cmd {
     /*     * *************************Attributs****************************** */
 
     /*

@@ -1,4 +1,4 @@
-PROGRESS_FILE=/tmp/jeedom/devolo_network/dependency #remplacez template par l'ID de votre plugin
+PROGRESS_FILE=/tmp/jeedom/devolo_cpl/dependency #remplacez template par l'ID de votre plugin
 
 if [ ! -z $1 ]; then
     PROGRESS_FILE=$1

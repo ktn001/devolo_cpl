@@ -18,13 +18,13 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
-function devolo_network_install() {
+function devolo_cpl_install() {
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
-function devolo_network_update() {
+function devolo_cpl_update() {
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
-function devolo_network_remove() {
+function devolo_cpl_remove() {
 }

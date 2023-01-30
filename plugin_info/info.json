@@ -1,6 +1,6 @@
 {
-	"id" : "devolo_network",
-	"name" : "Devolo network",
+	"id" : "devolo_cpl",
+	"name" : "Devolo CPL",
 	"description" : {
 		"fr_FR": "Plugin pour les réseaux CPL de Devolo"
 	},
@@ -8,13 +8,13 @@
 	"author" : "ktn",
 	"require" : "4.2.0",
 	"category" : "communication",
-	"hasDependency" : true,
-	"hasOwnDeamon" : true,
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 5,
-	"changelog" : "https://jeedom.github.io/plugin-devolo_network/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-devolo_network/#language#/",
-	"changelog_beta" : "https://jeedom.github.io/plugin-devolo_network/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-devolo_network/#language#/beta/",
+	"changelog" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/changelog",
+	"documentation" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/",
+	"changelog_beta" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/beta/changelog",
+	"documentation_beta" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/beta/",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"

@@ -27,7 +27,7 @@ $("#table_cmd").sortable({
 $('#bt_syncDevolo').on('click',function(){
 	$.ajax({
 		type: 'POST',
-		url: '/plugins/devolo_network/core/ajax/devolo_network.ajax.php',
+		url: '/plugins/devolo_cpl/core/ajax/devolo_cpl.ajax.php',
 		data: {
 			action: 'syncDevolo'
 		},

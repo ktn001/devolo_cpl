@@ -8,6 +8,7 @@ from logging import debug, info, warning, error
 import atexit
 import json
 from jeedom.jeedom import *
+import time
 
 libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-1.1.0/')
 sys.path.append (libDir)
@@ -43,7 +44,7 @@ def options():
 
     parser = argparse.ArgumentParser(allow_abbrev=False)
     actiongrp = parser.add_mutually_exclusive_group()
-    actiongrp.add_argument('-syncDevolo', action='store_true')
+    actiongrp.add_argument('--syncDevolo', action='store_true')
     parser.add_argument('-l', '--loglevel')
     args = parser.parse_known_args()
 
@@ -68,20 +69,21 @@ def syncDevolo():
     for serial in discovered_devices:
         discovered_devices[serial].connect()
         result[serial] = {}
+        result[serial]['serial'] = serial
         result[serial]['model'] = discovered_devices[serial].product
         result[serial]['mac'] = discovered_devices[serial].mac
         network = discovered_devices[serial].plcnet.get_network_overview()
         for i in range (0, len(network.devices)):
             dev = network.devices[i]
-            if dev.mac_address in devices:
-                if devices[dev.mac_address]['name'] != dev.user_device_name:
+            if dev.mac_address in discovered_devices:
+                if devices[dev['mac_address']]['name'] != dev['user_device_name']:
                     warning(f"Deux noms différents pour la mac address {dev.mac_address}: '{devices[dev.mac_address]['name']}' et '{dev.user_device_name}'")
             else:
                 devices[dev.mac_address] = {}
                 devices[dev.mac_address]['name'] = dev.user_device_name
         discovered_devices[serial].disconnect()
     for serial in result:
-        result[serial]['name']=devices[result[serial]['mac']]['name']
+        result[serial]['name'] = devices[result[serial]['mac']]['name']
     print (json.dumps(result))
 
   ###########################

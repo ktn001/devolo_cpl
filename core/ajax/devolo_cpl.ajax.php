@@ -29,11 +29,11 @@ try {
   */
     ajax::init();
     $action = init('action');
-    log::add("devolo_network","debug","  Ajax devolo_network: action: " . $action);
+    log::add("devolo_cpl","debug","  Ajax devolo_cpl: action: " . $action);
 
     if ($action == 'syncDevolo'){
 	    try {
-		    devolo_network::syncDevolo();
+		    devolo_cpl::syncDevolo();
 		    ajax::success();
 	    } catch (Exception $e){
 		    ajax::error(displayException($e), $e->getCode());

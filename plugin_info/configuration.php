@@ -21,8 +21,8 @@ if (!isConnect()) {
   include_file('desktop', '404', 'php');
   die();
 }
-include_file('core', 'devolo_network', 'class', 'devolo_network');
-$defaultPort = config::getDefaultConfiguration('devolo_network')['devolo_network']['daemon::port'];
+include_file('core', 'devolo_cpl', 'class', 'devolo_cpl');
+$defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daemon::port'];
 ?>
 
 <form class="form-horizontal">
