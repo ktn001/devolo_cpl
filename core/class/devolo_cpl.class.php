@@ -91,19 +91,61 @@ class devolo_cpl extends eqLogic {
    //     return $return;
    // }
 
+    public static function getModelInfos($model = Null) {
+	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
+	if ($model == Null) {
+	    return $infos;
+	}
+	if (array_key_exists($model,$infos)){
+	    return $infos[$model];
+	}
+	return Null;
+    }
+
+    public static function createOrUpdate($equipement){
+	if (!is_array($equipement)) {
+	    throw new Exception(__('Information reçues incorrectes',__FILE__));
+	}
+
+	if (!array_key_exists('serial',$equipement)) {
+	    throw new Exception (__("Le n° de serie est indéfini!",__FILE__));
+	}
+	if (!array_key_exists('name',$equipement) || $equipement['name'] == '') {
+	    $equipement['name'] = $equipement['serial'];
+	}
+	$eqLogic = devolo_cpl::byLogicalId($equipement['serial'],__CLASS__);
+	if (is_object($eqLogic)) {
+	    log::add("devolo_cpl","debug",sprintf(__("Mise à jour de '%s'",__FILE__),$equipement['name']));
+	} else {
+	    log::add("devolo_cpl","debug",sprintf(__("Créaction de '%s'",__FILE__),$equipement['name']));
+	    $devolo = new devolo_cpl();
+	    $devolo->setName($equipement['name']);
+	    $devolo->setEqType_name(__CLASS__);
+	    $devolo->setLogicalId($equipement['serial']);
+	    $devolo->setConfiguration("model",$equipement['model']);
+	    $devolo->save();
+	}
+    }
+
     public static function syncDevolo() {
-        $path = realpath(dirname(__FILE__) . '/../../resources/bin');
-        $cmd = $path . '/devolo_cpl.py';
-        $cmd .= ' --syncDevolo';
-        $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
-        $cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_out');
+	$path = realpath(dirname(__FILE__) . '/../../resources/bin');
+	$cmd = $path . '/devolo_cpl.py';
+	$cmd .= ' --syncDevolo';
+	$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
+	$cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_out');
 	$lines = [];
-        $result = exec($cmd ,$lines, $exitStatus);
+	$result = exec($cmd ,$lines, $exitStatus);
 	if ($result === false) {
-		throw new Exception(__("Erreur lors du lancement de syncDevolo.py",__FILE__));
+	    throw new Exception(__("Erreur lors du lancement de syncDevolo.py",__FILE__));
 	}
 	if ($exitStatus != 0) {
-		throw new Exception(__("Erreur lors de l'exécution de syncDevolo.py",__FILE__));
+	    throw new Exception(__("Erreur lors de l'exécution de syncDevolo.py",__FILE__));
+	}
+	log::add("devolo_cpl","info", join(" ",$lines));
+	$equipements = json_decode(join(" ",$lines),true);
+	foreach ($equipements as $equipement) {
+	    log::add("devolo_cpl","debug",print_r($equipement,true));
+	    self::createOrUpdate($equipement);
 	}
     }
 
@@ -173,6 +215,17 @@ class devolo_cpl extends eqLogic {
       // no return value
     }
     */
+
+    public function getImage() {
+	$model = $this->getConfiguration('model');
+	if ($model != "") {
+	    $infos = $this->getModelInfos($model);
+	    if (is_array($infos)) {
+		return "/plugins/devolo_cpl/desktop/img/" . $infos['image'];
+	    }
+	}
+	return parent::getImage();
+    }
 
     /*     * **********************Getteur Setteur*************************** */
 

@@ -1,0 +1,51 @@
+{
+	"Magic 2 WiFi next": {
+		"image" : "Magic_2_WiFi_next.png"
+	},
+	"Magic 2 WiFi 2-1": {
+		"image" : "Magic_2_WiFi_2-1.png"
+	},
+	"Magic 2 LAN triple": {
+		"image" : "Magic_2_LAN_triple.png"
+	},
+	"Magic 2 DinRail": {
+		"image" : "Magic_2_DinRail.png"
+	},
+	"Magic 2 LAN 1-1": {
+		"image" : "Magic_2_LAN_1-1.png"
+	},
+	"Magic 1 WiFi mini": {
+		"image" : "Magic_1_WiFi_mini.png"
+	},
+	"Magic 1 WiFi 2-1": {
+		"image" : "Magic_1_WiFi_2-1.png"
+	},
+	"Magic 1 LAN 1-1": {
+		"image" : "Magic_1_LAN_1-1.png"
+	},
+	"Repeater 5400": {
+		"image" : "Repeater_5400.png"
+	},
+	"Repeater 3000": {
+		"image" : "Repeater_3000.png"
+	},
+	"Repeater 1200": {
+		"image" : "Repeater_1200.png"
+	},
+	"Repeater ac+": {
+		"image" : "Repeater_ac+.png"
+	},
+	"Repeater ac": {
+		"image" : "Repeater_ac.png"
+	},
+	"dLAN 1200+ WiFi ac": {
+		"image" : "Repeater_ac.png"
+	},
+	"dLAN 550+ Wifi": {
+		"image" : "dLAN_550+_Wifi.png"
+	},
+	"dLAN 550 WiFi": {
+		"image" : "dLAN_550_WiFi.png"
+	}
+}
+

@@ -32,6 +32,11 @@ try {
     log::add("devolo_cpl","debug","  Ajax devolo_cpl: action: " . $action);
 
     if ($action == 'syncDevolo'){
+	    unautorizedInDemo();
+	    if (!isConnect('admin')) {
+		    throw new Exception(__('401 - Accès non autorisé',__FILE__));
+	    }
+
 	    try {
 		    devolo_cpl::syncDevolo();
 		    ajax::success();
