@@ -133,6 +133,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
                             <legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
                             <div class="form-group">
+				<label class="col-sm-4 control-label">{{N° de série}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Numéro se série de l'équipement}}"></i></sup>
+                                </label>
+                                <div class="col-sm-6 input-group">
+				    <input type="text" class="eqLogicAttr form-control" data-l1key="logicalId" />
+                                </div>
+                            </div>
+                            <div class="form-group">
 				<label class="col-sm-4 control-label">{{Password}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Même password que pour l'accès à l'interface web de l'équipement}}"></i></sup>
                                 </label>
@@ -141,6 +149,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				    <span class="input-group-btn">
 					<a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 				    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+				<label class="col-sm-4 control-label">{{code produit}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Code du produit remonté par l'équipement lors de la synchronisation}}"></i></sup>
+                                </label>
+                                <div class="col-sm-6 input-group">
+				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="sync_model" disabled />
                                 </div>
                             </div>
                         </div>
@@ -175,6 +191,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					<div style="height:220px;display:flex;justify-content:center;align-items:center;margin-top:30px">
 					   <img id="img_equipement" class="img-reponsive" style="max-height:2oopx;max-width:200px;" src="/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png" onerror="this.src='/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png'"> 
 				    	</div>
+					<div id="code_equipement" style="text-align:center;"></div>
 				    </div>
                                 </div>
                             </div>

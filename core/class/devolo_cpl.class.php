@@ -122,7 +122,12 @@ class devolo_cpl extends eqLogic {
 	    $devolo->setName($equipement['name']);
 	    $devolo->setEqType_name(__CLASS__);
 	    $devolo->setLogicalId($equipement['serial']);
-	    $devolo->setConfiguration("model",$equipement['model']);
+	    $devolo->setConfiguration("sync_model",$equipement['model']);
+	    if (self::getModelInfos($equipement['model']) == Null) {
+		$devolo->setConfiguration("model","autre");
+	    } else {
+		$devolo->setConfiguration("model",$equipement['model']);
+	    }
 	    $devolo->save();
 	}
     }
@@ -194,33 +199,11 @@ class devolo_cpl extends eqLogic {
       $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
     }
 
-    /*
-    * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-    public function toHtml($_version = 'dashboard') {}
-    */
-
-    /*
-    * Permet de déclencher une action avant modification d'une variable de configuration du plugin
-    * Exemple avec la variable "param3"
-    public static function preConfig_param3( $value ) {
-      // do some checks or modify on $value
-      return $value;
-    }
-    */
-
-    /*
-    * Permet de déclencher une action après modification d'une variable de configuration du plugin
-    * Exemple avec la variable "param3"
-    public static function postConfig_param3($value) {
-      // no return value
-    }
-    */
-
     public function getImage() {
 	$model = $this->getConfiguration('model');
 	if ($model != "") {
 	    $infos = $this->getModelInfos($model);
-	    if (is_array($infos)) {
+	    if (is_array($infos) and array_key_exists('image',$infos)) {
 		return "/plugins/devolo_cpl/desktop/img/" . $infos['image'];
 	    }
 	}

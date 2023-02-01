@@ -48,8 +48,10 @@ $('#bt_syncDevolo').on('click',function(){
 /* Mise à jour de l'image lors du chengement de modèle */
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
 	var img = $(this).find('option:selected').attr('img')
+	var val = $(this).find('option:selected').attr('value')
 	console.log(img)
 	$('#img_equipement').attr('src',img)
+	$('#code_equipement').html(val)
 })
 
 /* Fonction permettant l'affichage des commandes dans l'équipement */

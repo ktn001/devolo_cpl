@@ -1,9 +1,12 @@
 {
+	"autre": {
+		"texte" : "{{Modèle inconnu}}"
+	},
 	"Magic 2 WiFi next": {
 		"texte" : "{{Devolo Magic 2 WiFi next}}",
 		"image" : "Magic_2_WiFi_next.png"
 	},
-	"Magic 2 WiFi 2-1": {
+	"Magic 2 WiFi 6": {
 		"texte" : "{{Devolo Magic 2 WiFi 6}}",
 		"image" : "Magic_2_WiFi_2-1.png"
 	},
