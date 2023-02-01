@@ -24,6 +24,7 @@ $("#table_cmd").sortable({
   forcePlaceholderSize: true
 })
 
+/* Bouton de synchronisation des équipements */
 $('#bt_syncDevolo').on('click',function(){
 	$.ajax({
 		type: 'POST',
@@ -42,6 +43,13 @@ $('#bt_syncDevolo').on('click',function(){
 			}
 		}
 	})
+})
+
+/* Mise à jour de l'image lors du chengement de modèle */
+$('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
+	var img = $(this).find('option:selected').attr('img')
+	console.log(img)
+	$('#img_equipement').attr('src',img)
 })
 
 /* Fonction permettant l'affichage des commandes dans l'équipement */

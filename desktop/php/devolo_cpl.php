@@ -133,36 +133,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
                             <legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Nom du paramètre n°1}}
-                                    <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le paramètre n°1 de l'équipement}}"></i></sup>
+				<label class="col-sm-4 control-label">{{Password}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Même password que pour l'accès à l'interface web de l'équipement}}"></i></sup>
                                 </label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="param1" placeholder="{{Paramètre n°1}}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"> {{Mot de passe}}
-                                    <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le mot de passe}}"></i></sup>
-                                </label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="eqLogicAttr form-control inputPassword" data-l1key="configuration" data-l2key="password">
-                                </div>
-                            </div>
-                            <!-- Exemple de champ de saisie du cron d'auto-actualisation avec assistant -->
-                            <!-- La fonction cron de la classe du plugin doit contenir le code prévu pour que ce champ soit fonctionnel -->
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Auto-actualisation}}
-                                    <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}"></i></sup>
-                                </label>
-                                <div class="col-sm-6">
-                                    <div class="input-group">
-                                        <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="autorefresh" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
-                                        <span class="input-group-btn">
-                                            <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
-                                                <i class="fas fa-question-circle"></i>
-                                            </a>
-                                        </span>
-                                    </div>
+                                <div class="col-sm-6 input-group">
+				    <input type="text" class="inputPassword eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" />
+				    <span class="input-group-btn">
+					<a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+				    </span>
                                 </div>
                             </div>
                         </div>
@@ -182,16 +160,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Sélectionner le type d'équipement Devolo}}"></i></sup>
                                 </label>
                                 <div class="col-sm-7">
-                                        <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
-                                        <?php
+                                    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
+                                    <?php
                                         $options = '';
                                         $model_infos = devolo_cpl::getModelInfos();
                                         foreach ($model_infos as $model => $info){
-					    $options .= '<option value="' . $model. '" img="' . $infos['image'] .'">' . $info['texte'] . '</option>';
+					    $image = '/plugins/devolo_cpl/desktop/img/' . $info['image'];
+					    $options .= '<option value="' . $model. '" img="' . $image .'">' . $info['texte'] . '</option>';
                                         }
 					echo $options;
-                                        ?>
-                                        </select>
+                                    ?>
+                                    </select>
+				    <div>
+					<div style="height:220px;display:flex;justify-content:center;align-items:center;margin-top:30px">
+					   <img id="img_equipement" class="img-reponsive" style="max-height:2oopx;max-width:200px;" src="/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png" onerror="this.src='/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png'"> 
+				    	</div>
+				    </div>
                                 </div>
                             </div>
                         </div>

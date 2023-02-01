@@ -186,13 +186,13 @@ class devolo_cpl extends eqLogic {
     /*
     * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
     * Exemple avec le champ "Mot de passe" (password)
+    */
     public function decrypt() {
       $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
     }
     public function encrypt() {
       $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
     }
-    */
 
     /*
     * Permet de modifier l'affichage du widget (également utilisable par les commandes)
