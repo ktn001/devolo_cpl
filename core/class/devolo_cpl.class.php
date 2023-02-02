@@ -21,18 +21,6 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 class devolo_cpl extends eqLogic {
     /*     * *************************Attributs****************************** */
 
-    /*
-    * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-    * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-    public static $_widgetPossibility = array();
-    */
-
-    /*
-    * Permet de crypter/décrypter automatiquement des champs de configuration du plugin
-    * Exemple : "param1" & "param2" seront cryptés mais pas "param3"
-    public static $_encryptConfigKey = array('param1', 'param2');
-    */
-
     /*     * ***********************Methode static*************************** */
 
     /*
@@ -93,6 +81,22 @@ class devolo_cpl extends eqLogic {
 
     public static function getModelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
+	$country = config::byKey('country','devolo_cpl','ch');
+	$imgDir = __DIR__ . '/../../desktop/img/';
+	foreach ($infos as $m => $i ) {
+	    if (!array_key_exists('image',$i)){
+		continue;
+	    }
+	    $img = $i['image'];
+	    if (file_exists($imgDir . $img)){
+		continue;
+	    }
+	    $img = $country . '-' . $img;
+	    if (file_exists($imgDir . $img)){
+		$infos[$m]['image'] = $img;
+	    }
+	}
+	log::add("devolo_cpl","debug",print_r($infos,true));
 	if ($model == Null) {
 	    return $infos;
 	}
@@ -204,7 +208,7 @@ class devolo_cpl extends eqLogic {
 	if ($model != "") {
 	    $infos = $this->getModelInfos($model);
 	    if (is_array($infos) and array_key_exists('image',$infos)) {
-		return "/plugins/devolo_cpl/desktop/img/" . $infos['image'];
+		return '/plugins/devolo_cpl/desktop/img/' . $infos['image'];
 	    }
 	}
 	return parent::getImage();
