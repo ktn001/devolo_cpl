@@ -1,0 +1,8 @@
+{
+	"leds" : {
+		"version" : "0",
+		"name" : "{{LEDS}}",
+		"type" : "info",
+		"subType" : "binary"
+	}
+}

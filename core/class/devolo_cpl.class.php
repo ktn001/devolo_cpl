@@ -170,12 +170,39 @@ class devolo_cpl extends eqLogic {
 
     /*     * *********************Méthodes d'instance************************* */
 
+    // Remontée de l'état de l'équipement
+    public function getEqState() {
+    }
+
+    // Function pour la création des CMD
+    private function createCmds () {
+	log::add("devolo_cpl","info",sprintf(__("Création des commandes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
+	$cmdFile = realpath(__DIR__ . "/../config/cmds.json"); 
+	$configs =  json_decode(file_get_contents($cmdFile),true);
+	foreach ($configs as $logicalId => $config) {
+	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s",__FILE__),$logicalId));
+	    $cmd = $this->getCmd(null, $logicalId);
+	    if (is_object($cmd)) {
+		log::add("devolo_cpl","warning",sprintf(__("La commande '%s' exist déjà",__FILE__),$logicalId));
+		continue;
+	    }
+	    $cmd = new devolo_cplCMD();
+	    $cmd->setEqLogic_id($this->getId());
+	    $cmd->setLogicalId($logicalId);
+	    $cmd->setName(translate::exec($config['name'],$cmdFile));
+	    $cmd->setType($config['type']);
+	    $cmd->setSubType($config['subType']);
+	    $cmd->save();
+	}
+    }
+
     // Fonction exécutée automatiquement avant la création de l'équipement
     public function preInsert() {
     }
 
     // Fonction exécutée automatiquement après la création de l'équipement
     public function postInsert() {
+	$this->createCmds();
     }
 
     // Fonction exécutée automatiquement avant la mise à jour de l'équipement
