@@ -83,15 +83,11 @@ class devolo_cpl extends eqLogic {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
 	$imgDir = __DIR__ . '/../../desktop/img/';
-	foreach ($infos as $m => $i ) {
-	    if (!array_key_exists('image',$i)){
+	foreach (array_keys($infos) as $m ) {
+	    if (!array_key_exists('image',$infos[$m])){
 		continue;
 	    }
-	    $img = $i['image'];
-	    if (file_exists($imgDir . $img)){
-		continue;
-	    }
-	    $img = $country . '-' . $img;
+	    $img = $country . '-' . $infos[$m]['image'];
 	    if (file_exists($imgDir . $img)){
 		$infos[$m]['image'] = $img;
 	    }
