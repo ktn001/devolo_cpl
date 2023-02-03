@@ -92,7 +92,6 @@ class devolo_cpl extends eqLogic {
 		$infos[$m]['image'] = $img;
 	    }
 	}
-	log::add("devolo_cpl","debug",print_r($infos,true));
 	if ($model == Null) {
 	    return $infos;
 	}
@@ -116,6 +115,21 @@ class devolo_cpl extends eqLogic {
 	$eqLogic = devolo_cpl::byLogicalId($equipement['serial'],__CLASS__);
 	if (is_object($eqLogic)) {
 	    log::add("devolo_cpl","debug",sprintf(__("Mise à jour de '%s'",__FILE__),$equipement['name']));
+	    $modified = false;
+	    if ($eqLogic->getName() != $equipement['name']){
+		log::add("devolo_cpl","info",__("Le nom de l'équipement a été changé:",__FILE__) . " " . $eqLogic->getName() . " => " . $equipement['name']);
+		$modified = true;
+		$eqLogic->setName($equipement['name']);
+	    }
+	    if ($eqLogic->getConfiguration("sync_model") != $equipement['model']){
+		log::add("devolo_cpl","info",sprintf(__("Le model de l'équipement %s été changé:",__FILE__),$eqLogoc->getName()) . " " . $eqLogic->getConfiguration('model') . " => " . $equipement['model']);
+		$modified = true;
+		$eqLogic->setConfiguration('sync_model',$equipement['model']);
+		$eqLogic->setConfiguration('model',$equipement['model']);
+	    }
+	    if ($modified) {
+		$eqLogic->save();
+	    }
 	} else {
 	    log::add("devolo_cpl","debug",sprintf(__("Créaction de '%s'",__FILE__),$equipement['name']));
 	    $devolo = new devolo_cpl();

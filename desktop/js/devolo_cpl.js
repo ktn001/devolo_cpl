@@ -41,6 +41,8 @@ $('#bt_syncDevolo').on('click',function(){
 				$.fn.showAlert({message: data.result, level: "danger"})
 				return
 			}
+			console.log(window.location.href)
+			jeedomUtils.loadPage(window.location.href)
 		}
 	})
 })
@@ -49,7 +51,6 @@ $('#bt_syncDevolo').on('click',function(){
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
 	var img = $(this).find('option:selected').attr('img')
 	var val = $(this).find('option:selected').attr('value')
-	console.log(img)
 	$('#img_equipement').attr('src',img)
 	$('#code_equipement').html(val)
 })

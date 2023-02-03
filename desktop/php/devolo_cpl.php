@@ -181,7 +181,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         $options = '';
                                         $model_infos = devolo_cpl::getModelInfos();
                                         foreach ($model_infos as $model => $info){
-					    $image = '/plugins/devolo_cpl/desktop/img/' . $info['image'];
+					    if (array_key_exists('image',$info)) {
+					    	$image = '/plugins/devolo_cpl/desktop/img/' . $info['image'];
+					    } else {
+						$image = "";
+					    }
 					    $options .= '<option value="' . $model. '" img="' . $image .'">' . $info['texte'] . '</option>';
                                         }
 					echo $options;
