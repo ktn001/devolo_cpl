@@ -155,6 +155,3 @@ if action == 'syncDevolo':
     syncDevolo()
 elif action == 'getState':
     asyncio.run(getState(args))
-else:
-    print ("2222222222222222222222222")
-

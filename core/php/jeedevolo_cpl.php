@@ -31,6 +31,11 @@ try {
 	if (isset($result['leds'])) {
 	    $eqLogic->checkAndUpdateCmd('LEDS', $result['leds']);
 	}
+    } elseif ($result['action'] == 'message') {
+	if ($result['code'] == 'devNotAnswer') {
+	    $texte = sprintf(__("L'équipement %s (%s) ne répond pas",__FILE__),$result['serial'],$result['ip']);
+	    log::add("devolo_cpl","error",$texte);
+	}
     }
 } catch (Exception $e) {
     log::add('devolo_cpl', 'error', displayException($e));

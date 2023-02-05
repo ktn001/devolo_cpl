@@ -30,7 +30,9 @@ import asyncio
 
 libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-1.1.0/')
 sys.path.append (libDir)
+import devolo_plc_api
 from devolo_plc_api import Device
+from devolo_plc_api.exceptions.device import *
 
 try:
     from jeedom.jeedom import *
@@ -55,16 +57,24 @@ async def getState (serial, ip, password):
 
 async def execCmd (message):
     logging.info("============== execCmd ==============")
-    async with Device(ip=message['ip']) as dpa:
-        if message['password'] != '':
-            dpa.password = message['password']
-        if message['cmd'] == 'leds':
-            if message['param'] == 0:
-                enable=False
-            else:
-                enable=True
-            success = await dpa.device.async_set_led_setting(enable=enable)
-
+    try:
+        async with Device(ip=message['ip']) as dpa:
+            if message['password'] != '':
+                dpa.password = message['password']
+            if message['cmd'] == 'leds':
+                if message['param'] == 0:
+                    enable=False
+                else:
+                    enable=True
+                success = await dpa.device.async_set_led_setting(enable=enable)
+    except DeviceNotFound as e:
+        logging.error('Send command to demon error : '+str(e))
+        reponse = {}
+        reponse['action'] = 'message'
+        reponse['code'] = 'devNotAnswer'
+        reponse['serial'] = message['serial']
+        reponse['ip'] = message['ip']
+        jeedom_com.send_change_immediate(reponse)
 
 def read_socket():
     global JEEDOM_SOCKET_MESSAGE
@@ -73,13 +83,10 @@ def read_socket():
         if message['apikey'] != _apikey:
             logging.error("Invalid apikey from socket : " + str(message))
             return
-        try:
-            if message['action'] == 'getState':
-                asyncio.run(getState(message['serial'], message['ip'], message['password']))
-            if message['action'] == 'execCmd':
-                asyncio.run(execCmd(message))
-        except Exception as e:
-            logging.error('Send command to demon error : '+str(e))
+        if message['action'] == 'getState':
+            asyncio.run(getState(message['serial'], message['ip'], message['password']))
+        if message['action'] == 'execCmd':
+            asyncio.run(execCmd(message))
 
 def listen():
     jeedom_socket.open()
