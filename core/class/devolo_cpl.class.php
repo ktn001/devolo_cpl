@@ -30,8 +30,13 @@ class devolo_cpl extends eqLogic {
 
     /*
     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-    public static function cron5() {}
     */
+    public static function cron() {
+	$equipements = eqLogic::byType(__CLASS__,True);
+	foreach($equipements as $equipement) {
+	    $equipement->getEqState();
+	}
+    }
 
     /*
     * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
@@ -79,6 +84,65 @@ class devolo_cpl extends eqLogic {
    //     return $return;
    // }
 
+    public static function deamon_info() {
+        $return = array();
+        $return['log'] = __CLASS__;
+        $return['state'] = 'nok';
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        if (file_exists($pid_file)) {
+            if (@posix_getsid(trim(file_get_contents($pid_file)))) {
+                $return['state'] = 'ok';
+            } else {
+                shell_exec(system::getCmdSudo() . 'rm -rf ' . $pid_file . ' 2>&1 > /dev/null');
+            }
+        }
+        $return['launchable'] = 'ok';
+        return $return;
+    }
+
+    public static function deamon_start() {
+        self::deamon_stop();
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['launchable'] != 'ok') {
+            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+        }
+
+        $path = realpath(dirname(__FILE__) . '/../../resources/bin/');
+        $cmd = 'python3 ' . $path . '/devolo_cpld.py';
+        $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
+        $cmd .= ' --socketport ' . config::byKey('daemon::port', __CLASS__ );
+        $cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_cpl/core/php/jeedevolo_cpl.php'; // chemin de la callback url à modifier (voir ci-dessous)
+        $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__); // l'apikey pour authentifier les échanges suivants
+        $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        log::add(__CLASS__, 'info', 'Lancement démon');
+        $result = exec($cmd . ' >> ' . log::getPathToLog('devolo_cpl_daemon') . ' 2>&1 &');
+        $i = 0;
+        while ($i < 20) {
+            $deamon_info = self::deamon_info();
+            if ($deamon_info['state'] == 'ok') {
+                break;
+            }
+            sleep(1);
+            $i++;
+        }
+        if ($i >= 30) {
+            log::add(__CLASS__, 'error', __('Impossible de lancer le démon, vérifiez le log', __FILE__), 'unableStartDeamon');
+            return false;
+        }
+        message::removeAll(__CLASS__, 'unableStartDeamon');
+        return true;
+    }
+
+    public static function deamon_stop() {
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid'; // ne pas modifier
+        if (file_exists($pid_file)) {
+            $pid = intval(trim(file_get_contents($pid_file)));
+            system::kill($pid);
+        }
+        system::kill('templated.py'); // nom du démon à modifier
+        sleep(1);
+    }
+
     public static function getModelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
@@ -122,10 +186,15 @@ class devolo_cpl extends eqLogic {
 		$eqLogic->setName($equipement['name']);
 	    }
 	    if ($eqLogic->getConfiguration("sync_model") != $equipement['model']){
-		log::add("devolo_cpl","info",sprintf(__("Le model de l'équipement %s été changé:",__FILE__),$eqLogoc->getName()) . " " . $eqLogic->getConfiguration('model') . " => " . $equipement['model']);
+		log::add("devolo_cpl","info",sprintf(__("Le model de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('model') . " => " . $equipement['model']);
 		$modified = true;
 		$eqLogic->setConfiguration('sync_model',$equipement['model']);
 		$eqLogic->setConfiguration('model',$equipement['model']);
+	    }
+	    if ($eqLogic->getConfiguration("ip") != $equipement['ip']){
+		log::add("devolo_cpl","info",sprintf(__("L'ip de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('ip') . " => " . $equipement['ip']);
+		$modified = true;
+		$eqLogic->setConfiguration('ip',$equipement['ip']);
 	    }
 	    if ($modified) {
 		$eqLogic->save();
@@ -137,6 +206,7 @@ class devolo_cpl extends eqLogic {
 	    $devolo->setEqType_name(__CLASS__);
 	    $devolo->setLogicalId($equipement['serial']);
 	    $devolo->setConfiguration("sync_model",$equipement['model']);
+	    $devolo->setConfiguration("ip",$equipement['ip']);
 	    if (self::getModelInfos($equipement['model']) == Null) {
 		$devolo->setConfiguration("model","autre");
 	    } else {
@@ -170,8 +240,25 @@ class devolo_cpl extends eqLogic {
 
     /*     * *********************Méthodes d'instance************************* */
 
+
+    public function sendToDaemon($params) {
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['state'] != 'ok') {
+            throw new Exception("Le démon n'est pas démarré");
+        }
+        $params['apikey'] = jeedom::getApiKey(__CLASS__);
+	$params['serial'] = $this->getLogicalId();
+	$params['ip'] = $this->getConfiguration('ip');
+	$params['password'] = $this->getConfiguration('password');
+        $payLoad = json_encode($params);
+        $socket = socket_create(AF_INET, SOCK_STREAM, 0);
+        socket_connect($socket, '127.0.0.1', config::byKey('socketport', __CLASS__, config::byKey('daemon::port',__CLASS__)));
+        socket_write($socket, $payLoad, strlen($payLoad));
+        socket_close($socket);
+    }
     // Remontée de l'état de l'équipement
-    public function getEqState() {
+    public function getEqState () {
+	$this::sendToDaemon(['action' => 'getState']);
     }
 
     // Function pour la création des CMD
@@ -274,8 +361,27 @@ class devolo_cplCmd extends cmd {
     }
     */
 
+    private function sendActionToDaemon ($action, $param = Null, $refresh=true) {
+	$params = [
+	    'action' => "execCmd",
+	    'cmd' => $action,
+	    'param' => $param,
+	    'refresh' => $refresh
+	];
+	$this->getEqLogic()->sendToDaemon($params);
+    }
+
     // Exécution d'une commande
     public function execute($_options = array()) {
+	if ($this->getLogicalId() == 'refresh') {
+	    $this->getEqLogic()->getEqState();
+	}
+	if ($this->getLogicalId() == 'leds_on') {
+	    $this->sendActionToDaemon('leds', 1);
+	}
+	if ($this->getLogicalId() == 'leds_off') {
+	    $this->sendActionToDaemon('leds', 0);
+	}
     }
 
     /*     * **********************Getteur Setteur*************************** */

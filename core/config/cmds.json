@@ -1,8 +1,26 @@
 {
+	"refresh" : {
+		"version" : "0",
+		"name" : "{{Rafraichir}}",
+		"type" : "action",
+		"subType" : "other"
+	},
 	"leds" : {
 		"version" : "0",
 		"name" : "{{LEDS}}",
 		"type" : "info",
 		"subType" : "binary"
+	},
+	"leds_on" : {
+		"version" : "0",
+		"name" : "{{Leds ON}}",
+		"type" : "action",
+		"subType" : "other"
+	},
+	"leds_off" : {
+		"version" : "0",
+		"name" : "{{Leds OFF}}",
+		"type" : "action",
+		"subType" : "other"
 	}
 }

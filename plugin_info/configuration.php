@@ -28,6 +28,7 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group col-md-6 col-sm-12">
+      <legend><i class="fas fa-wrench"></i> {{Plugin}}</legend>
       <label class="col-sm-2 control-label">{{Pays}}
         <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
       </label>
@@ -36,6 +37,13 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 	<option value="fr" selected>{{France}}</option>
 	<option value="ch" selected>{{Suisse}}</option>
       </select>
+    </div>
+    <div class="form-group col-md-6 col-sm-12">
+      <legend><i class="fas fa-university"></i> {{Démon }}</legend>
+      <label class="col-sm-2 control-label">{{Port}}
+        <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
+      </label>
+      <input class="configKey col-sm-2 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
     </div>
   </fieldset>
 </form>
