@@ -8,7 +8,7 @@
 	"author" : "ktn",
 	"require" : "4.2.0",
 	"category" : "communication",
-	"hasDependency" : false,
+	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 5,
 	"changelog" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/changelog",
