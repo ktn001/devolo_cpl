@@ -1,6 +1,7 @@
 {
   "pip3": {
 	  "httpx" :{},
-	  "zeroconf" : {}
+	  "zeroconf" : {},
+	  "protobuf" : {}
   }
 }
