@@ -267,7 +267,7 @@ class devolo_cpl extends eqLogic {
 	$cmdFile = realpath(__DIR__ . "/../config/cmds.json"); 
 	$configs =  json_decode(file_get_contents($cmdFile),true);
 	foreach ($configs as $logicalId => $config) {
-	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s",__FILE__),$logicalId));
+	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s (première passe)",__FILE__),$logicalId));
 	    $cmd = $this->getCmd(null, $logicalId);
 	    if (is_object($cmd)) {
 		log::add("devolo_cpl","warning",sprintf(__("La commande '%s' exist déjà",__FILE__),$logicalId));
@@ -279,7 +279,35 @@ class devolo_cpl extends eqLogic {
 	    $cmd->setName(translate::exec($config['name'],$cmdFile));
 	    $cmd->setType($config['type']);
 	    $cmd->setSubType($config['subType']);
+	    if (isset($config['visible'])){
+		    $cmd->setIsVisible($config['visible']);
+	    }
+	    if (isset($config['template'])){
+		    if (isset($config['template']['dashboard'])){
+			    $cmd->setTemplate('dashboard',$config['template']['dashboard']);
+		    }
+		    if (isset($config['template']['mobile'])){
+			    $cmd->setTemplate('mobile',$config['template']['mobile']);
+		    }
+	    }
 	    $cmd->save();
+	}
+	foreach ($configs as $logicalId => $config) {
+	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s (seconde passe)",__FILE__),$logicalId));
+	    if (isset($config['value'])){
+		$cmdLiee = $this->getCmd(null,$config['value']);
+		if (! is_object($cmdLiee)){
+		    log::add("devolo_cpl","errror",sprintf(__("La commande '%s' est introuvable",__FILE__),$config['value']));
+		    continue;
+		}
+		$cmd = $this->getCmd(null,$logicalId);
+		if (! is_object($cmd)){
+		    log::add("devolo_cpl","errror",sprintf(__("La commande '%s' est introuvable",__FILE__),$logicalId));
+		    continue;
+		}
+		$cmd->setValue($cmdLiee->getId());
+		$cmd->save();
+	    }
 	}
     }
 

@@ -27,6 +27,7 @@ from os.path import join
 import json
 import argparse
 import asyncio
+import httpx
 
 libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-1.1.0/')
 sys.path.append (libDir)
@@ -57,24 +58,15 @@ async def getState (serial, ip, password):
 
 async def execCmd (message):
     logging.info("============== execCmd ==============")
-    try:
-        async with Device(ip=message['ip']) as dpa:
-            if message['password'] != '':
-                dpa.password = message['password']
-            if message['cmd'] == 'leds':
-                if message['param'] == 0:
-                    enable=False
-                else:
-                    enable=True
-                success = await dpa.device.async_set_led_setting(enable=enable)
-    except DeviceNotFound as e:
-        logging.error('Send command to demon error : '+str(e))
-        reponse = {}
-        reponse['action'] = 'message'
-        reponse['code'] = 'devNotAnswer'
-        reponse['serial'] = message['serial']
-        reponse['ip'] = message['ip']
-        jeedom_com.send_change_immediate(reponse)
+    async with Device(ip=message['ip']) as dpa:
+        if message['password'] != '':
+            dpa.password = message['password']
+        if message['cmd'] == 'leds':
+            if message['param'] == 0:
+                enable=False
+            else:
+                enable=True
+            success = await dpa.device.async_set_led_setting(enable=enable)
 
 def read_socket():
     global JEEDOM_SOCKET_MESSAGE
@@ -83,10 +75,44 @@ def read_socket():
         if message['apikey'] != _apikey:
             logging.error("Invalid apikey from socket : " + str(message))
             return
-        if message['action'] == 'getState':
-            asyncio.run(getState(message['serial'], message['ip'], message['password']))
-        if message['action'] == 'execCmd':
-            asyncio.run(execCmd(message))
+        try:
+            if message['action'] == 'getState':
+                asyncio.run(getState(message['serial'], message['ip'], message['password']))
+            if message['action'] == 'execCmd':
+                asyncio.run(execCmd(message))
+        except DeviceNotFound as e:
+            logging.error('Send command to demon error : '+str(e))
+            reponse = {}
+            reponse['action'] = 'message'
+            reponse['code'] = 'devNotAnswer'
+            reponse['serial'] = message['serial']
+            reponse['ip'] = message['ip']
+            jeedom_com.send_change_immediate(reponse)
+        except DevicePasswordProtected as e:
+            logging.error('Send command to demon error : '+str(e))
+            reponse = {}
+            reponse['action'] = 'message'
+            reponse['code'] = 'devPasswordError'
+            reponse['serial'] = message['serial']
+            reponse['ip'] = message['ip']
+            jeedom_com.send_change_immediate(reponse)
+        except httpx.HTTPStatusError as e:
+            logging.error('Send command to demon error : '+str(e))
+            reponse = {}
+            reponse['action'] = 'message'
+            reponse['code'] = 'httpxStatusError'
+            reponse['message'] = str(e)
+            reponse['serial'] = message['serial']
+            reponse['ip'] = message['ip']
+            jeedom_com.send_change_immediate(reponse)
+        except Exception as e:
+            logging.error("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            logging.error('Send command to demon error : '+str(e))
+            logging.error("---------------------------------------------------------------------")
+            logging.error(e.__class__.__name__)
+            logging.error("---------------------------------------------------------------------")
+            logging.error(e)
+            logging.error("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 def listen():
     jeedom_socket.open()

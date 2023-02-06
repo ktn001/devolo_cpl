@@ -35,6 +35,13 @@ try {
 	if ($result['code'] == 'devNotAnswer') {
 	    $texte = sprintf(__("L'équipement %s (%s) ne répond pas",__FILE__),$result['serial'],$result['ip']);
 	    log::add("devolo_cpl","error",$texte);
+	} elseif ($result['code'] == 'devPasswordError') {
+	    $texte = sprintf(__("L'équipement %s (%s): erreur de password",__FILE__),$result['serial'],$result['ip']);
+	    log::add("devolo_cpl","error",$texte);
+	} elseif ($result['code'] == 'httpxStatusError') {
+	    log::add("devolo_cpl","error",$result['message']);
+	} else {
+	    log::add("devolo_cpl","error",$result['code']);
 	}
     }
 } catch (Exception $e) {
