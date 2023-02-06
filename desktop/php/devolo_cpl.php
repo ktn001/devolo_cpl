@@ -141,6 +141,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
                             <div class="form-group">
+				<label class="col-sm-4 control-label">{{Adresse IP}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Adresse IP de l'équipement}}"></i></sup>
+                                </label>
+                                <div class="col-sm-6 input-group">
+				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ip" />
+                                </div>
+                            </div>
+                            <div class="form-group">
 				<label class="col-sm-4 control-label">{{Password}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Même password que pour l'accès à l'interface web de l'équipement}}"></i></sup>
                                 </label>
@@ -152,7 +160,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
                             <div class="form-group">
-				<label class="col-sm-4 control-label">{{code produit}}
+				<label class="col-sm-4 control-label">{{Code produit}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Code du produit remonté par l'équipement lors de la synchronisation}}"></i></sup>
                                 </label>
                                 <div class="col-sm-6 input-group">
