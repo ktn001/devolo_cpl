@@ -11,10 +11,10 @@
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 5,
-	"changelog" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/",
-	"changelog_beta" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-devolo_cpl/#language#/beta/",
+	"changelog" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
+	"documentation" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
+	"changelog_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
+	"documentation_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"
