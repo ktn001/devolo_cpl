@@ -41,19 +41,19 @@ except ImportError:
     print("Error: importing module jeedom.jeedom")
     sys.exit(1)
 
-async def getState (serial, ip, password):
+async def getState (message):
     logging.info("============== getState ==============")
-    async with Device(ip=ip) as dpa:
+    async with Device(ip=message['ip']) as dpa:
         result = {}
         result['action'] = 'getState'
-        result['serial'] = serial
-        if password != '':
-            dpa.password = password
+        result['serial'] = message['serial']
+        if message['password'] != '':
+            dpa.password = message['password']
         if await dpa.device.async_get_led_setting():
             result['leds'] = 1
         else:
             result['leds'] = 0
-        logging.warning(result)
+        logging.debug(result)
         jeedom_com.send_change_immediate(result)
 
 async def execCmd (message):
@@ -62,11 +62,18 @@ async def execCmd (message):
         if message['password'] != '':
             dpa.password = message['password']
         if message['cmd'] == 'leds':
+            logging.info("cmd: 'leds'")
             if message['param'] == 0:
                 enable=False
             else:
                 enable=True
             success = await dpa.device.async_set_led_setting(enable=enable)
+            if success:
+                logging.debug("commande 'leds': OK")
+                await getState(message)
+            else:
+                logging.debug("commande 'leds': KO")
+
 
 def read_socket():
     global JEEDOM_SOCKET_MESSAGE
@@ -77,7 +84,7 @@ def read_socket():
             return
         try:
             if message['action'] == 'getState':
-                asyncio.run(getState(message['serial'], message['ip'], message['password']))
+                asyncio.run(getState(message))
             if message['action'] == 'execCmd':
                 asyncio.run(execCmd(message))
         except DeviceNotFound as e:
