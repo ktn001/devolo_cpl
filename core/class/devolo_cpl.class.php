@@ -139,7 +139,7 @@ class devolo_cpl extends eqLogic {
             $pid = intval(trim(file_get_contents($pid_file)));
             system::kill($pid);
         }
-        system::kill('templated.py'); // nom du démon à modifier
+        system::kill('devolo_cpld.py'); // nom du démon à modifier
         sleep(1);
     }
 
@@ -218,7 +218,7 @@ class devolo_cpl extends eqLogic {
 
     public static function syncDevolo() {
 	$path = realpath(dirname(__FILE__) . '/../../resources/bin');
-	$cmd = $path . '/devolo_cpl.py';
+	$cmd = "python3 " . $path . '/devolo_cpl.py';
 	$cmd .= ' --syncDevolo';
 	$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
 	$cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_out');
