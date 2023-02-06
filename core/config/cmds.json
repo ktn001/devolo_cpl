@@ -28,7 +28,7 @@
 		"name"    : "{{Leds OFF}}",
 		"type"    : "action",
 		"subType" : "other",
-		"value"   : "leds"
+		"value"   : "leds",
 		"template": {
 			"dashboard" : "core::light",
 			"mobile"    : "core::light"
