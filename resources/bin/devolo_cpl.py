@@ -75,24 +75,41 @@ def syncDevolo():
     discovered_devices = devolo_plc_api.network.discover_network()
     result = {}
     devices = {}
-    for serial in discovered_devices:
-        discovered_devices[serial].connect()
-        warning(discovered_devices[serial].__dict__)
-        result[serial] = {}
-        result[serial]['serial'] = serial
-        result[serial]['model'] = discovered_devices[serial].product
-        result[serial]['mac'] = discovered_devices[serial].mac
-        result[serial]['ip'] = discovered_devices[serial].ip
-        network = discovered_devices[serial].plcnet.get_network_overview()
-        for i in range (0, len(network.devices)):
-            dev = network.devices[i]
-            if dev.mac_address in discovered_devices:
-                if devices[dev['mac_address']]['name'] != dev['user_device_name']:
-                    warning(f"Deux noms différents pour la mac address {dev.mac_address}: '{devices[dev.mac_address]['name']}' et '{dev.user_device_name}'")
-            else:
-                devices[dev.mac_address] = {}
-                devices[dev.mac_address]['name'] = dev.user_device_name
-        discovered_devices[serial].disconnect()
+    try:
+        for serial in discovered_devices:
+            discovered_devices[serial].connect()
+            result[serial] = {}
+            result[serial]['serial'] = serial
+            result[serial]['model'] = discovered_devices[serial].product
+            result[serial]['mac'] = discovered_devices[serial].mac
+            result[serial]['ip'] = discovered_devices[serial].ip
+            network = discovered_devices[serial].plcnet.get_network_overview()
+            for i in range (0, len(network.devices)):
+                dev = network.devices[i]
+                if dev.mac_address in discovered_devices:
+                    if devices[dev['mac_address']]['name'] != dev['user_device_name']:
+                        warning(f"Deux noms différents pour la mac address {dev.mac_address}: '{devices[dev.mac_address]['name']}' et '{dev.user_device_name}'")
+                else:
+                    devices[dev.mac_address] = {}
+                    devices[dev.mac_address]['name'] = dev.user_device_name
+            try:
+                discovered_devices[serial].disconnect()
+            except Exception as e:
+                logging.error("++++++++++++++++++++++++++++++++++++++")
+                logging.error("Error disconnecting from device: " + str(e))
+                logging.error("--------------------------------------")
+                logging.error(e.__class__.__name__)
+                logging.error("--------------------------------------")
+                logging.error(e)
+                logging.error("++++++++++++++++++++++++++++++++++++++")
+    except Exception as e:
+        logging.error("======================================")
+        logging.error("Error discovering devices: " + str(e))
+        logging.error("--------------------------------------")
+        logging.error(e.__class__.__name__)
+        logging.error("--------------------------------------")
+        logging.error(e)
+        logging.error("======================================")
     for serial in result:
         result[serial]['name'] = devices[result[serial]['mac']]['name']
     print (json.dumps(result))
