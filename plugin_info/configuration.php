@@ -33,7 +33,7 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
         <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
       </label>
       <select class="configKey col-sm-4 form-control" data-l1key="country">
-	<option value="fr" selected>{{Belgique}}</option>
+	<option value="be" selected>{{Belgique}}</option>
 	<option value="fr" selected>{{France}}</option>
 	<option value="ch" selected>{{Suisse}}</option>
       </select>

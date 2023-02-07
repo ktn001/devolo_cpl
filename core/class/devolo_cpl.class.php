@@ -146,6 +146,9 @@ class devolo_cpl extends eqLogic {
     public static function getModelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
+	if ($country == 'be'){
+	    $country = 'fr';
+	}
 	$imgDir = __DIR__ . '/../../desktop/img/';
 	foreach (array_keys($infos) as $m ) {
 	    if (!array_key_exists('image',$infos[$m])){
@@ -256,6 +259,7 @@ class devolo_cpl extends eqLogic {
         socket_write($socket, $payLoad, strlen($payLoad));
         socket_close($socket);
     }
+
     // Remontée de l'état de l'équipement
     public function getEqState () {
 	$this::sendToDaemon(['action' => 'getState']);
