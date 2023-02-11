@@ -194,6 +194,11 @@ class devolo_cpl extends eqLogic {
 		$eqLogic->setConfiguration('sync_model',$equipement['model']);
 		$eqLogic->setConfiguration('model',$equipement['model']);
 	    }
+	    if ($eqLogic->getConfiguration("mac") != $equipement['mac']){
+		log::add("devolo_cpl","info",sprintf(__("L'adresse mac de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('mac') . " => " . $equipement['mac']);
+		$modified = true;
+		$eqLogic->setConfiguration('mac',$equipement['mac']);
+	    }
 	    if ($eqLogic->getConfiguration("ip") != $equipement['ip']){
 		log::add("devolo_cpl","info",sprintf(__("L'ip de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('ip') . " => " . $equipement['ip']);
 		$modified = true;
@@ -268,9 +273,20 @@ class devolo_cpl extends eqLogic {
     // Function pour la création des CMD
     private function createCmds () {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
-	$cmdFile = realpath(__DIR__ . "/../config/cmds.json"); 
+	$modelFile = __DIR__ . "/../config/models.json"; 
+	$models =  json_decode(file_get_contents($modelFile),true);
+	$model = $this->getConfiguration('model');
+	if ($model and !isset($models[$model])){
+	    throw new Exception(sprintf(__("Le model '%s' est inconnu",__FILE__),$model));
+	}
+	$isManageable = ($models[$model]['manageable'] == 1) ? true : false;
+	
+	$cmdFile = __DIR__ . "/../config/cmds.json"; 
 	$configs =  json_decode(file_get_contents($cmdFile),true);
 	foreach ($configs as $logicalId => $config) {
+	    if (! $isManageable and $config['manageableOnly']) {
+		continue;
+	    }
 	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s (première passe)",__FILE__),$logicalId));
 	    $cmd = $this->getCmd(null, $logicalId);
 	    if (is_object($cmd)) {
@@ -321,11 +337,20 @@ class devolo_cpl extends eqLogic {
 
     // Fonction exécutée automatiquement après la création de l'équipement
     public function postInsert() {
-	$this->createCmds();
     }
 
     // Fonction exécutée automatiquement avant la mise à jour de l'équipement
     public function preUpdate() {
+	    if ($this->getConfiguration('mac') != ''){
+		    $mac = trim(strtoupper($this->getConfiguration('mac')));
+		    if (! preg_match('/^([0-9A-F]{2}:){5}[0-9A-F]{2}$/',$mac)){
+			    if (preg_match('/^[0-9A-F]{12}$/',$mac)){
+				    $mac = rtrim(chunk_split($mac,2,":"),":");
+				    log::add("devolo_cpl","debug","==" . $mac . "==");
+			    }
+		    }
+		    $this->setConfiguration('mac',$mac);
+	    } 
     }
 
     // Fonction exécutée automatiquement après la mise à jour de l'équipement
@@ -338,6 +363,7 @@ class devolo_cpl extends eqLogic {
 
     // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
     public function postSave() {
+	$this->createCmds();
     }
 
     // Fonction exécutée automatiquement avant la suppression de l'équipement

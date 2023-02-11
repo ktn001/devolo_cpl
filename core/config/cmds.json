@@ -1,35 +1,39 @@
 {
 	"refresh" : {
-		"version" : "0",
-		"name"    : "{{Rafraichir}}",
-		"type"    : "action",
-		"subType" : "other"
+		"version"        : "0",
+		"manageableOnly" : "1",
+		"name"           : "{{Rafraichir}}",
+		"type"           : "action",
+		"subType"        : "other"
 	},
 	"leds" : {
-		"version" : "0",
-		"name"    : "{{LEDS}}",
-		"type"    : "info",
-		"subType" : "binary",
-		"visible" : "0"
+		"version"        : "0",
+		"manageableOnly" : "1",
+		"name"           : "{{LEDS}}",
+		"type"           : "info",
+		"subType"        : "binary",
+		"visible"        : "0"
 	},
 	"leds_on" : {
-		"version" : "0",
-		"name"    : "{{Leds ON}}",
-		"type"    : "action",
-		"subType" : "other",
-		"value"   : "leds",
+		"version"        : "0",
+		"manageableOnly" : "1",
+		"name"           : "{{Leds ON}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "leds",
 		"template": {
 			"dashboard" : "core::light",
 			"mobile"    : "core::light"
 		}
 	},
 	"leds_off" : {
-		"version" : "0",
-		"name"    : "{{Leds OFF}}",
-		"type"    : "action",
-		"subType" : "other",
-		"value"   : "leds",
-		"template": {
+		"version"        : "0",
+		"manageableOnly" : "1",
+		"name"           : "{{Leds OFF}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "leds",
+		"template"       : {
 			"dashboard" : "core::light",
 			"mobile"    : "core::light"
 		}

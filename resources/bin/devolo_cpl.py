@@ -93,15 +93,10 @@ def syncDevolo():
                     devices[dev.mac_address] = {}
                     devices[dev.mac_address]['name'] = dev.user_device_name
             try:
-                discovered_devices[serial].disconnect()
-            except Exception as e:
-                logging.error("++++++++++++++++++++++++++++++++++++++")
-                logging.error("Error disconnecting from device: " + str(e))
-                logging.error("--------------------------------------")
-                logging.error(e.__class__.__name__)
-                logging.error("--------------------------------------")
-                logging.error(e)
-                logging.error("++++++++++++++++++++++++++++++++++++++")
+                if discovered_devices[serial]._connected:
+                    discovered_devices[serial].disconnect()
+            except RunTimeError as e:
+                logging.warning(f"Error disconnecting from device (serial: {serial}")
     except Exception as e:
         logging.error("======================================")
         logging.error("Error discovering devices: " + str(e))
@@ -111,7 +106,8 @@ def syncDevolo():
         logging.error(e)
         logging.error("======================================")
     for serial in result:
-        result[serial]['name'] = devices[result[serial]['mac']]['name']
+        if result[serial]['mac'] in devices:
+            result[serial]['name'] = devices[result[serial]['mac']]['name']
     print (json.dumps(result))
 
 #===============================================================================

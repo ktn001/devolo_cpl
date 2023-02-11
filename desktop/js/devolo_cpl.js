@@ -47,10 +47,43 @@ $('#bt_syncDevolo').on('click',function(){
 	})
 })
 
+$('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() {
+	var manageable = $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').find('option:selected').attr('manageable')
+	if (manageable != 1){
+		var cmdToRemove = []
+		$('.cmd.manageable-only').each(function(){
+			var logicalId = $(this).find('.cmdAttr[data-l1key=logicalId]').value()
+			cmdToRemove.push(logicalId)
+		})
+		var message = "{{Le changement de modèle implique la suppression des commandes suivantes:}}"
+		message += "<ul>"
+		for (let i=0; i < cmdToRemove.length; i++) {
+			message += "<li>" + cmdToRemove[i] + "</li>"
+		}
+		message += "<ul>"
+		bootbox.confirm(message, function(result){
+			if (! result) {
+				return
+			}
+			$('.cmd.manageable-only').remove()
+			console.log("SAUVEGARDE")
+			$('.eqLogicAction[data-action=save').trigger('click')
+		})
+	} else {
+		$('.eqLogicAction[data-action=save').trigger('click')
+	}
+})
+
 /* Mise à jour de l'image lors du chengement de modèle */
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
 	var img = $(this).find('option:selected').attr('img')
 	var val = $(this).find('option:selected').attr('value')
+	var manageable = $(this).find('option:selected').attr('manageable')
+	if (manageable == 1){
+		$(".manageable-only").removeClass("hidden")
+	} else {
+		$(".manageable-only").addClass("hidden")
+	}
 	$('#img_equipement').attr('src',img)
 	$('#code_equipement').html(val)
 })
@@ -63,7 +96,17 @@ function addCmdToTable(_cmd) {
   if (!isset(_cmd.configuration)) {
     _cmd.configuration = {}
   }
-  var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
+  manageable = ""
+  if (isset (_cmd.logicalId)){
+    if (isset(cmdsDef[_cmd.logicalId])) {
+      if (isset(cmdsDef[_cmd.logicalId]['manageableOnly'])) {
+        if (cmdsDef[_cmd.logicalId]['manageableOnly'] == 1) {
+          manageable = " manageable-only"
+	}
+      }
+    }
+  }
+  var tr = '<tr class="cmd' + manageable + '" data-cmd_id="' + init(_cmd.id) + '">'
   tr += '<td class="hidden-xs">'
   tr += '<span class="cmdAttr" data-l1key="id"></span>'
   tr += '</td>'
@@ -76,6 +119,9 @@ function addCmdToTable(_cmd) {
   tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">'
   tr += '<option value="">{{Aucune}}</option>'
   tr += '</select>'
+  tr += '</td>'
+  tr += '<td>'
+  tr += '<span class="cmdAttr" data-l1key="logicalId"></span>'
   tr += '</td>'
   tr += '<td>'
   tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
@@ -113,6 +159,7 @@ function addCmdToTable(_cmd) {
       tr.find('.cmdAttr[data-l1key=value]').append(result)
       tr.setValues(_cmd, '.cmdAttr')
       jeedom.cmd.changeType(tr, init(_cmd.subType))
+      $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').trigger('change')
     }
   })
 }
