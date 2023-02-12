@@ -45,7 +45,7 @@ async def getState (message):
     logging.info("============== getState ==============")
     async with Device(ip=message['ip']) as dpa:
         result = {}
-        result['action'] = 'getState'
+        result['action'] = 'infoState'
         result['serial'] = message['serial']
         if message['password'] != '':
             dpa.password = message['password']
@@ -61,6 +61,8 @@ async def execCmd (message):
     async with Device(ip=message['ip']) as dpa:
         if message['password'] != '':
             dpa.password = message['password']
+        
+        ##### leds #####
         if message['cmd'] == 'leds':
             logging.info("cmd: 'leds'")
             if message['param'] == 0:
@@ -70,9 +72,34 @@ async def execCmd (message):
             success = await dpa.device.async_set_led_setting(enable=enable)
             if success:
                 logging.debug("commande 'leds': OK")
-                await getState(message)
             else:
                 logging.debug("commande 'leds': KO")
+
+        ##### locate #####
+        if message['cmd'] == 'locate':
+            logging.info("cmd: 'locate'")
+            if message['param'] == 1:
+                success = await dpa.plcnet.async_identify_device_start()
+                result = {}
+                result['action'] = 'locate'
+                result['serial'] = message['serial']
+                if success:
+                    result = {}
+                    result['action'] = 'infoState'
+                    result['serial'] = message['serial']
+                    result['locate'] = 1
+                    jeedom_com.send_change_immediate(result)
+            else:
+                success = await dpa.plcnet.async_identify_device_stop()
+                if success:
+                    result = {}
+                    result['action'] = 'infoState'
+                    result['serial'] = message['serial']
+                    result['locate'] = 0
+                    jeedom_com.send_change_immediate(result)
+
+        ##### actualisation de l'équipement #####
+        await getState(message)
 
 
 def read_socket():

@@ -27,9 +27,12 @@ try {
 	}
     }
 
-    if ($result['action'] == 'getState') {
+    if ($result['action'] == 'infoState') {
 	if (isset($result['leds'])) {
-	    $eqLogic->checkAndUpdateCmd('LEDS', $result['leds']);
+	    $eqLogic->checkAndUpdateCmd('leds', $result['leds']);
+	}
+	if (isset($result['locate'])) {
+	    $eqLogic->checkAndUpdateCmd('locate', $result['locate']);
 	}
     } elseif ($result['action'] == 'message') {
 	if ($result['code'] == 'devNotAnswer') {

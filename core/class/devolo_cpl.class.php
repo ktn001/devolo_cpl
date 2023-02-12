@@ -126,6 +126,18 @@ class devolo_cpl extends eqLogic {
         sleep(1);
     }
 
+    public static function templateWidget() {
+	$return = [
+	    'action' => [
+		'other' => [
+		    'locate' => [
+		    ]
+		]
+	    ]
+	];
+	return $return;
+    }
+
     public static function getModelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
@@ -177,7 +189,7 @@ class devolo_cpl extends eqLogic {
 		$eqLogic->setConfiguration('sync_model',$equipement['model']);
 		$eqLogic->setConfiguration('model',$equipement['model']);
 	    }
-	    if ($eqLogic->getConfiguration("mac") != $equipement['mac']){
+	    if (strtoupper($eqLogic->getConfiguration("mac")) != str_replace(":","",$equipement['mac'])){
 		log::add("devolo_cpl","info",sprintf(__("L'adresse mac de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('mac') . " => " . $equipement['mac']);
 		$modified = true;
 		$eqLogic->setConfiguration('mac',$equipement['mac']);
@@ -231,7 +243,6 @@ class devolo_cpl extends eqLogic {
 
     /*     * *********************Méthodes d'instance************************* */
 
-
     public function sendToDaemon($params) {
         $deamon_info = self::deamon_info();
         if ($deamon_info['state'] != 'ok') {
@@ -254,7 +265,7 @@ class devolo_cpl extends eqLogic {
     }
 
     // Function pour la création des CMD
-    private function createCmds () {
+    private function createCmds ($level=0) {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
 	$modelFile = __DIR__ . "/../config/models.json"; 
 	$models =  json_decode(file_get_contents($modelFile),true);
@@ -263,7 +274,10 @@ class devolo_cpl extends eqLogic {
 	$cmdFile = __DIR__ . "/../config/cmds.json"; 
 	$configs =  json_decode(file_get_contents($cmdFile),true);
 	foreach ($configs as $logicalId => $config) {
-	    if (! $isManageable and $config['manageableOnly']) {
+	    if ($level != 0 and $level != $config['level']){
+		continue;
+	    }
+	    if (! $isManageable and $config['manageableOnly']){
 		continue;
 	    }
 	    $cmd = $this->getCmd(null, $logicalId);
@@ -278,15 +292,23 @@ class devolo_cpl extends eqLogic {
 	    $cmd->setType($config['type']);
 	    $cmd->setSubType($config['subType']);
 	    if (isset($config['visible'])){
-		    $cmd->setIsVisible($config['visible']);
+		$cmd->setIsVisible($config['visible']);
+	    }
+	    if (isset($config['configuration'])){
+		if (isset($config['configuration']['returnStateValue'])){
+		    $cmd->setConfiguration('returnStateValue',$config['configuration']['returnStateValue']);
+		}
+		if (isset($config['configuration']['returnStateTime'])){
+		    $cmd->setConfiguration('returnStateTime',$config['configuration']['returnStateTime']);
+		}
 	    }
 	    if (isset($config['template'])){
-		    if (isset($config['template']['dashboard'])){
-			    $cmd->setTemplate('dashboard',$config['template']['dashboard']);
-		    }
-		    if (isset($config['template']['mobile'])){
-			    $cmd->setTemplate('mobile',$config['template']['mobile']);
-		    }
+		if (isset($config['template']['dashboard'])){
+		    $cmd->setTemplate('dashboard',$config['template']['dashboard']);
+		}
+		if (isset($config['template']['mobile'])){
+		    $cmd->setTemplate('mobile',$config['template']['mobile']);
+		}
 	    }
 	    $cmd->save();
 	}
@@ -427,6 +449,12 @@ class devolo_cplCmd extends cmd {
 	}
 	if ($this->getLogicalId() == 'leds_off') {
 	    $this->sendActionToDaemon('leds', 0);
+	}
+	if ($this->getLogicalId() == 'locate_on') {
+	    $this->sendActionToDaemon('locate', 1);
+	}
+	if ($this->getLogicalId() == 'locate_off') {
+	    $this->sendActionToDaemon('locate', 0);
 	}
     }
 
