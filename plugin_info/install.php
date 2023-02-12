@@ -37,10 +37,20 @@ function devolo_cpl_upgrade() {
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
 	if ($pluginLevel < 1) {
 		foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+			$eqLogic->createCmds(1);
 			$eqLogic->save();
 		}
 		config::save('pluginLevel',1,'devolo_cpl');
 		$pluginLevel = 1;
+		log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
+	}
+	if ($pluginLevel < 2) {
+		foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+			$eqLogic->createCmds(2);
+			$eqLogic->save();
+		}
+		config::save('pluginLevel',2,'devolo_cpl');
+		$pluginLevel = 2;
 		log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
 	}
 }

@@ -1,13 +1,13 @@
 {
 	"refresh" : {
-		"version"        : "0",
+		"level"          : "0",
 		"manageableOnly" : "1",
 		"name"           : "{{Rafraichir}}",
 		"type"           : "action",
 		"subType"        : "other"
 	},
 	"leds" : {
-		"version"        : "0",
+		"level"          : "0",
 		"manageableOnly" : "1",
 		"name"           : "{{LEDS}}",
 		"type"           : "info",
@@ -15,7 +15,7 @@
 		"visible"        : "0"
 	},
 	"leds_on" : {
-		"version"        : "0",
+		"level"          : "0",
 		"manageableOnly" : "1",
 		"name"           : "{{Leds ON}}",
 		"type"           : "action",
@@ -27,7 +27,7 @@
 		}
 	},
 	"leds_off" : {
-		"version"        : "0",
+		"level"          : "0",
 		"manageableOnly" : "1",
 		"name"           : "{{Leds OFF}}",
 		"type"           : "action",
@@ -36,6 +36,42 @@
 		"template"       : {
 			"dashboard" : "core::light",
 			"mobile"    : "core::light"
+		}
+	},
+	"locate" : {
+		"level"          : "2",
+		"manageableOnly" : "1",
+		"name"           : "{{Locate}}",
+		"type"           : "info",
+		"subType"        : "binary",
+		"visible"        : "0",
+		"configuration"  : {
+			"returnStateValue" : "0",
+			"returnStateTime"  : "2"
+		}
+	},
+	"locate_on" : {
+		"level"          : "2",
+		"manageableOnly" : "1",
+		"name"           : "{{Locate ON}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "locate",
+		"template": {
+			"dashboard" : "devolo_cpl::locate",
+			"mobile"    : "devolo_cpl::locate"
+		}
+	},
+	"locate_off" : {
+		"level"          : "2",
+		"manageableOnly" : "1",
+		"name"           : "{{Locate OFF}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "locate",
+		"template"       : {
+			"dashboard" : "devolo_cpl::locate",
+			"mobile"    : "devolo_cpl::locate"
 		}
 	}
 }
