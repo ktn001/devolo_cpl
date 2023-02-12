@@ -58,8 +58,8 @@
 		"subType"        : "other",
 		"value"          : "locate",
 		"template": {
-			"dashboard" : "core::light",
-			"mobile"    : "core::light"
+			"dashboard" : "devolo_cpl::locate",
+			"mobile"    : "devolo_cpl::locate"
 		}
 	},
 	"locate_off" : {
@@ -70,8 +70,8 @@
 		"subType"        : "other",
 		"value"          : "locate",
 		"template"       : {
-			"dashboard" : "core::light",
-			"mobile"    : "core::light"
+			"dashboard" : "devolo_cpl::locate",
+			"mobile"    : "devolo_cpl::locate"
 		}
 	}
 }

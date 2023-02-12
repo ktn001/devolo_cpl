@@ -131,6 +131,11 @@ class devolo_cpl extends eqLogic {
 	    'action' => [
 		'other' => [
 		    'locate' => [
+			'template' => 'tmplicon',
+			'replace' => [
+			    '#_icon_on_#' => '<i class="icon_green icon fas fa-podcast"></i>',
+			    '#_icon_off_#' => '<i class="icon_blue icon jeedom2-case"></i>'
+			]
 		    ]
 		]
 	    ]
