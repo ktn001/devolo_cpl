@@ -79,6 +79,7 @@ def read_socket():
     global JEEDOM_SOCKET_MESSAGE
     if not JEEDOM_SOCKET_MESSAGE.empty():
         message = json.loads(JEEDOM_SOCKET_MESSAGE.get().decode())
+        logging.debug("received massage: " + str(message))
         if message['apikey'] != _apikey:
             logging.error("Invalid apikey from socket : " + str(message))
             return

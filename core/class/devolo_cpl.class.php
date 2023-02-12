@@ -34,6 +34,10 @@ class devolo_cpl extends eqLogic {
     public static function cron5() {
 	$equipements = eqLogic::byType(__CLASS__,True);
 	foreach($equipements as $equipement) {
+	    if (! $equipement->getConfiguration('isManageable')){
+		continue;
+	    }
+	    log::add("devolo_cpl","debug","cron: " . $equipement->getName());
 	    $equipement->getEqState();
 	}
     }
@@ -62,27 +66,6 @@ class devolo_cpl extends eqLogic {
     * Fonction exécutée automatiquement tous les jours par Jeedom
     public static function cronDaily() {}
     */
-
-   // public static function dependancy_install() {
-   //     log::remove(__CLASS__ . '_update');
-   //     return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__) . '/dependency', 'log' => log::getPathToLog(__CLASS__ . '_update'));
-   // }
-
-   // public static function dependancy_info() {
-   //     $return = array();
-   //     $return['log'] = log::getPathToLog(__CLASS__ . '_update');
-   //     $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
-   //     if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
-   //         $return['state'] = 'in_progress';
-   //     } else {
-   //         if (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "devolo-plc-api"') < 1) {
-   //             $return['state'] = 'nok';
-   //         } else {
-   //             $return['state'] = 'ok';
-   //         }
-   //     }
-   //     return $return;
-   // }
 
     public static function deamon_info() {
         $return = array();
@@ -272,14 +255,10 @@ class devolo_cpl extends eqLogic {
 
     // Function pour la création des CMD
     private function createCmds () {
-	log::add("devolo_cpl","info",sprintf(__("Création des commandes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
+	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
 	$modelFile = __DIR__ . "/../config/models.json"; 
 	$models =  json_decode(file_get_contents($modelFile),true);
-	$model = $this->getConfiguration('model');
-	if ($model and !isset($models[$model])){
-	    throw new Exception(sprintf(__("Le model '%s' est inconnu",__FILE__),$model));
-	}
-	$isManageable = ($models[$model]['manageable'] == 1) ? true : false;
+	$isManageable = $this->getConfiguration('isManageable');
 	
 	$cmdFile = __DIR__ . "/../config/cmds.json"; 
 	$configs =  json_decode(file_get_contents($cmdFile),true);
@@ -287,12 +266,11 @@ class devolo_cpl extends eqLogic {
 	    if (! $isManageable and $config['manageableOnly']) {
 		continue;
 	    }
-	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s (première passe)",__FILE__),$logicalId));
 	    $cmd = $this->getCmd(null, $logicalId);
 	    if (is_object($cmd)) {
-		log::add("devolo_cpl","warning",sprintf(__("La commande '%s' exist déjà",__FILE__),$logicalId));
 		continue;
 	    }
+	    log::add("devolo_cpl","info",sprintf(__("  cmd: %s (première passe)",__FILE__),$logicalId));
 	    $cmd = new devolo_cplCMD();
 	    $cmd->setEqLogic_id($this->getId());
 	    $cmd->setLogicalId($logicalId);
@@ -341,16 +319,16 @@ class devolo_cpl extends eqLogic {
 
     // Fonction exécutée automatiquement avant la mise à jour de l'équipement
     public function preUpdate() {
-	    if ($this->getConfiguration('mac') != ''){
-		    $mac = trim(strtoupper($this->getConfiguration('mac')));
-		    if (! preg_match('/^([0-9A-F]{2}:){5}[0-9A-F]{2}$/',$mac)){
-			    if (preg_match('/^[0-9A-F]{12}$/',$mac)){
-				    $mac = rtrim(chunk_split($mac,2,":"),":");
-				    log::add("devolo_cpl","debug","==" . $mac . "==");
-			    }
-		    }
-		    $this->setConfiguration('mac',$mac);
-	    } 
+	if ($this->getConfiguration('mac') != ''){
+	    $mac = trim(strtoupper($this->getConfiguration('mac')));
+	    if (! preg_match('/^([0-9A-F]{2}:){5}[0-9A-F]{2}$/',$mac)){
+		if (preg_match('/^[0-9A-F]{12}$/',$mac)){
+		    $mac = rtrim(chunk_split($mac,2,":"),":");
+		    log::add("devolo_cpl","debug","==" . $mac . "==");
+		}
+	    }
+	    $this->setConfiguration('mac',$mac);
+	} 
     }
 
     // Fonction exécutée automatiquement après la mise à jour de l'équipement
@@ -359,6 +337,16 @@ class devolo_cpl extends eqLogic {
 
     // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
     public function preSave() {
+	if ($this->getConfiguration('model') == ""){
+	    $this->setConfiguration('model','autre');
+	}
+	$models =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
+	$isManageable = 0;
+	$model = $this->getConfiguration('model');
+	if (isset($models[$model]) and isset($models[$model]['manageable'])){
+	    $isManageable = $models[$model]['manageable'];
+	}
+	$this->setConfiguration('isManageable', $isManageable);
     }
 
     // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
