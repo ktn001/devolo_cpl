@@ -55,20 +55,24 @@ $('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() 
 			var logicalId = $(this).find('.cmdAttr[data-l1key=logicalId]').value()
 			cmdToRemove.push(logicalId)
 		})
-		var message = "{{Le changement de modèle implique la suppression des commandes suivantes:}}"
-		message += "<ul>"
-		for (let i=0; i < cmdToRemove.length; i++) {
-			message += "<li>" + cmdToRemove[i] + "</li>"
-		}
-		message += "<ul>"
-		bootbox.confirm(message, function(result){
-			if (! result) {
-				return
+		if (cmdToRemove.length > 0) {
+			var message = "{{Le changement de modèle implique la suppression des commandes suivantes:}}"
+			message += "<ul>"
+			for (let i=0; i < cmdToRemove.length; i++) {
+				message += "<li>" + cmdToRemove[i] + "</li>"
 			}
-			$('.cmd.manageable-only').remove()
-			console.log("SAUVEGARDE")
+			message += "<ul>"
+			bootbox.confirm(message, function(result){
+				if (! result) {
+					return
+				}
+				$('.cmd.manageable-only').remove()
+				console.log("SAUVEGARDE")
+				$('.eqLogicAction[data-action=save').trigger('click')
+			})
+		} else {
 			$('.eqLogicAction[data-action=save').trigger('click')
-		})
+		}
 	} else {
 		$('.eqLogicAction[data-action=save').trigger('click')
 	}
