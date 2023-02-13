@@ -270,7 +270,7 @@ class devolo_cpl extends eqLogic {
     }
 
     // Function pour la création des CMD
-    private function createCmds ($level=0) {
+    public function createCmds ($level=0) {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
 	$modelFile = __DIR__ . "/../config/models.json"; 
 	$models =  json_decode(file_get_contents($modelFile),true);
