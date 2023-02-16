@@ -36,43 +36,41 @@ function devolo_cpl_goto_3() {
 	config::save('devolo_plc_api::version','1.2.0',devolo_cpl);
 }
 
+function devolo_upgrade_to_level($level) {
+	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+		$eqLogic->createCmds($level);
+		$eqLogic->save();
+	}
+	$sqlFile = __DIR__ . "/sql/upgrade_" . $level . ".sql";
+	if (file_exists($sqlFile)){
+		$sql = file_get_contents($sqlFile);
+		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
+	}
+}
+
 function devolo_cpl_upgrade() {
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	if ($pluginLevel < 1) {
-		foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
-			$eqLogic->createCmds(1);
-			$eqLogic->save();
+	for ($level = 1; $level <= 4; $level++) {
+		if ($pluginLevel < $level) {
+			devolo_upgrade_to_level($level);
+			config::save('pluginLevel',$level,'devolo_cpl');
+			$pluginLevel = $level;
+			log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
 		}
-		config::save('pluginLevel',1,'devolo_cpl');
-		$pluginLevel = 1;
-		log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	}
-	if ($pluginLevel < 2) {
-		foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
-			$eqLogic->createCmds(2);
-			$eqLogic->save();
-		}
-		config::save('pluginLevel',2,'devolo_cpl');
-		$pluginLevel = 2;
-		log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	}
-	if ($pluginLevel < 3) {
-		devolo_cpl_goto_3();
-		config::save('pluginLevel',3,'devolo_cpl');
-		log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
 	}
 }
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function devolo_cpl_install() {
-	log::add("devolo_cpl","warning","devolo_cpl_install");
+	log::add("devolo_cpl","info","Lancement de 'devolo_cpl_install()'");
 	devolo_cpl_checkMac();
 	devolo_cpl_upgrade();
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
 function devolo_cpl_update() {
+	log::add("devolo_cpl","info","Lancement de 'devolo_cpl_update()'");
 	devolo_cpl_checkMac();
 	devolo_cpl_upgrade();
 }
