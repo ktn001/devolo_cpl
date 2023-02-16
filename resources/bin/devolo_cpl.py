@@ -136,6 +136,7 @@ async def getState(arguments):
 
     result = {}
     async with Device(ip=args.ip) as dpa:
+        logging.info(dpa)
         if password:
             dpa.password = password
         if await dpa.device.async_get_led_setting():
