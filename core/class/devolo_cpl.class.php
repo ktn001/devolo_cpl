@@ -25,8 +25,10 @@ class devolo_cpl extends eqLogic {
 
     /*
     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    public static function cron() {}
     */
+    public static function cron() {
+	devolo_cpl::getRates();
+    }
 
     /*
     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
@@ -60,10 +62,13 @@ class devolo_cpl extends eqLogic {
      * Etat du daemon
      */
     public static function deamon_info() {
+	return self::daemon_info();
+    }
+    public static function daemon_info() {
         $return = array();
         $return['log'] = __CLASS__;
         $return['state'] = 'nok';
-        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/daemon.pid';
         if (file_exists($pid_file)) {
             if (@posix_getsid(trim(file_get_contents($pid_file)))) {
                 $return['state'] = 'ok';
@@ -79,9 +84,12 @@ class devolo_cpl extends eqLogic {
      * Lancement de daemon
      */
     public static function deamon_start() {
-        self::deamon_stop();
-        $deamon_info = self::deamon_info();
-        if ($deamon_info['launchable'] != 'ok') {
+	return self::daemon_start();
+    }
+    public static function daemon_start() {
+        self::daemon_stop();
+        $daemon_info = self::daemon_info();
+        if ($daemon_info['launchable'] != 'ok') {
             throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
 
@@ -91,23 +99,23 @@ class devolo_cpl extends eqLogic {
         $cmd .= ' --socketport ' . config::byKey('daemon::port', __CLASS__ );
         $cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_cpl/core/php/jeedevolo_cpl.php'; // chemin de la callback url à modifier (voir ci-dessous)
         $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__); // l'apikey pour authentifier les échanges suivants
-        $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/daemon.pid';
         log::add(__CLASS__, 'info', 'Lancement démon');
         $result = exec($cmd . ' >> ' . log::getPathToLog('devolo_cpl_daemon') . ' 2>&1 &');
         $i = 0;
         while ($i < 20) {
-            $deamon_info = self::deamon_info();
-            if ($deamon_info['state'] == 'ok') {
+            $daemon_info = self::daemon_info();
+            if ($daemon_info['state'] == 'ok') {
                 break;
             }
             sleep(1);
             $i++;
         }
         if ($i >= 30) {
-            log::add(__CLASS__, 'error', __('Impossible de lancer le démon, vérifiez le log', __FILE__), 'unableStartDeamon');
+            log::add(__CLASS__, 'error', __('Impossible de lancer le démon, vérifiez le log', __FILE__));
             return false;
         }
-        message::removeAll(__CLASS__, 'unableStartDeamon');
+        message::removeAll(__CLASS__, 'unableStartDaemon');
         return true;
     }
 
@@ -115,12 +123,16 @@ class devolo_cpl extends eqLogic {
      * Arrêt du daemon
      */
     public static function deamon_stop() {
-        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid'; // ne pas modifier
+    	return self::daemon_stop();
+    }
+    public static function daemon_stop() {
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/daemon.pid'; // ne pas modifier
         if (file_exists($pid_file)) {
             $pid = intval(trim(file_get_contents($pid_file)));
             system::kill($pid);
         }
-        system::kill('devolo_cpld.py'); // nom du démon à modifier
+        sleep(2);
+        system::kill('python.*devolo_cpld.py'); // nom du démon à modifier
         sleep(1);
     }
 
@@ -256,17 +268,26 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    /*     * *********************Méthodes d'instance************************* */
+    public static function getRates() {
+	$equipements = eqLogic::byType(__CLASS__,True);
+	$ipList = [];
+	foreach($equipements as $equipement) {
+	    $ip = $equipement->getConfiguration('ip');
+	    if ($ip){
+		$ipList[] = $ip;
+	    }
+	}
+	$params['action'] = 'getRates';
+	$params['ip'] = join(':',$ipList);
+	self::sendToDaemon($params);
+    }
 
-    public function sendToDaemon($params) {
-        $deamon_info = self::deamon_info();
-        if ($deamon_info['state'] != 'ok') {
+    public static function sendToDaemon($params) {
+        $daemon_info = self::daemon_info();
+        if ($daemon_info['state'] != 'ok') {
             throw new Exception("Le démon n'est pas démarré");
         }
         $params['apikey'] = jeedom::getApiKey(__CLASS__);
-	$params['serial'] = $this->getLogicalId();
-	$params['ip'] = $this->getConfiguration('ip');
-	$params['password'] = $this->getConfiguration('password');
         $payLoad = json_encode($params);
         $socket = socket_create(AF_INET, SOCK_STREAM, 0);
         socket_connect($socket, '127.0.0.1', config::byKey('socketport', __CLASS__, config::byKey('daemon::port',__CLASS__)));
@@ -274,9 +295,18 @@ class devolo_cpl extends eqLogic {
         socket_close($socket);
     }
 
+    /*     * *********************Méthodes d'instance************************* */
+
+    public function PrepareToDaemon($params) {
+	$params['serial'] = $this->getLogicalId();
+	$params['ip'] = $this->getConfiguration('ip');
+	$params['password'] = $this->getConfiguration('password');
+	devolo_cpl::sendToDaemon($params);
+    }
+
     // Remontée de l'état de l'équipement
     public function getEqState () {
-	$this::sendToDaemon(['action' => 'getState']);
+	$this::PrepareToDaemon(['action' => 'getState']);
     }
 
     // Function pour la création des CMD
@@ -451,7 +481,7 @@ class devolo_cplCmd extends cmd {
 	    'param' => $param,
 	    'refresh' => $refresh
 	];
-	$this->getEqLogic()->sendToDaemon($params);
+	$this->getEqLogic()->PrepareToDaemon($params);
     }
 
     // Exécution d'une commande
