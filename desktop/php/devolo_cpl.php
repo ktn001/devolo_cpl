@@ -157,7 +157,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Adresse IP de l'équipement}}"></i></sup>
 				</label>
 				<div class="col-sm-6 input-group">
-				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ip" />
+				    <input type="text" class="eqLogicAttr form-control" data-l1key='configuration' data-l2key="ip" />
 				</div>
 			    </div>
 			    <div class="form-group manageable-only">

@@ -4,12 +4,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # Jeedom is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 
@@ -44,9 +44,9 @@ except ImportError:
 async def getState (message):
     logging.info("============== getState ==============")
     async with Device(ip=message['ip']) as dpa:
-        logging.info("++++++++++++++++++++++++++++++++++++")
-        logging.info(await dpa.plcnet.async_get_network_overview())
-        logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info(await dpa.plcnet.async_get_network_overview())
+        #logging.info("++++++++++++++++++++++++++++++++++++")
         result = {}
         result['action'] = 'infoState'
         result['serial'] = message['serial']
@@ -59,12 +59,31 @@ async def getState (message):
         logging.debug(result)
         jeedom_com.send_change_immediate(result)
 
+async def getRates (message):
+    logging.info("============== getRates ==============")
+    for ip in message['ip'].split(':'):
+        try:
+            async with Device(ip) as dpa:
+                logging.warning("#####################################")
+                infos = await dpa.plcnet.async_get_network_overview()
+                #logging.warning(infos)
+                for i in range(0 , len(infos.data_rates)):
+                    logging.warning(infos.data_rates[i].mac_address_from)
+                    logging.warning(infos.data_rates[i].mac_address_to)
+                    logging.warning(infos.data_rates[i].tx_rate)
+                    logging.warning(infos.data_rates[i].rx_rate)
+                    logging.warning("#####################################")
+                break
+        except:
+            pass
+
+
 async def execCmd (message):
     logging.info("============== execCmd ==============")
     async with Device(ip=message['ip']) as dpa:
         if message['password'] != '':
             dpa.password = message['password']
-        
+
         ##### leds #####
         if message['cmd'] == 'leds':
             logging.info("cmd: 'leds'")
@@ -116,6 +135,8 @@ def read_socket():
         try:
             if message['action'] == 'getState':
                 asyncio.run(getState(message))
+            if message['action'] == 'getRates':
+                asyncio.run(getRates(message))
             if message['action'] == 'execCmd':
                 asyncio.run(execCmd(message))
         except DeviceNotFound as e:
@@ -218,7 +239,7 @@ if args.cycle:
     _cycle = float(args.cycle)
 if args.socketport:
     _socket_port = args.socketport
-        
+
 _socket_port = int(_socket_port)
 
 jeedom_utils.set_log_level(_log_level)
@@ -232,7 +253,7 @@ logging.info('Apikey : '+str(_apikey))
 logging.info('Callback : '+str(_callback))
 
 signal.signal(signal.SIGINT, handler)
-signal.signal(signal.SIGTERM, handler)    
+signal.signal(signal.SIGTERM, handler)
 
 try:
     jeedom_utils.write_pid(str(_pidfile))
