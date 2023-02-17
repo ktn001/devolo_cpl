@@ -47,9 +47,9 @@ except ImportError:
 async def getState (message):
     logging.info("============== getState ==============")
     async with Device(ip=message['ip']) as dpa:
-        logging.info("++++++++++++++++++++++++++++++++++++")
-        logging.info(await dpa.plcnet.async_get_network_overview())
-        logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info(await dpa.plcnet.async_get_network_overview())
+        #logging.info("++++++++++++++++++++++++++++++++++++")
         result = {}
         result['action'] = 'infoState'
         result['serial'] = message['serial']
