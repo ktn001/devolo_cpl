@@ -29,7 +29,10 @@ import argparse
 import asyncio
 import httpx
 
-libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-1.1.0/')
+with open (os.path.dirname(__file__) + '/../etc/devolo_plc_api.version') as versionFile:
+    devolo_cpl_api_version = versionFile.readlines()[0]
+
+libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-' + devolo_cpl_api_version + '/')
 sys.path.append (libDir)
 import devolo_plc_api
 from devolo_plc_api import Device
@@ -251,6 +254,7 @@ logging.info('Socket host : '+str(_socket_host))
 logging.info('PID file : '+str(_pidfile))
 logging.info('Apikey : '+str(_apikey))
 logging.info('Callback : '+str(_callback))
+logging.info('version de devolo_cpl_api : ' +str(devolo_cpl_api_version))
 
 signal.signal(signal.SIGINT, handler)
 signal.signal(signal.SIGTERM, handler)

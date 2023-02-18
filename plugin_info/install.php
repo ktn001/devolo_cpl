@@ -32,6 +32,10 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_3() {
+	config::save('devolo_plc_api::version','1.1.0',devolo_cpl);
+}
+
 function devolo_upgrade_to_level($level) {
 	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
 		$eqLogic->createCmds($level);
@@ -41,6 +45,10 @@ function devolo_upgrade_to_level($level) {
 	if (file_exists($sqlFile)){
 		$sql = file_get_contents($sqlFile);
 		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
+	}
+	$function = 'devolo_upgrade_to_level_' . $level;
+	if (function_exists($function)){
+		$function();
 	}
 }
 

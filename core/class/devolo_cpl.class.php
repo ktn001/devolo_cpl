@@ -45,30 +45,21 @@ class devolo_cpl extends eqLogic {
     }
 
     /*
-    * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-    public static function cron10() {}
-    */
+     * Changement de version pour devolo_plc_api
+     */
+    public static function preConfig_devolo_plc_api_version($version){
+        $etcPath = __DIR__ . '/../../resources/etc';
+	if (! file_exists($etcPath)){
+	    mkdir ($etcPath);
+	    chmod ($etcPath, 0775);
+	}
+	$versionFile = $etcPath . '/devolo_plc_api.version';
+	file_put_contents($versionFile, $version);
+    }
 
     /*
-    * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-    public static function cron15() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-    public static function cron30() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les heures par Jeedom
-    public static function cronHourly() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement tous les jours par Jeedom
-    public static function cronDaily() {}
-    */
-
+     * Etat du daemon
+     */
     public static function deamon_info() {
 	return self::daemon_info();
     }
@@ -88,6 +79,9 @@ class devolo_cpl extends eqLogic {
         return $return;
     }
 
+    /*
+     * Lancement de daemon
+     */
     public static function deamon_start() {
 	return self::daemon_start();
     }
@@ -124,6 +118,9 @@ class devolo_cpl extends eqLogic {
         return true;
     }
 
+    /*
+     * Arrêt du daemon
+     */
     public static function deamon_stop() {
     	return self::daemon_stop();
     }
@@ -138,6 +135,9 @@ class devolo_cpl extends eqLogic {
         sleep(1);
     }
 
+    /*
+     * Widgets spécifiques
+     */
     public static function templateWidget() {
 	$return = [
 	    'action' => [
@@ -155,6 +155,9 @@ class devolo_cpl extends eqLogic {
 	return $return;
     }
 
+    /*
+     * Retourne des infos pour un model d'appareil
+     */
     public static function getModelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
@@ -180,6 +183,9 @@ class devolo_cpl extends eqLogic {
 	return Null;
     }
 
+    /*
+     * Création ou mise à jour d'un équipment suite à une synchro
+     */
     public static function createOrUpdate($equipement){
 	if (!is_array($equipement)) {
 	    throw new Exception(__('Information reçues incorrectes',__FILE__));
@@ -236,6 +242,9 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
+    /*
+     * Lancement d'une synchro
+     */
     public static function syncDevolo() {
 	$path = realpath(dirname(__FILE__) . '/../../resources/bin');
 	$cmd = "python3 " . $path . '/devolo_cpl.py';

@@ -1,7 +1,8 @@
 {
   "pip3": {
-    "httpx" :    { "version" : "0.20.0" },
-    "zeroconf" : { "version" : "0.47.1" },
-    "protobuf" : { "version" : "4.21.12" }
+    "httpx" :              { "version" : "0.20.0" },
+    "zeroconf" :           { "version" : "0.47.1" },
+    "protobuf" :           { "version" : "4.21.12" },
+    "importlib-metadata" : { "version" : "6.0.0" }
   }
 }
