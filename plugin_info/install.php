@@ -33,7 +33,7 @@ function devolo_cpl_checkMac() {
 }
 
 function devolo_cpl_goto_3() {
-	config::save('devolo_plc_api::version','1.1.0',devolo_cpl);
+	config::save('devolo_plc_api::version','1.2.0',devolo_cpl);
 }
 
 function devolo_cpl_upgrade() {
