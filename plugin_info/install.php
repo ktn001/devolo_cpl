@@ -46,7 +46,7 @@ function devolo_upgrade_to_level($level) {
 		$sql = file_get_contents($sqlFile);
 		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
 	}
-	$function = 'devolo_cpl_' . $level;
+	$function = 'devolo_cpl_goto_' . $level;
 	if (function_exists($function)){
 		log::add("devolo_cpl","debug","execution de " . $function . "()");
 		$function();
