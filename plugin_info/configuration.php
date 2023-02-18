@@ -29,21 +29,46 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
   <fieldset>
     <div class="form-group col-md-6 col-sm-12">
       <legend><i class="fas fa-wrench"></i> {{Plugin}}</legend>
-      <label class="col-sm-2 control-label">{{Pays}}
-        <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
-      </label>
-      <select class="configKey col-sm-4 form-control" data-l1key="country">
-	<option value="be" selected>{{Belgique}}</option>
-	<option value="fr" selected>{{France}}</option>
-	<option value="ch" selected>{{Suisse}}</option>
-      </select>
+      <div class="row">
+        <label class="col-sm-4 control-label">{{Pays}}
+          <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
+        </label>
+        <select class="configKey col-sm-4 form-control" data-l1key="country">
+          <option value="be" selected>{{Belgique}}</option>
+          <option value="fr" selected>{{France}}</option>
+          <option value="ch" selected>{{Suisse}}</option>
+        </select>
+      </div>
     </div>
     <div class="form-group col-md-6 col-sm-12">
-      <legend><i class="fas fa-university"></i> {{Démon }}</legend>
-      <label class="col-sm-2 control-label">{{Port}}
-        <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
-      </label>
-      <input class="configKey col-sm-2 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
+      <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage de démon}})</sub></legend>
+      <div class="row">
+        <label class="col-sm-4 control-label">{{Port}}
+          <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
+        </label>
+        <input class="configKey col-sm-2 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
+      </div>
+      <div class="row">
+        <label class="col-sm-4 control-label">{{Version devolo_plc_api}}
+          <sup><i class="fas fa-question-circle" title="{{Sauf indication contraire, veuillez utiliser la dernière version}}"></i></sup>
+        </label>
+        <select class="configKey col-sm-2 form-control" data-l1key="devolo_plc_api::version">
+        <?php
+          $dir = opendir(__DIR__ . "/../3rdparty/");
+          $versions = [];
+          while (false !== ($entry = readdir($dir))){
+            if (preg_match('/^devolo_plc_api-([\d\.]+)$/', $entry, $match)){
+              $versions[] = $match[1];
+	    }
+	  }
+          closedir($dir);
+	  sort($versions);
+	  foreach ($versions as $version) {
+            echo ('<option value="' . $version . '">' . $version . '</option>'); 
+          }
+        ?>
+        </select>
+      </div>
     </div>
   </fieldset>
 </form>
