@@ -53,6 +53,7 @@ class devolo_cpl extends eqLogic {
 	}
 	$versionFile = $etcPath . '/devolo_plc_api.version';
 	file_put_contents($versionFile, $version);
+	return $version;
     }
 
     /*
