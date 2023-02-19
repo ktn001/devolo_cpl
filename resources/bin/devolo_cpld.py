@@ -67,19 +67,22 @@ async def getRates (message):
     for ip in message['ip'].split(':'):
         try:
             async with Device(ip) as dpa:
-                logging.warning("#####################################")
                 infos = await dpa.plcnet.async_get_network_overview()
-                #logging.warning(infos)
-                for i in range(0 , len(infos.data_rates)):
-                    logging.warning(infos.data_rates[i].mac_address_from)
-                    logging.warning(infos.data_rates[i].mac_address_to)
-                    logging.warning(infos.data_rates[i].tx_rate)
-                    logging.warning(infos.data_rates[i].rx_rate)
-                    logging.warning("#####################################")
+                rates = []
+                for i in range (0, len(infos.data_rates)):
+                    rate = {}
+                    rate['mac_address_from'] = infos.data_rates[i].mac_address_from
+                    rate['mac_address_to'] = infos.data_rates[i].mac_address_to
+                    rate['tx_rate'] = infos.data_rates[i].tx_rate
+                    rate['rx_rate'] = infos.data_rates[i].rx_rate
+                    rates.append(rate)
+                result = {}
+                result['action'] = 'getRates'
+                result['rates'] = rates
+                jeedom_com.send_change_immediate(result)
                 break
         except:
             pass
-
 
 async def execCmd (message):
     logging.info("============== execCmd ==============")
@@ -131,7 +134,7 @@ def read_socket():
     global JEEDOM_SOCKET_MESSAGE
     if not JEEDOM_SOCKET_MESSAGE.empty():
         message = json.loads(JEEDOM_SOCKET_MESSAGE.get().decode())
-        logging.debug("received massage: " + str(message))
+        logging.debug("received message: " + str(message))
         if message['apikey'] != _apikey:
             logging.error("Invalid apikey from socket : " + str(message))
             return
@@ -168,13 +171,15 @@ def read_socket():
             reponse['ip'] = message['ip']
             jeedom_com.send_change_immediate(reponse)
         except Exception as e:
-            logging.error("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-            logging.error('Send command to demon error : '+str(e))
-            logging.error("---------------------------------------------------------------------")
-            logging.error(e.__class__.__name__)
-            logging.error("---------------------------------------------------------------------")
-            logging.error(e)
-            logging.error("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            logging.error("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            logging.error('┃Send command to demon error : '+str(e))
+            logging.error("┠────────────────────────────────────────────────────────────────────")
+            logging.error("┃" + e.__class__.__name__)
+            logging.error("┠────────────────────────────────────────────────────────────────────")
+            logging.error("┃" + e.__str__())
+            logging.error("┠────────────────────────────────────────────────────────────────────")
+            logging.error(sys.exc_info()[2])
+            logging.error("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
 def listen():
     jeedom_socket.open()
@@ -247,14 +252,14 @@ _socket_port = int(_socket_port)
 
 jeedom_utils.set_log_level(_log_level)
 
-logging.info('Start demond')
-logging.info('Log level : '+str(_log_level))
-logging.info('Socket port : '+str(_socket_port))
-logging.info('Socket host : '+str(_socket_host))
-logging.info('PID file : '+str(_pidfile))
-logging.info('Apikey : '+str(_apikey))
-logging.info('Callback : '+str(_callback))
-logging.info('version de devolo_cpl_api : ' +str(devolo_cpl_api_version))
+logging.info('┌─Start demond')
+logging.info('│ Log level      : '+str(_log_level))
+logging.info('│ Socket port    : '+str(_socket_port))
+logging.info('│ Socket host    : '+str(_socket_host))
+logging.info('│ PID file       : '+str(_pidfile))
+logging.info('│ Apikey         : '+str(_apikey))
+logging.info('│ Callback       : '+str(_callback))
+logging.info('└─devolo_cpl_api : ' +str(devolo_cpl_api_version))
 
 signal.signal(signal.SIGINT, handler)
 signal.signal(signal.SIGTERM, handler)
