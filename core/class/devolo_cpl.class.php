@@ -25,10 +25,9 @@ class devolo_cpl extends eqLogic {
 
     /*
     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    */
     public static function cron() {
-	devolo_cpl::getRates();
     }
+    */
 
     /*
     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
@@ -42,6 +41,7 @@ class devolo_cpl extends eqLogic {
 	    log::add("devolo_cpl","debug","cron: " . $equipement->getName());
 	    $equipement->getEqState();
 	}
+	devolo_cpl::getRates();
     }
 
     /*

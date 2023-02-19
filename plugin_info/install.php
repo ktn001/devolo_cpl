@@ -48,22 +48,6 @@ function devolo_upgrade_to_level($level) {
 	}
 	$function = 'devolo_cpl_goto_' . $level;
 	if (function_exists($function)){
-		$function();
-	}
-}
-
-function devolo_upgrade_to_level($level) {
-	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
-		$eqLogic->createCmds($level);
-		$eqLogic->save();
-	}
-	$sqlFile = __DIR__ . "/sql/upgrade_" . $level . ".sql";
-	if (file_exists($sqlFile)){
-		$sql = file_get_contents($sqlFile);
-		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
-	}
-	$function = 'devolo_cpl_goto_' . $level;
-	if (function_exists($function)){
 		log::add("devolo_cpl","debug","execution de " . $function . "()");
 		$function();
 	}
