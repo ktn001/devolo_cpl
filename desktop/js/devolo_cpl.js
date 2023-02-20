@@ -47,6 +47,7 @@ $('#bt_syncDevolo').on('click',function(){
 	})
 })
 
+/* Sauvegarde avec validation préliminaire */
 $('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() {
 	var manageable = $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').find('option:selected').attr('manageable')
 	if (manageable != 1){
@@ -78,6 +79,10 @@ $('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() 
 	}
 })
 
+/* Affichage du réseau */
+$('#bt_devoloNetwork').off('click').on('click', function() {
+	$('#md_modal').dialog({title: "{{Réseaux CPL}}"}).load('index.php?v=d&plugin=devolo_cpl&modal=network').dialog('open')
+})
 /* Mise à jour de l'image lors du chengement de modèle */
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
 	var img = $(this).find('option:selected').attr('img')

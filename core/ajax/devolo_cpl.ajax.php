@@ -45,6 +45,23 @@ try {
 	    }
     }
 
+    if ($action == 'getCplNetworks') {
+	    try {
+		    $cplNetworks = devolo_cpl::getCplNetworksToModal();
+		    ajax::success(json_encode($cplNetworks));
+	    } catch (Exception $e){
+		    ajax::error(displayException($e), $e->getCode());
+	    }
+    }
+
+    if ($action == 'getCplRates') {
+	    try {
+		    $cplRates = devolo_cpl::getCplRatesToModal();
+		    ajax::success(json_encode($cplRates));
+	    } catch (Exception $e){
+		    ajax::error(displayException($e), $e->getCode());
+	    }
+    }
 
     throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
     /*     * *********Catch exeption*************** */
