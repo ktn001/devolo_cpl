@@ -32,6 +32,10 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_4() {
+	config::save('data-retention','7 DAY',devolo_cpl);
+}
+
 function devolo_cpl_goto_3() {
 	config::save('devolo_plc_api::version','1.2.0',devolo_cpl);
 }

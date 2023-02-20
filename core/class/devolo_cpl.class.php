@@ -38,6 +38,10 @@ class devolo_cpl extends eqLogic {
 	devolo_cpl::getRates();
     }
 
+    public static function cronDaily() {
+	self::purgeDB();
+    }
+
     /*
      * Changement de version pour devolo_plc_api
      */
@@ -128,6 +132,18 @@ class devolo_cpl extends eqLogic {
         sleep(2);
         system::kill('python.*devolo_cpld.py'); // nom du démon à modifier
         sleep(1);
+    }
+
+    /*
+     * Purge de données historiques
+     */
+    public static function purgeDB() {
+	$retention = config::byKey('data-retention','devolo_cpl');
+	$sql = "DELETE FROM devolo_cpl_rates";
+	$sql .= " WHERE time < DATE_SUB(now(), INTERVAL " . $retention . ")";
+	log::add("devolo_cpl","debug",$sql);
+	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
+	log::add("devolo_cpl","debug",$response);
     }
 
     /*
