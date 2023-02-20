@@ -39,9 +39,23 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
           <option value="ch" selected>{{Suisse}}</option>
         </select>
       </div>
+      <legend><i class="fas fa-database"></i> {{Base de données}}</legend>
+      <div class="row">
+        <label class="col-sm-4 control-label">{{Rétention}}
+          <sup><i class="fas fa-question-circle" title="{{Durée de rétention de l'historique des débits CPL}}"></i></sup>
+        </label>
+        <select class="configKey col-sm-4 form-control" data-l1key="data-retention">
+          <option value="1 DAY" selected>1 {{jour}}</option>
+          <option value="3 DAY" selected>3 {{jours}}</option>
+          <option value="7 DAY" selected>1 {{semaine}}</option>
+          <option value="14 DAY" selected>2 {{semaines}}</option>
+          <option value="1 MONTH" selected>1 {{mois}}</option>
+          <option value="2 MONTH" selected>2 {{mois}}</option>
+        </select>
+      </div>
     </div>
     <div class="form-group col-md-6 col-sm-12">
-      <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage de démon}})</sub></legend>
+      <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage du démon}})</sub></legend>
       <div class="row">
         <label class="col-sm-4 control-label">{{Port}}
           <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
