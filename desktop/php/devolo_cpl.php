@@ -27,6 +27,11 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 		<br>
 		<span>{{Synchronisation}}</span>
 	    </div>
+	    <div id="bt_devoloNetwork" class="cursor eqLogicAction logoSecondary">
+		<i class="fas fa-sitemap"></i>
+		<br>
+		<span>{{Réseaux CPL}}</span>
+	    </div>
 	    <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
 		<i class="fas fa-wrench"></i>
 		<br>
@@ -169,6 +174,14 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <span class="input-group-btn">
 					<a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 				    </span>
+				</div>
+			    </div>
+			    <div class="form-group manageable-only">
+				<label class="col-sm-4 control-label">{{Réseau}}
+				    <sup><i class="fas fa-question-circle tooltips" title="{{Réseau CPL}}"></i></sup>
+				</label>
+				<div class="col-sm-6 input-group">
+				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="network"/>
 				</div>
 			    </div>
 			    <div class="form-group manageable-only">

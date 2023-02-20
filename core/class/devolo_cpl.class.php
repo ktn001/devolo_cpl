@@ -24,12 +24,6 @@ class devolo_cpl extends eqLogic {
     /*     * ***********************Methode static*************************** */
 
     /*
-    * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    public static function cron() {
-    }
-    */
-
-    /*
     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
     */
     public static function cron5() {
@@ -157,6 +151,17 @@ class devolo_cpl extends eqLogic {
     }
 
     /*
+     * Cherche un équipement avec une mac adresse donnée
+     */
+    public static function byMacAddress ($_macAddress) {
+	$eqLogics = devolo_cpl::byTypeAndSearchConfiguration(__CLASS__,['mac' => $_macAddress]);
+	if (count($eqLogics > 1)) {
+	    log::add("devolo_cpl","warning",sprintf(__("Il y a plusieurs équipements avec l'adresse mac %s",__FILE__),$_macAddress));
+	}
+	return $eqLogics[0];
+    }
+
+    /*
      * Retourne des infos pour un model d'appareil
      */
     public static function getModelInfos($model = Null) {
@@ -266,6 +271,31 @@ class devolo_cpl extends eqLogic {
 	    log::add("devolo_cpl","debug",print_r($equipement,true));
 	    self::createOrUpdate($equipement);
 	}
+    }
+
+    public static function getCplNetworksToModal() {
+	$eqLogics = devolo_cpl::byType('devolo_cpl',true);
+	$networks = [];
+	foreach ($eqLogics as $eqLogic) {
+	    $network = $eqLogic->getConfiguration('network','cpl');
+	    if (!isset ($networks[$network])){
+		$networks[$network] = [];
+	    }
+	    $humanName = $eqLogic->getHumanName(true);
+	    $networks[$network][$humanName] = [
+		'id' => $eqLogic->getId(),
+		'macAddress' => $eqLogic->getConfiguration('mac'),
+		'img' => $eqLogic->getImage(),
+	    ];
+	}
+	return $networks;
+    }
+
+    public static function getCplRatesToModal() {
+        $sql = "select `time`, `mac_address_from`, `mac_address_to`, `tx_rate`, `rx_rate`";
+	$sql .=  "from `devolo_cpl_rates`";
+	$sql .= "where time = (select max(time) from `devolo_cpl_rates`)";
+	return  DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
     }
 
     public static function getRates() {
