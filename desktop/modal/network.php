@@ -53,11 +53,18 @@ if (!isConnect('admin')) {
     padding-top : 14px;
   }
 
+  #div_devoloNetwork .legend{
+    margin: auto;
+    width: 200px;
+  }
+
 </style>
 <div id='div_devoloNetwork'>
     <h3 class="center">{{Débits CPL}}</h3>
     <ul id="tabs_network" class="nav nav-tabs" data-tabs="tabs"></ul>
     <div id='network-tab-content' class='tab-content'></div>
+    <div class="legend">{{Lignes: source}}<br>{{Colonnes: destination}}</div>
+    <div id="dateMesure" class="pull-right"></div>
 </div>
 <script>
 
@@ -79,6 +86,9 @@ function fillRatesTables() {
                 return
             }
             rates = json_decode(data.result)
+	    if (rates.length > 0) {
+		$('#div_devoloNetwork #dateMesure').html(rates[0].time)
+	    }
 	    for (rate of rates) {
 		selector = '#div_devoloNetwork .devolo_rates_table td'
 		selector += '[data-src_mac="' + rate.mac_address_from + '"]'
@@ -163,8 +173,6 @@ function createNetworkTabs() {
                     table += '</tbody>'
                     table += '</table>'
                     $('#div_devoloNetwork #tab_network_' + network).append(table)
-		    legend = "<div>Lignes: source<br>Colonnes: destination</div>"
-                    $('#div_devoloNetwork #tab_network_' + network).append(legend)
             }
 	    fillRatesTables()
         }
