@@ -86,4 +86,8 @@ function devolo_cpl_update() {
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function devolo_cpl_remove() {
+	$sql = 'DROP TABLE IF EXISTS devolo_cpl_rates';
+	log::add("devolo_cpl","debug",$sql);
+	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
+	log::add("devolo_cpl","debug",$response);
 }
