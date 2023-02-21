@@ -180,7 +180,7 @@ class devolo_cpl extends eqLogic {
     /*
      * Retourne des infos pour un model d'appareil
      */
-    public static function getModelInfos($model = Null) {
+    public static function modelInfos($model = Null) {
 	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 	$country = config::byKey('country','devolo_cpl','ch');
 	if ($country == 'be'){
@@ -255,7 +255,7 @@ class devolo_cpl extends eqLogic {
 	    $devolo->setLogicalId($equipement['serial']);
 	    $devolo->setConfiguration("sync_model",$equipement['model']);
 	    $devolo->setConfiguration("ip",$equipement['ip']);
-	    if (self::getModelInfos($equipement['model']) == Null) {
+	    if (self::modelInfos($equipement['model']) == Null) {
 		$devolo->setConfiguration("model","autre");
 	    } else {
 		$devolo->setConfiguration("model",$equipement['model']);
@@ -303,6 +303,12 @@ class devolo_cpl extends eqLogic {
 		'macAddress' => $eqLogic->getConfiguration('mac'),
 		'img' => $eqLogic->getImage(),
 	    ];
+	    $infos = $eqLogic->getModelInfos();
+	    if (isset($infos['cpl_speed'])){
+		$networks[$network][$humanName]['cpl_speed'] = $infos['cpl_speed'];
+	    } else {
+		$networks[$network][$humanName]['cpl_speed'] = '';
+	    }
 	}
 	return $networks;
     }
@@ -422,14 +428,6 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    // Fonction exécutée automatiquement avant la création de l'équipement
-    public function preInsert() {
-    }
-
-    // Fonction exécutée automatiquement après la création de l'équipement
-    public function postInsert() {
-    }
-
     // Fonction exécutée automatiquement avant la mise à jour de l'équipement
     public function preUpdate() {
 	if ($this->getConfiguration('mac') != ''){
@@ -442,10 +440,6 @@ class devolo_cpl extends eqLogic {
 	    }
 	    $this->setConfiguration('mac',$mac);
 	} 
-    }
-
-    // Fonction exécutée automatiquement après la mise à jour de l'équipement
-    public function postUpdate() {
     }
 
     // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
@@ -467,17 +461,8 @@ class devolo_cpl extends eqLogic {
 	$this->createCmds();
     }
 
-    // Fonction exécutée automatiquement avant la suppression de l'équipement
-    public function preRemove() {
-    }
-
-    // Fonction exécutée automatiquement après la suppression de l'équipement
-    public function postRemove() {
-    }
-
     /*
     * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
-    * Exemple avec le champ "Mot de passe" (password)
     */
     public function decrypt() {
       $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -486,10 +471,14 @@ class devolo_cpl extends eqLogic {
       $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
     }
 
+    public function getModelInfos() {
+	return $this->modelInfos($this->getConfiguration('model'));
+    }
+
     public function getImage() {
 	$model = $this->getConfiguration('model');
 	if ($model != "") {
-	    $infos = $this->getModelInfos($model);
+	    $infos = $this->modelInfos($model);
 	    if (is_array($infos) and array_key_exists('image',$infos)) {
 		return '/plugins/devolo_cpl/desktop/img/' . $infos['image'];
 	    }

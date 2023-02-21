@@ -48,9 +48,14 @@ if (!isConnect('admin')) {
   #div_devoloNetwork [data-src_mac] {
     text-align: center;
   }
+ 
+  #div_devoloNetwork td span.pull-right {
+    padding-top : 14px;
+  }
 
 </style>
 <div id='div_devoloNetwork'>
+    <h3 class="center">{{Débits CPL}}</h3>
     <ul id="tabs_network" class="nav nav-tabs" data-tabs="tabs"></ul>
     <div id='network-tab-content' class='tab-content'></div>
 </div>
@@ -75,7 +80,6 @@ function fillRatesTables() {
             }
             rates = json_decode(data.result)
 	    for (rate of rates) {
-	    	console.log(rate)
 		selector = '#div_devoloNetwork .devolo_rates_table td'
 		selector += '[data-src_mac="' + rate.mac_address_from + '"]'
 		selector += '[data-dst_mac="' + rate.mac_address_to + '"]'
@@ -102,10 +106,16 @@ function createNetworkTabs() {
                 $.fn.showAlert({message: data.result, level: 'danger'})
                 return
             }
+
             networks = json_decode(data.result)
             active = 'active'
+	    if (Object.keys(networks).length == 1) {
+		    hidden = ' hidden'
+	    } else {
+		    hidden = ''
+	    }
             for ( network of Object.keys(networks).sort()) {
-                    li = '<li class="' + active + '" >'
+                    li = '<li class="' + active + hidden + '" >'
                     li += '<a href="#tab_network_' + network + '" data-toggle="tab">'
                     li += network
                     li += '</a>'
@@ -134,6 +144,9 @@ function createNetworkTabs() {
 			table += '<td>'
 			table += '<img src="' + networks[network][src_equipement].img + '" height="40"> '
 			table += src_equipement
+			if (networks[network][src_equipement].cpl_speed) {
+			    table += '<span class="pull-right">(' + networks[network][src_equipement].cpl_speed + ')</span>'
+			}
 		        table += '</td>'
                         table += '<td>' + networks[network][src_equipement].id + '</td>'
                         for (dst_equipement of Object.keys(networks[network])) {
@@ -150,6 +163,8 @@ function createNetworkTabs() {
                     table += '</tbody>'
                     table += '</table>'
                     $('#div_devoloNetwork #tab_network_' + network).append(table)
+		    legend = "<div>Lignes: source<br>Colonnes: destination</div>"
+                    $('#div_devoloNetwork #tab_network_' + network).append(legend)
             }
 	    fillRatesTables()
         }
