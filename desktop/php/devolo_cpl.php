@@ -176,7 +176,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    </span>
 				</div>
 			    </div>
-			    <div class="form-group manageable-only">
+			    <div class="form-group">
 				<label class="col-sm-4 control-label">{{Réseau}}
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Réseau CPL}}"></i></sup>
 				</label>
