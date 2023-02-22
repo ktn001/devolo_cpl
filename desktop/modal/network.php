@@ -32,7 +32,7 @@ if (!isConnect('admin')) {
   }
 
   #div_devoloNetwork thead th:nth-child(2) {
-    width: 30px;
+    width: 40px;
   }
 
   #div_devoloNetwork thead th:not(:first-child):not(:nth-child(2)) {
@@ -56,6 +56,11 @@ if (!isConnect('admin')) {
   #div_devoloNetwork .legend{
     margin: auto;
     width: 200px;
+  }
+
+  #div_devoloNetwork .eqLogicId{
+    font-style : italic;
+    vertical-align: middle;
   }
 
 </style>
@@ -141,9 +146,9 @@ function createNetworkTabs() {
                     table += '<thead>'
                     table += '<tr>'
                     table += '<th>{{Nom}}</th>'
-                    table += '<th>{{id}}</th>'
+                    table += '<th class="eqLogicId">{{id}}</th>'
                     for (equipement of Object.keys(networks[network])) {
-                        table += '<th>' + networks[network][equipement].id + '</th>'
+                        table += '<th class="eqLogicId">' + networks[network][equipement].id + '</th>'
                     }
                     table += '</tr>'
                     table += '</thead>'
@@ -158,7 +163,7 @@ function createNetworkTabs() {
 			    table += '<span class="pull-right">(' + networks[network][src_equipement].cpl_speed + ')</span>'
 			}
 		        table += '</td>'
-                        table += '<td>' + networks[network][src_equipement].id + '</td>'
+                        table += '<th class="eqLogicId">' + networks[network][src_equipement].id + '</th>'
                         for (dst_equipement of Object.keys(networks[network])) {
                             mac_dst = networks[network][dst_equipement].macAddress
                             if (mac_src == mac_dst) {
