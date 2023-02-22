@@ -28,7 +28,7 @@ if (!isConnect('admin')) {
   }
 
   #div_devoloNetwork thead th:first-child {
-    width: 220px;
+    width: 300px;
   }
 
   #div_devoloNetwork thead th:nth-child(2) {
