@@ -32,6 +32,12 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_6() {
+	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+		$eqLogic->sortCmds();
+	}
+}
+
 function devolo_cpl_goto_4() {
 	config::save('data-retention','7 DAY',devolo_cpl);
 }
@@ -60,7 +66,7 @@ function devolo_upgrade_to_level($level) {
 function devolo_cpl_upgrade() {
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	for ($level = 1; $level <= 5; $level++) {
+	for ($level = 1; $level <= 6; $level++) {
 		if ($pluginLevel < $level) {
 			devolo_upgrade_to_level($level);
 			config::save('pluginLevel',$level,'devolo_cpl');

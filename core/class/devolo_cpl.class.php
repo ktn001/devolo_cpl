@@ -333,6 +333,21 @@ class devolo_cpl extends eqLogic {
 	$this::PrepareToDaemon(['action' => 'getState']);
     }
 
+    // Function pour tirer les commandes
+    public function sortCmds () {
+	log::add("devolo_cpl","info",sprintf(__("Tri des commandes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
+	$cmdFile = __DIR__ . "/../config/cmds.json"; 
+	$configs =  json_decode(file_get_contents($cmdFile),true);
+	foreach ($configs as $logicalId => $config) {
+	    $cmd = $this->getCmd(null, $logicalId);
+	    if (! is_object($cmd)) {
+		continue;
+	    }
+	    $cmd->setOrder($config['order']);
+	    $cmd->save();
+	}
+    }
+
     // Function pour la création des CMD
     public function createCmds ($level=0) {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
@@ -357,6 +372,7 @@ class devolo_cpl extends eqLogic {
 	    $cmd->setName(translate::exec($config['name'],$cmdFile));
 	    $cmd->setType($config['type']);
 	    $cmd->setSubType($config['subType']);
+	    $cmd->setOrder($config['order']);
 	    if (isset($config['visible'])){
 		$cmd->setIsVisible($config['visible']);
 	    }
