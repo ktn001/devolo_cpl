@@ -16,7 +16,7 @@
 */
 
 /* * ***************************Includes********************************* */
-require_once __DIR__  . '/../../../../core/php/core.inc.php';
+require_once __DIR__  . '/../php/devolo_cpl.inc.php';
 
 class devolo_cpl extends eqLogic {
     /*     * *************************Attributs****************************** */
@@ -29,7 +29,7 @@ class devolo_cpl extends eqLogic {
     public static function cron5() {
 	$equipements = eqLogic::byType(__CLASS__,True);
 	foreach($equipements as $equipement) {
-	    if (! $equipement->getConfiguration('isManageable')){
+	    if (! $equipement->isManageable()){
 		continue;
 	    }
 	    log::add("devolo_cpl","debug","cron: " . $equipement->getName());
@@ -178,34 +178,6 @@ class devolo_cpl extends eqLogic {
     }
 
     /*
-     * Retourne des infos pour un model d'appareil
-     */
-    public static function modelInfos($model = Null) {
-	$infos =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
-	$country = config::byKey('country','devolo_cpl','ch');
-	if ($country == 'be'){
-	    $country = 'fr';
-	}
-	$imgDir = __DIR__ . '/../../desktop/img/';
-	foreach (array_keys($infos) as $m ) {
-	    if (!array_key_exists('image',$infos[$m])){
-		continue;
-	    }
-	    $img = $country . '-' . $infos[$m]['image'];
-	    if (file_exists($imgDir . $img)){
-		$infos[$m]['image'] = $img;
-	    }
-	}
-	if ($model == Null) {
-	    return $infos;
-	}
-	if (array_key_exists($model,$infos)){
-	    return $infos[$model];
-	}
-	return Null;
-    }
-
-    /*
      * Création ou mise à jour d'un équipment suite à une synchro
      */
     public static function createOrUpdate($equipement){
@@ -255,7 +227,7 @@ class devolo_cpl extends eqLogic {
 	    $devolo->setLogicalId($equipement['serial']);
 	    $devolo->setConfiguration("sync_model",$equipement['model']);
 	    $devolo->setConfiguration("ip",$equipement['ip']);
-	    if (self::modelInfos($equipement['model']) == Null) {
+	    if (model::byCode($equipement['model'] == Null)) {
 		$devolo->setConfiguration("model","autre");
 	    } else {
 		$devolo->setConfiguration("model",$equipement['model']);
@@ -364,9 +336,6 @@ class devolo_cpl extends eqLogic {
     // Function pour la création des CMD
     public function createCmds ($level=0) {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
-	$modelFile = __DIR__ . "/../config/models.json"; 
-	$models =  json_decode(file_get_contents($modelFile),true);
-	$isManageable = $this->getConfiguration('isManageable');
 	
 	$cmdFile = __DIR__ . "/../config/cmds.json"; 
 	$configs =  json_decode(file_get_contents($cmdFile),true);
@@ -374,7 +343,7 @@ class devolo_cpl extends eqLogic {
 	    if ($level != 0 and $level != $config['level']){
 		continue;
 	    }
-	    if (! $isManageable and $config['manageableOnly']){
+	    if (! $this->isManageable() and $config['manageableOnly']){
 		continue;
 	    }
 	    $cmd = $this->getCmd(null, $logicalId);
@@ -447,18 +416,15 @@ class devolo_cpl extends eqLogic {
 	if ($this->getConfiguration('model') == ""){
 	    $this->setConfiguration('model','autre');
 	}
-	$models =  json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
-	$isManageable = 0;
-	$model = $this->getConfiguration('model');
-	if (isset($models[$model]) and isset($models[$model]['manageable'])){
-	    $isManageable = $models[$model]['manageable'];
-	}
-	$this->setConfiguration('isManageable', $isManageable);
     }
 
     // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
     public function postSave() {
 	$this->createCmds();
+    }
+
+    public function getModel () {
+	return model::byCode($this->getConfiguration('model'));
     }
 
     /*
@@ -471,19 +437,12 @@ class devolo_cpl extends eqLogic {
       $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
     }
 
-    public function getModelInfos() {
-	return $this->modelInfos($this->getConfiguration('model'));
+    public function getImage() {
+	return $this->getModel()->getImage();
     }
 
-    public function getImage() {
-	$model = $this->getConfiguration('model');
-	if ($model != "") {
-	    $infos = $this->modelInfos($model);
-	    if (is_array($infos) and array_key_exists('image',$infos)) {
-		return '/plugins/devolo_cpl/desktop/img/' . $infos['image'];
-	    }
-	}
-	return parent::getImage();
+    public function isManageable() {
+	return model::byCode($this->getConfiguration('model'))->isManageable();
     }
 
     /*     * **********************Getteur Setteur*************************** */

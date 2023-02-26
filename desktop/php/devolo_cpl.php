@@ -212,14 +212,18 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
 				    <?php
 					$options = '';
-					$model_infos = devolo_cpl::modelInfos();
-					foreach ($model_infos as $model => $info){
+					$models = model::all();
+					foreach ($models as $model){
 					    if (array_key_exists('image',$info)) {
 						$image = '/plugins/devolo_cpl/desktop/img/' . $info['image'];
 					    } else {
 						$image = "";
 					    }
-					    $options .= '<option value="' . $model. '" img="' . $image .'" manageable="' . $info['manageable'] . '">' . $info['texte'] . '</option>';
+					    $code = $model->getCode();
+					    $image = $model->getImage();
+					    $manageable = $model->getManageable();
+					    $texte = $model->getText();
+					    $options .= '<option value="' . $code . '" img="' . $image .'" manageable="' . $manageable . '">' . $texte . '</option>';
 					}
 					echo $options;
 				    ?>
