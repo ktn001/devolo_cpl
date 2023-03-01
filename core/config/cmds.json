@@ -97,7 +97,7 @@
 		"subType"        : "binary",
 		"order"          : "9"
 	},
-	"firmware_vailable" : {
+	"next_firmware" : {
 		"level"          : "6",
 		"manageableOnly" : "1",
 		"name"           : "{{firmware disponible}}",

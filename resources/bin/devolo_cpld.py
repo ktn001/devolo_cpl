@@ -50,6 +50,9 @@ async def getState (message):
         #logging.info("++++++++++++++++++++++++++++++++++++")
         #logging.info(await dpa.plcnet.async_get_network_overview())
         #logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info("++++++++++++++++++++++++++++++++++++")
+        #logging.info(dpa.device.__dict__)
+        #logging.info("++++++++++++++++++++++++++++++++++++")
         result = {}
         result['action'] = 'infoState'
         result['serial'] = message['serial']
@@ -59,6 +62,12 @@ async def getState (message):
             result['leds'] = 1
         else:
             result['leds'] = 0
+        firmware = await dpa.device.async_check_firmware_available()
+        if firmware.result == devolo_plc_api.device_api.UPDATE_AVAILABLE:
+            result['firmwareAvailable'] = 1
+        else:
+            result['firmwareAvailable'] = 0
+        result['nextFirmware'] = firmware.new_firmware_version
         logging.debug(result)
         jeedom_com.send_change_immediate(result)
 
@@ -79,6 +88,17 @@ async def getRates (message):
                 result = {}
                 result['action'] = 'getRates'
                 result['rates'] = rates
+                jeedom_com.send_change_immediate(result)
+                firmwares = []
+                for i in range (0, len(infos.devices)):
+                    logging.info(infos.devices[i])
+                    firmware = {}
+                    firmware['mac'] = infos.devices[i].mac_address
+                    firmware['version'] = infos.devices[i].friendly_version
+                    firmwares.append(firmware)
+                result = {}
+                result['action'] = 'firmwares'
+                result['firmwares'] = firmwares
                 jeedom_com.send_change_immediate(result)
                 break
         except:

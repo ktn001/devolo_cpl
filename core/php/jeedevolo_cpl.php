@@ -1,12 +1,15 @@
 <?php
 
 function process_infoState($eqLogic, $result) {
-    log::add("devolo_cpl","debug",print_r($result,true));
+    log::add("devolo_cpl","debug","XXX " . print_r($result,true));
     if (isset($result['leds'])) {
 	$eqLogic->checkAndUpdateCmd('leds', $result['leds']);
     }
     if (isset($result['locate'])) {
 	$eqLogic->checkAndUpdateCmd('locate', $result['locate']);
+    }
+    if (isset($result['firmwareAvailable'])) {
+	$eqLogic->checkAndUpdateCmd('update_available', $result['firmwareAvailable']);
     }
 }
 
@@ -29,7 +32,6 @@ function process_getRates($result) {
     foreach ($result['rates'] as $rate){
 	$rate['mac_address_from'] = rtrim(chunk_split($rate['mac_address_from'],2,":"),":");
 	$rate['mac_address_to'] = rtrim(chunk_split($rate['mac_address_to'],2,":"),":");
-	log::add("devolo_cpl","debug",print_r($rate,true));
 	$sql = 'INSERT INTO devolo_cpl_rates ';
 	$sql .= 'SET `time`="' . $time . '", ';
 	$sql .= '`mac_address_from`="' . $rate['mac_address_from'] . '", ';
@@ -38,6 +40,13 @@ function process_getRates($result) {
 	$sql .= '`rx_rate`="' . $rate['rx_rate'] . '"';
 	DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
     }
+}
+
+function process_firmwares($result) {
+	foreach ($result['firmwares'] as $firmware) {
+		$eqLogic = devolo_cpl::byMacAddress ($firmware['mac']);
+		$eqLogic->checkAndUpdateCmd('firmware',$firmware['version']);
+	}
 }
 
 try {

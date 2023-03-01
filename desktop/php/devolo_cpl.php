@@ -214,11 +214,6 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 					$options = '';
 					$models = model::all();
 					foreach ($models as $model){
-					    if (array_key_exists('image',$info)) {
-						$image = '/plugins/devolo_cpl/desktop/img/' . $info['image'];
-					    } else {
-						$image = "";
-					    }
 					    $code = $model->getCode();
 					    $image = $model->getImage();
 					    $manageable = $model->getManageable();
