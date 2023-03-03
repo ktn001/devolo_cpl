@@ -12,8 +12,11 @@ import time
 import ipaddress
 import asyncio
 
-libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-1.1.0/')
-sys.path.append (libDir)
+with open (os.path.dirname(__file__) + '/../etc/devolo_plc_api.version') as versionFile:
+    devolo_plc_api_version = versionFile.readlines()[0]
+
+libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-' + devolo_plc_api_version + '/')
+sys.path.insert(0,libDir)
 import devolo_plc_api
 import devolo_plc_api.network
 from devolo_plc_api import Device

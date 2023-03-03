@@ -222,13 +222,11 @@ class Device:  # pylint: disable=too-many-instance-attributes
             return  # No need to continue, if there are no relevant service information
 
         self._logger.debug("Updating service info of %s for %s", service_type, service_info.server_key)
-        # Begin for python 3.7
-        #if info := self.info_from_service(service_info):
-        #    self._info[service_type] = info
+        # JEEDOM
+        # if info := self.info_from_service(service_info):
         info = self.info_from_service(service_info)
         if info:
             self._info[service_type] = info
-        # END for python 3.7
 
     @staticmethod
     def info_from_service(service_info: ServiceInfo) -> ZeroconfServiceInfo | None:
