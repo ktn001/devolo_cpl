@@ -225,13 +225,14 @@ class devolo_cpl extends eqLogic {
 		$eqLogic->save();
 	    }
 	} else {
-	    log::add("devolo_cpl","debug",sprintf(__("Créaction de '%s'",__FILE__),$equipement['name']));
+	    log::add("devolo_cpl","debug",sprintf(__("Création de '%s'",__FILE__),$equipement['name']));
 	    $devolo = new devolo_cpl();
 	    $devolo->setName($equipement['name']);
 	    $devolo->setEqType_name(__CLASS__);
 	    $devolo->setLogicalId($equipement['serial']);
-	    $devolo->setConfiguration("sync_model",$equipement['model']);
+	    $devolo->setConfiguration('mac',$equipement['mac']);
 	    $devolo->setConfiguration("ip",$equipement['ip']);
+	    $devolo->setConfiguration("sync_model",$equipement['model']);
 	    if (model::byCode($equipement['model'] == Null)) {
 		$devolo->setConfiguration("model","autre");
 	    } else {

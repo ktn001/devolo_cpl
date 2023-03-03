@@ -54,13 +54,11 @@ def _add(
     if state_change is not ServiceStateChange.Added:
         return
 
-    # BEGIN modification for python 3.7
-    #if (service_info := zeroconf.get_service_info(service_type, name)) is None:
-    #    return
+    # JEEDOM
+    # if (service_info := zeroconf.get_service_info(service_type, name)) is None:
     service_info = zeroconf.get_service_info(service_type, name)
-    if service_info:
+    if service_info is None:
         return
-    # END modification for python 3.7
 
     info = Device.info_from_service(service_info)
     if info is None or info.properties["MT"] in ("2600", "2601"):

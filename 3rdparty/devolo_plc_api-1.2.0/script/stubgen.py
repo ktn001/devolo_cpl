@@ -54,11 +54,7 @@ class ApiStubGenerator(StubGenerator):
     def fix_union_annotations(self) -> None:
         """Fix Union annotations."""
         for i, output in enumerate(self._output):
-            # BEGIN modification for python 3.7
-            #if match := re.search(r"Union\[([a-z, ]+)\]", output):
-            match = re.search(r"Union\[([a-z, ]+)\]", output)
-            if match:
-                #END modification for python 3.7
+            if match := re.search(r"Union\[([a-z, ]+)\]", output):
                 types = match[1].replace(",", " |")
                 self._output[i] = output.replace(match[0], types)
 
