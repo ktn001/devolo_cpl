@@ -18,9 +18,9 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
-class model {
+class devolo_model {
     private static function cast ($array, $code) {
-        $model = new model();
+        $model = new devolo_model();
         foreach ($array as $key => $value){
             $model->$key = $value;
         }

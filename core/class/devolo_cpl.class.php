@@ -233,7 +233,7 @@ class devolo_cpl extends eqLogic {
 	    $devolo->setConfiguration('mac',$equipement['mac']);
 	    $devolo->setConfiguration("ip",$equipement['ip']);
 	    $devolo->setConfiguration("sync_model",$equipement['model']);
-	    if (model::byCode($equipement['model'] == Null)) {
+	    if (devolo_model::byCode($equipement['model'] == Null)) {
 		$devolo->setConfiguration("model","autre");
 	    } else {
 		$devolo->setConfiguration("model",$equipement['model']);
@@ -454,7 +454,7 @@ class devolo_cpl extends eqLogic {
     }
 
     public function getModel () {
-	return model::byCode($this->getConfiguration('model'));
+	return devolo_model::byCode($this->getConfiguration('model'));
     }
 
     /*
@@ -472,7 +472,7 @@ class devolo_cpl extends eqLogic {
     }
 
     public function isManageable() {
-	return model::byCode($this->getConfiguration('model'))->isManageable();
+	return devolo_model::byCode($this->getConfiguration('model'))->isManageable();
     }
 
     /*     * **********************Getteur Setteur*************************** */

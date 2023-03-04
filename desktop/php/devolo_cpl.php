@@ -212,7 +212,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
 				    <?php
 					$options = '';
-					$models = model::all();
+					$models = devolo_model::all();
 					foreach ($models as $model){
 					    $code = $model->getCode();
 					    $image = $model->getImage();
