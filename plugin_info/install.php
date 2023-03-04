@@ -81,6 +81,8 @@ function devolo_cpl_install() {
 	log::add("devolo_cpl","info","Lancement de 'devolo_cpl_install()'");
 	devolo_cpl_checkMac();
 	devolo_cpl_upgrade();
+	$plc_api_versiom = config::byKey('devolo_plc_api::version',devolo_cpl);
+	config::save('devolo_plc_api::version',$devolo_cpl_version,devolo_cpl);
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
