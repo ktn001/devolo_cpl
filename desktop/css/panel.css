@@ -1,0 +1,109 @@
+
+.subnavbar {
+	margin-bottom: 2.5em;
+}
+
+.subnavbar-inner {
+	height: 60px;
+	background: rgb(var(--defaultBkg-color)) !important;
+	border-bottom: 1px solid #636363;
+}
+
+.subnavbar .container > ul {
+	display: inline-block;
+	height: 60px;
+	padding: 0;
+	margin: 0;
+}
+
+.subnavbar .container > ul > li {
+	float: left;
+	min-width: 20px;
+	height: 100%;
+	padding: 0 10px;
+	margin: 0;
+	text-align: center;
+	list-style: none;
+	font-size: 12px;
+	font-weight: bold;
+	border-left: 1px solid #d9d9d9;
+}
+
+.subnavbar .container > ul > li:last-child {
+	border-right: 1px solid #d9d9d9;
+}
+.subnavbar .container > ul > li:hover {
+	color: #888;
+	text-decoration: none;
+}
+
+.subnavbar .container > ul > li.active {
+	border-bottom: 3px solid #ff7f74;
+}
+
+.subnavbar .container > ul > li > i {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-top: 11px;
+	margin-bottom: -3px;
+	font-size: 20px;
+}
+
+.subnavbar .container > ul > li > span {
+	display: block;
+}
+
+#div_devolo_cpl .row {
+	margin:0px;
+}
+
+.widget {
+	position: relative;
+	clear: both;
+	width: auto;
+	margin-bottom: 2em;
+	overflow: hidden;
+}
+
+.widget-header {
+	position: relative;
+	height: 40px;
+	line-height: 40px;
+	background: var(--form-bg-color);
+	border: 1px solid #d6d6d6;
+	-webkit-background-clip: padding-box;
+}
+
+.widget-header h3{
+	position: relative;
+	top: 2px;
+	left: 10px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: 2em;
+	font-size: 14px;
+	font-weight: 800;
+	color: rgb(var(--txt-color));
+	line-height: 18px;
+}
+
+.widget-content {
+	padding: 20px 15px 15px;
+	background: rgba(var(--panel-bg-color), var(--opacity));
+	border: 1px solid #D5D5D5;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.widget-header+.widget-content {
+	border-top: none;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-top-right-radius: 0;
+	-moz-border-radius-topleft: 0;
+	-moz-border-radius-topright: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}

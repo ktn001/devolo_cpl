@@ -8,6 +8,7 @@
 	"author" : "ktn",
 	"require" : "4.2.0",
 	"category" : "communication",
+	"display" : "panel",
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 5,
