@@ -30,7 +30,7 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
     <div class="form-group col-md-6 col-sm-12">
       <legend><i class="fas fa-wrench"></i> {{Plugin}}</legend>
       <div class="row">
-        <label class="col-sm-4 control-label">{{Pays}}
+        <label class="col-sm-5 control-label">{{Pays}}
           <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
         </label>
         <select class="configKey col-sm-4 form-control" data-l1key="country">
@@ -39,9 +39,15 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
           <option value="ch" selected>{{Suisse}}</option>
         </select>
       </div>
+      <div class="row">
+        <label class="col-sm-5 control-label">{{Nom des équipements sans l'objet}}
+          <sup><i class="fas fa-question-circle" title="{{Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'}}"></i></sup>
+        </label>
+	<input class="configKey" type=checkbox data-l1key="noObject"></input>
+      </div>
       <legend><i class="fas fa-database"></i> {{Base de données}}</legend>
       <div class="row">
-        <label class="col-sm-4 control-label">{{Rétention}}
+        <label class="col-sm-5 control-label">{{Rétention}}
           <sup><i class="fas fa-question-circle" title="{{Durée de rétention de l'historique des débits CPL}}"></i></sup>
         </label>
         <select class="configKey col-sm-4 form-control" data-l1key="data-retention">
@@ -57,13 +63,13 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
     <div class="form-group col-md-6 col-sm-12">
       <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage du démon}})</sub></legend>
       <div class="row">
-        <label class="col-sm-4 control-label">{{Port}}
+        <label class="col-sm-5 control-label">{{Port}}
           <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
         </label>
         <input class="configKey col-sm-2 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
       </div>
       <div class="row">
-        <label class="col-sm-4 control-label">{{Version devolo_plc_api}}
+        <label class="col-sm-5 control-label">{{Version devolo_plc_api}}
           <sup><i class="fas fa-question-circle" title="{{Sauf indication contraire, veuillez utiliser la dernière version}}"></i></sup>
         </label>
         <select class="configKey col-sm-2 form-control" data-l1key="devolo_plc_api::version">

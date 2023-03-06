@@ -267,6 +267,22 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
+    public static function getEqListToGraph() {
+	$eqLogics = devolo_cpl::byType('devolo_cpl',true);
+	$eqList = [];
+	foreach ($eqLogics as $eqLogic) {
+	    if (config::byKey('noObject','devolo_cpl') == 1){
+		$humanName = $eqLogic->getName();
+	    } else {
+		$humanName = $eqLogic->getHumanName();
+	    }
+	    $eqList[$humanName] = [];
+	    $eqList[$humanName]['network'] = $eqLogic->getConfiguration('network','cpl');
+	    $eqList[$humanName]['mac'] = $eqLogic->getConfiguration('mac');
+	}
+	return $eqList;
+    }
+
     public static function getCplNetworksToModal() {
 	$eqLogics = devolo_cpl::byType('devolo_cpl',true);
 	$networks = [];
@@ -275,7 +291,11 @@ class devolo_cpl extends eqLogic {
 	    if (!isset ($networks[$network])){
 		$networks[$network] = [];
 	    }
-	    $humanName = $eqLogic->getHumanName();
+	    if (config::byKey('noObject','devolo_cpl') == 1){
+		$humanName = $eqLogic->getName();
+	    } else {
+		$humanName = $eqLogic->getHumanName();
+	    }
 	    $networks[$network][$humanName] = [
 		'id' => $eqLogic->getId(),
 		'macAddress' => $eqLogic->getConfiguration('mac'),

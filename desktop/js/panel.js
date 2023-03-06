@@ -6,6 +6,10 @@ function hideall(){
 	$('.mainnav li').removeClass('active')
 }
 
+$('#div_devolo_cpl').on('click','.bt-close_card',function() {
+	$(this).closest('.card').remove()
+})
+
 $('.mainnav li[data-panel]').on('click',function(){
 	hideall()
 	panelId = $(this).data('panel')

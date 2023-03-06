@@ -1,15 +1,14 @@
+<?php
+sendVarToJS('eqList', devolo_cpl::getEqListToGraph());
+?>
+
 <div class="col-lg-12" id="devolo_cpl_rates">
-	<div class='row'>
-		<div id='rates'>
-			<div class=card>
-				<div class="widget-header">
-					<i class="fas fa-exchange-alt"></i>
-					<h3>{{Débits}}</h3>
-				</div>
-				<div class="widget-content">
-					content
-				</div>
-			</div>
-		</div>
-	</div>
+  <a id="bt_add-graph" class="btn btn-default btn-sm pull-right panel-top">
+   <i class="fas fa-plus-circle"></i>
+   {{Ajouter un graphique}}
+  </a>
 </div>
+
+<?php
+include_file('desktop', 'panel_rates', 'js', 'devolo_cpl')
+?>
