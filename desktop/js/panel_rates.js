@@ -123,6 +123,19 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 				credits: {
 					enabled: false,
 				},
+				exporting: {
+					libURL: '/3rdparty/highstock/lib/',
+				},
+				lang: {
+					downloadCSV: '{{Téléchargement CSV}}',
+					downloadJPEG: '{{Téléchargement JPEG}}',
+					downloadPDF: '{{Téléchargement PDF}}',
+					downloadPNG: '{{Téléchargement PNG}}',
+					downloadSVG: '{{Téléchargement SVG}}',
+					downloadXLS: '{{Téléchargement XLS}}',
+					printChart: '{{Imprimer}}',
+					viewFullscreen: '{{Plein écran}}',
+				},
 				legend: {
 					enabled: true,
 					align: 'left',

@@ -25,5 +25,5 @@ include_file('desktop', 'panel', 'css', 'devolo_cpl');
 </div>
 
 <?php
-include_file('desktop', 'panel', 'js', 'devolo_cpl')
+include_file('desktop', 'panel', 'js', 'devolo_cpl');
 ?>
