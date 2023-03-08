@@ -33,7 +33,7 @@ function devolo_cpl_checkMac() {
 }
 
 function devolo_cpl_goto_7() {
-	config::save('displayDesktopPanel,'1',devolo_cpl);
+	config::save('displayDesktopPanel','1',devolo_cpl);
 }
 
 function devolo_cpl_goto_6() {
