@@ -63,6 +63,20 @@ try {
 	    }
     }
 
+    if ($action == 'ratesHistorique') {
+	    try {
+		    $macFrom = init('macFrom');
+		    $macTo = init('macTo');
+		    if ($macFrom == '' || $macTo == '') {
+			throw new Exception(__("l'adresse mac source ou destination est indéfinie.",__FILE__));
+		    }
+		    $rates = devolo_cpl::getRatesHistorique($macFrom, $macTo);
+		    ajax::success($rates);
+	    } catch (Exception $e){
+		    ajax::error(displayException($e), $e->getCode());
+	    }
+    }
+
     throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
     /*     * *********Catch exeption*************** */
 }

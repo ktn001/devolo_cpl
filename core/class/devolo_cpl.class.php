@@ -328,6 +328,18 @@ class devolo_cpl extends eqLogic {
 	self::sendToDaemon($params);
     }
 
+    public static function getRatesHistorique($macFrom, $macTo) {
+	$values = [
+	    'macFrom' => $macFrom,
+	    'macTo' => $macTo,
+	];
+	$sql = 'SELECT UNIX_TIMESTAMP(time) as time, tx_rate, rx_rate
+		FROM devolo_cpl_rates
+		WHERE mac_address_from=:macFrom and mac_address_to=:macTo
+		';
+	return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
+    }
+
     public static function sendToDaemon($params) {
         $daemon_info = self::daemon_info();
         if ($daemon_info['state'] != 'ok') {
