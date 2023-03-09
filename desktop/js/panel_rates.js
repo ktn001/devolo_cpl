@@ -127,7 +127,7 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 					enabled: false,
 				},
 				exporting: {
-					libURL: '/3rdparty/highstock/lib/',
+					libURL: '3rdparty/highstock/lib/',
 				},
 				lang: {
 					downloadCSV: '{{Téléchargement CSV}}',
