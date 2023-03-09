@@ -84,7 +84,10 @@ $('#devolo_cpl_rates').on('change','div.card select.from', function() {
 $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 	graphId = $(this).closest('.card').find('.card-content').attr('id')
 	macFrom = $(this).closest('.card').find('select.from').value()
+	eqFrom =  $(this).closest('.card').find('select.from option:selected').text()
 	macTo = $(this).closest('.card').find('select.to').value()
+	eqTo =  $(this).closest('.card').find('select.to option:selected').text()
+
 	$.ajax({
 		type: 'POST',
 		url: '/plugins/devolo_cpl/core/ajax/devolo_cpl.ajax.php',
@@ -178,6 +181,9 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 					name: "{{Réception}}",
 					data: rx_rates,
 				}],
+				title:{
+					text: eqFrom + " -> " + eqTo,
+				},
 				xAxis: {
 					type: 'datetime',
 				},
