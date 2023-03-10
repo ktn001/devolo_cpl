@@ -16,10 +16,6 @@
 	"documentation" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
 	"changelog_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
 	"documentation_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
-	"link" : {
-		"forum":"Lien vers le forum",
-		"video" : "Lien vers une video"
-	},
 	"language": [
 		"fr_FR"
 	],
