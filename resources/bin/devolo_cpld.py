@@ -45,14 +45,14 @@ except ImportError:
     sys.exit(1)
 
 async def getState (message):
-    logging.info("============== getState ==============")
+    logging.info("============== begin getState ==============")
     async with Device(ip=message['ip']) as dpa:
-        #logging.info("++++++++++++++++++++++++++++++++++++")
-        #logging.info(await dpa.plcnet.async_get_network_overview())
-        #logging.info("++++++++++++++++++++++++++++++++++++")
-        #logging.info("++++++++++++++++++++++++++++++++++++")
-        #logging.info(dpa.device.__dict__)
-        #logging.info("++++++++++++++++++++++++++++++++++++")
+        # logging.info("++++++++++++++++++++++++++++++++++++")
+        # logging.info(await dpa.device.async_get_wifi_connected_station())
+        # logging.info("++++++++++++++++++++++++++++++++++++")
+        # logging.info("++++++++++++++++++++++++++++++++++++")
+        # logging.info(dpa.device.__dict__)
+        # logging.info("++++++++++++++++++++++++++++++++++++")
         result = {}
         result['action'] = 'infoState'
         result['serial'] = message['serial']
@@ -70,9 +70,29 @@ async def getState (message):
         result['nextFirmware'] = firmware.new_firmware_version
         logging.debug(result)
         jeedom_com.send_change_immediate(result)
+    logging.info("=============== end getState ===============")
+
+async def getWifiConnectedDevices (message):
+    logging.info("============== begin getWifiConnectedDevices ==============")
+    band_txt = ['wifi','wifi 2 Ghz','wifi 5 Ghz']
+    async with Device(ip=message['ip']) as dpa:
+        if 'wifi1' in dpa.device.features:
+            result = {}
+            result['action'] = 'wifiConnectedDevices'
+            result['serial'] = message['serial']
+            result['connections'] = []
+            for connected_device in await dpa.device.async_get_wifi_connected_station():
+                logging.info(connected_device)
+                connection = {}
+                connection['mac'] = connected_device.mac_address
+                connection['band'] = band_txt[connected_device.band]
+                result['connections'].append(connection)
+            logging.debug(result)
+            jeedom_com.send_change_immediate(result)
+    logging.info("=============== end getWifiConnectedDevices ===============")
 
 async def getRates (message):
-    logging.info("============== getRates ==============")
+    logging.info("============== begin getRates ==============")
     for ip in message['ip'].split(':'):
         try:
             async with Device(ip) as dpa:
@@ -91,7 +111,6 @@ async def getRates (message):
                 jeedom_com.send_change_immediate(result)
                 firmwares = []
                 for i in range (0, len(infos.devices)):
-                    logging.info(infos.devices[i])
                     firmware = {}
                     firmware['mac'] = infos.devices[i].mac_address
                     firmware['version'] = infos.devices[i].friendly_version
@@ -103,9 +122,10 @@ async def getRates (message):
                 break
         except:
             pass
+    logging.info("=============== end getRates ===============")
 
 async def execCmd (message):
-    logging.info("============== execCmd ==============")
+    logging.info("============== begin execCmd ==============")
     async with Device(ip=message['ip']) as dpa:
         if message['password'] != '':
             dpa.password = message['password']
@@ -148,6 +168,7 @@ async def execCmd (message):
 
         ##### actualisation de l'équipement #####
         await getState(message)
+    logging.info("=============== end execCmd ===============")
 
 
 def read_socket():
@@ -163,6 +184,8 @@ def read_socket():
                 asyncio.run(getState(message))
             if message['action'] == 'getRates':
                 asyncio.run(getRates(message))
+            if message['action'] == 'getWifiConnectedDevices':
+                asyncio.run(getWifiConnectedDevices(message))
             if message['action'] == 'execCmd':
                 asyncio.run(execCmd(message))
         except DeviceNotFound as e:

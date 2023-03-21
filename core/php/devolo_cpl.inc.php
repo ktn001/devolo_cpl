@@ -22,3 +22,5 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 *
 */
 require_once __DIR__ . '/../class/devolo_model.class.php';
+require_once __DIR__ . '/../class/devolo_connection.class.php';
+require_once __DIR__ . '/../class/devolo_mac_info.class.php';

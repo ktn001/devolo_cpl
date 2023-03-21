@@ -1,108 +1,127 @@
 {
 	"autre": {
 		"texte" : "{{Modèle inconnu}}",
+		"features" : [],
 		"manageable" : 0
 	},
 	"Magic 2 WiFi next": {
 		"texte" : "{{Devolo Magic 2 WiFi next}}",
 		"image" : "Magic_2_WiFi_next.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "2400",
 		"manageable" : 1
 	},
 	"Magic 2 WiFi 6": {
 		"texte" : "{{Devolo Magic 2 WiFi 6}}",
 		"image" : "Magic_2_WiFi_2-1.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "2400",
 		"manageable" : 1
 	},
 	"Magic 2 LAN triple": {
 		"texte" : "{{Devolo Magic 2 LAN triple}}",
 		"image" : "Magic_2_LAN_triple.png",
+		"features" : [],
 		"cpl_speed" : "2400",
 		"manageable" : 1
 	},
 	"Magic 2 DinRail": {
 		"texte" : "{{Devolo Magic 2 LAN DINRail}}",
 		"image" : "Magic_2_DinRail.png",
+		"features" : [],
 		"cpl_speed" : "2400",
 		"manageable" : 1
 	},
 	"Magic 2 LAN 1-1": {
 		"texte" : "{{Devolo Magic 2 LAN}}",
 		"image" : "Magic_2_LAN_1-1.png",
+		"features" : [],
 		"cpl_speed" : "2400",
 		"manageable" : 1
 	},
 	"Magic 1 WiFi mini": {
 		"texte" : "{{Devolo Magic 1 mini}}",
 		"image" : "Magic_1_WiFi_mini.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "1200",
 		"manageable" : 1
 	},
 	"Magic 1 WiFi 2-1": {
 		"texte" : "{{Devolo Magic 1 WiFi}}",
 		"image" : "Magic_1_WiFi_2-1.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "1200",
 		"manageable" : 1
 	},
 	"Magic 1 LAN 1-1": {
 		"texte" : "{{Devolo Magic 1 LAN}}",
 		"image" : "Magic_1_LAN_1-1.png",
+		"features" : [],
 		"cpl_speed" : "1200",
 		"manageable" : 1
 	},
 	"Repeater 5400": {
 		"texte" : "{{Devolo WiFi 6 Repeater 5400}}",
 		"image" : "Repeater_5400.png",
+		"features" : ["wifi"],
 		"manageable" : 1
 	},
 	"Repeater 3000": {
 		"texte" : "{{Devolo WiFi 6 Repeater 3000}}",
 		"image" : "Repeater_3000.png",
+		"features" : ["wifi"],
 		"manageable" : 1
 	},
 	"Repeater 1200": {
 		"texte" : "{{Devolo WiFi 5 Repeater 1200}}",
 		"image" : "Repeater_1200.png",
+		"features" : ["wifi"],
 		"manageable" : 1
 	},
 	"Repeater ac+": {
 		"texte" : "{{Devolo WiFi Repeater+ ac}}",
 		"image" : "Repeater_ac+.png",
+		"features" : ["wifi"],
 		"manageable" : 1
 	},
 	"Repeater ac": {
 		"texte" : "{{Devolo WiFi Repeater ac}}",
 		"image" : "Repeater_ac.png",
+		"features" : ["wifi"],
 		"manageable" : 1
 	},
 	"dLAN 1200+ WiFi ac": {
 		"texte" : "{{dLan 1200+ WiFi ac powerline}}",
 		"image" : "Repeater_ac.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "1200",
 		"manageable" : 1
 	},
 	"dLAN 550+ WiFi": {
 		"texte" : "{{dLan+ 550 WiFi powerline}}",
 		"image" : "dLAN_550+_WiFi.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "550",
 		"manageable" : 1
 	},
 	"dLAN 550 WiFi": {
 		"texte" : "{{dLan 550 WiFi powerline}}",
 		"image" : "dLAN_550_WiFi.png",
+		"features" : ["wifi"],
 		"cpl_speed" : "550",
 		"manageable" : 1
 	},
 	"dLAN 1200 LAN": {
 		"texte" : "{{dLan 1200 LAN powerline}}",
 		"image" : "dLAN_1200_LAN.png",
+		"features" : [],
 		"cpl_speed" : "1200",
 		"manageable" : 0
 	},
 	"dLAN 550 LAN": {
 		"texte" : "{{dLan 550 LAN powerline}}",
 		"image" : "dLAN_550_LAN.png",
+		"features" : [],
 		"cpl_speed" : "550",
 		"manageable" : 0
 	}

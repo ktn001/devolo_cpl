@@ -70,7 +70,7 @@ function devolo_upgrade_to_level($level) {
 function devolo_cpl_upgrade() {
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	for ($level = 1; $level <= 7; $level++) {
+	for ($level = 1; $level <= 8; $level++) {
 		if ($pluginLevel < $level) {
 			devolo_upgrade_to_level($level);
 			config::save('pluginLevel',$level,'devolo_cpl');

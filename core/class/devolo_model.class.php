@@ -68,6 +68,10 @@ class devolo_model {
         return $this->image;
     }
 
+    public function getFeatures() {
+	return $this->features;
+    }
+
     public function getCplSpeed() {
         return $this->cpl_speed;
     }
