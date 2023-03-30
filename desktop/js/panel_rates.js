@@ -34,11 +34,11 @@ function add_rates_card() {
 		card += '</option>'
 	}
 	card +=         '</select>' 
-	card +=       '<span class="button ok cursor">{{OK}}</span>'
+	card +=         '<span class="button ok cursor">{{OK}}</span>'
+	card +=       '</div>'
+	card +=       '<i class="fas fa-times-circle bt-close_card"></i>'
 	card +=     '</div>'
-	card +=     '<i class="fas fa-times-circle bt-close_card"></i>'
-	card +=   '</div>'
-	card +=   '<div id="ratesGraph_' + get_next_rates_id() + '" class="card-content">'
+	card +=     '<div id="ratesGraph_' + get_next_rates_id() + '" class="card-content">'
 	card +=   '</div>'
 	card += '</div>'
 	$('#devolo_cpl_rates').append(card)
@@ -48,7 +48,7 @@ function add_rates_card() {
 /*
  * Ajout d'une carte graphique
  */
-$('#bt_add-graph').on('click', function() {
+$('#bt_add-rates-graph').on('click', function() {
 	add_rates_card()
 })
 
@@ -111,8 +111,7 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 				tx_rates.push([parseInt(d['time'])*1000,parseInt(d['tx_rate'])])
 				rx_rates.push([parseInt(d['time'])*1000,parseInt(d['rx_rate'])])
 			}
-			console.log(tx_rates)
-			chart = new Highcharts.StockChart( graphId,{
+			chart_config = {...chart_defaults, ...{
 				chart: {
 					zoomType: 'x',
 					spacingBottom: 5,
@@ -122,57 +121,6 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 					style: {
 						fontFamily: 'Roboto',
 					},
-				},
-				credits: {
-					enabled: false,
-				},
-				exporting: {
-					libURL: '3rdparty/highstock/lib/',
-				},
-				lang: {
-					downloadCSV: '{{Téléchargement CSV}}',
-					downloadJPEG: '{{Téléchargement JPEG}}',
-					downloadPDF: '{{Téléchargement PDF}}',
-					downloadPNG: '{{Téléchargement PNG}}',
-					downloadSVG: '{{Téléchargement SVG}}',
-					downloadXLS: '{{Téléchargement XLS}}',
-					printChart: '{{Imprimer}}',
-					viewFullscreen: '{{Plein écran}}',
-				},
-				legend: {
-					enabled: true,
-					align: 'left',
-				},
-				rangeSelector: {
-					buttonTheme: {
-						width: 'auto',
-						padding: 4,
-					},
-					buttons: [{
-						type: 'all',
-						count: 1,
-						text: '{{Tous}}'
-					},{
-						type: 'hour',
-						count: 1,
-						text: '{{Heure}}',
-					},{
-						type: 'day',
-						count: 1,
-						text: '{{Jour}}',
-					},{
-						type: 'week',
-						count: 1,
-						text: '{{Semaine}}',
-					},{
-						type: 'month',
-						count: 1,
-						text: '{{Mois}}',
-					}],
-					selected: 2,
-					inputEnabled: false,
-					x: 0,
-					y: 0,
 				},
 				series:[{
 					name: "{{Emission}}",
@@ -184,10 +132,8 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 				title:{
 					text: eqFrom + " -> " + eqTo,
 				},
-				xAxis: {
-					type: 'datetime',
-				},
-			})
+			}}
+			chart = new Highcharts.StockChart(graphId,chart_config)
 		}
 	})
 })

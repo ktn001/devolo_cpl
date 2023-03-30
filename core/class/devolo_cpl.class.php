@@ -296,6 +296,12 @@ class devolo_cpl extends eqLogic {
 	    $eqList[$humanName] = [];
 	    $eqList[$humanName]['network'] = $eqLogic->getConfiguration('network','cpl');
 	    $eqList[$humanName]['mac'] = $eqLogic->getConfiguration('mac');
+	    $eqList[$humanName]['serial'] = $eqLogic->getLogicalId();
+	    if (in_array('wifi', $eqLogic->getFeatures())) {
+		$eqList[$humanName]['wifi'] = 1;
+	    } else {
+		$eqList[$humanName]['wifi'] = 0;
+	    }
 	}
 	return $eqList;
     }
@@ -350,10 +356,10 @@ class devolo_cpl extends eqLogic {
 	    'macFrom' => $macFrom,
 	    'macTo' => $macTo,
 	];
-	$sql = 'SELECT UNIX_TIMESTAMP(time) as time, tx_rate, rx_rate
-		FROM devolo_cpl_rates
-		WHERE mac_address_from=:macFrom and mac_address_to=:macTo
-		';
+	$sql  = 'SELECT UNIX_TIMESTAMP(time) as time, tx_rate, rx_rate';
+	$sql .= '  FROM devolo_cpl_rates'; 
+	$sql .= ' WHERE mac_address_from=:macFrom and mac_address_to=:macTo';
+	$sql .= ' ORDER BY time';
 	return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
     }
 

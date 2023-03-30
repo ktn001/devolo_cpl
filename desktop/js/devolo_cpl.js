@@ -41,7 +41,6 @@ $('#bt_syncDevolo').on('click',function(){
 				$.fn.showAlert({message: data.result, level: "danger"})
 				return
 			}
-			console.log(window.location.href)
 			jeedomUtils.loadPage(window.location.href)
 		}
 	})
@@ -68,7 +67,6 @@ $('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() 
 					return
 				}
 				$('.cmd.manageable-only').remove()
-				console.log("SAUVEGARDE")
 				$('.eqLogicAction[data-action=save').trigger('click')
 			})
 		} else {
@@ -83,7 +81,21 @@ $('.eqLogicAction[data-action=save_devolo').off('click').on('click', function() 
 $('#bt_devoloNetwork').off('click').on('click', function() {
 	$('#md_modal').dialog({title: "{{Réseaux CPL}}"}).load('index.php?v=d&plugin=devolo_cpl&modal=network').dialog('open')
 })
-/* Mise à jour de l'image lors du chengement de modèle */
+
+/* Affichage des adresses mac */
+$('#bt_devoloMacInfo').off('click').on('click', function() {
+	$('#md_modal2').dialog({
+		title: "{{Mac adresses}}",
+		classes: {
+			"ui-dialog" : 'no-close'
+		},
+		beforeClose : function (event, ui) {
+			return macinfo_canClose()
+		}
+	}).load('index.php?v=d&plugin=devolo_cpl&modal=macinfo').dialog('open')
+})
+
+/* Mise à jour de l'image lors du changement de modèle */
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=model]').on('change',function() {
 	var img = $(this).find('option:selected').attr('img')
 	var val = $(this).find('option:selected').attr('value')

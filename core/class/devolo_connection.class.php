@@ -90,6 +90,22 @@ class devolo_connection {
 		return DB::Prepare($sql, [], DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
 	}
 
+	public static function getWifiHistorique($serial) {
+		$value = array(
+			'serial' => $serial,
+		);
+		$sql  = "SELECT macinfo.mac, network,";
+		$sql .= "       unix_timestamp(connect_time) * 1000 as connect_time,";
+		$sql .= "       unix_timestamp(IFNULL (disconnect_time,now())) * 1000 as disconnect_time,";
+		$sql .= "       if (ISNULL(name) or name = '',concat(connection.mac,' (',vendor, ')'),name) AS label";
+		$sql .= "  FROM devolo_connection AS connection";
+		$sql .= "  JOIN devolo_macinfo AS macinfo ON connection.mac = macinfo.mac";
+		$sql .= " WHERE serial = :serial";
+		$sql .= " ORDER BY connect_time";
+		$sql .= " LIMIT 20";
+		return DB::Prepare($sql, $value, DB::FETCH_TYPE_ALL);
+	}
+
 	public static function set_connected_devices ($serial, $connected_devices) {
 		if (! exec ('/usr/sbin/arp', $output)) {
 			log::add("devolo_cpl","warning","Erreur lors de l'exécution de /usr/bin/arp");
@@ -172,7 +188,7 @@ class devolo_connection {
 	}
 
 	public function postSave() {
-		devolo_mac_info::actualize();
+		devolo_macinfo::actualize();
 	}
 
 	public function remove() {

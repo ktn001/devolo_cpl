@@ -23,7 +23,7 @@ function isRandomMac ($_mac) {
 	return in_array(substr($_mac,1,1),['2','4','A','a','E','e']);
 }
 
-class devolo_mac_info {
+class devolo_macinfo {
 	/*     * *************************Attributs****************************** */
 
 	private $id;
@@ -38,6 +38,25 @@ class devolo_mac_info {
 		return isRandomMac ($this->mac);
 	}
 
+	public static function all() {
+		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
+		$sql .= '  FROM devolo_macinfo';
+		return DB::Prepare($sql, [], DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+	}
+
+	public static function byId ($_id) {
+		if ($_id == '') {
+			return;
+		}
+		$value = array(
+			'id' => $_id,
+		);
+		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
+		$sql .= '  FROM devolo_macinfo';
+		$sql .= ' WHERE id=:id';
+		return DB::Prepare($sql, $value, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+	}
+
 	public static function byMac ($_mac, $create=false) {
 		if ($_mac == '') {
 			return;
@@ -46,14 +65,14 @@ class devolo_mac_info {
 			'mac' => $_mac,
 		);
 		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
-		$sql .= '  FROM devolo_mac_info';
+		$sql .= '  FROM devolo_macinfo';
 		$sql .= ' WHERE mac=:mac';
 		$mac = DB::Prepare($sql, $value, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
 		if (is_object($mac)) {
 			return $mac;
 		}
 		if ($create) {
-			$mac = new devolo_mac_info();
+			$mac = new devolo_macinfo();
 			$mac->setMac($_mac);
 			return $mac;
 		}
@@ -63,8 +82,8 @@ class devolo_mac_info {
 	public static function actualize () {
 		$macs = devolo_connection::macList();
 		foreach ($macs as $mac) {
-			$mac_info = devolo_mac_info::byMac($mac);
-			if (is_object($mac_info)){
+			$macinfo = devolo_macinfo::byMac($mac);
+			if (is_object($macinfo)){
 				continue;
 			}
 			log::add("devolo_cpl","info",sprintf(__("Recherche du vendeur pour %s",__FILE__),$mac));
@@ -73,10 +92,10 @@ class devolo_mac_info {
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			$response = curl_exec($ch);
-			$mac_info = new devolo_mac_info();
-			$mac_info->setMac($mac);
-			$mac_info->setVendor($response);
-			$mac_info->save();
+			$macinfo = new devolo_macinfo();
+			$macinfo->setMac($mac);
+			$macinfo->setVendor($response);
+			$macinfo->save();
 			sleep(1);
 		}
 
@@ -85,7 +104,7 @@ class devolo_mac_info {
 	/*     * *******************Méthodes d'instance************************** */
 
 	public function getTableName() {
-		return 'devolo_mac_info';
+		return 'devolo_macinfo';
 	}
 
 	public function save() {
@@ -96,6 +115,10 @@ class devolo_mac_info {
 			}
 		}
 		DB::save($this);
+	}
+
+	public function remove() {
+		DB::remove($this);
 	}
 
 	/*     * **********************Getteur Setteur*************************** */
@@ -126,6 +149,17 @@ class devolo_mac_info {
 	public function setVendor ($_vendor) {
 		if ($_vendor != $this->vendor) {
 			$this->vendor = $_vendor;
+			$this->_changed = true;
+		}
+	}
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function setName ($_name) {
+		if ($_name != $this->name) {
+			$this->name = $_name;
 			$this->_changed = true;
 		}
 	}

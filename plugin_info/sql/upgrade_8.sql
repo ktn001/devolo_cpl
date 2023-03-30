@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `devolo_connection` (
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `devolo_mac_info` (
+CREATE TABLE IF NOT EXISTS `devolo_macinfo` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`mac` VARCHAR(17) NOT NULL UNIQUE,
 	`vendor`VARCHAR(50),

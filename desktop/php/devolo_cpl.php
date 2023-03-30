@@ -32,6 +32,11 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 		<br>
 		<span>{{Réseaux CPL}}</span>
 	    </div>
+	    <div id="bt_devoloMacInfo" class="cursor" eqLogicAction logoSecondary">
+		<i class="fas fa-microchip"></i>
+		<br>
+		<span>{{Adresses mac}}</span>
+	    </div>
 	    <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
 		<i class="fas fa-wrench"></i>
 		<br>
