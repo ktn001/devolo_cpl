@@ -19,13 +19,22 @@ function add_wifi_card() {
 	card +=     '</div>'
 	card +=     '<div class="col-sm-5">'
 	card +=       '<span class="label">{{Equipement}}:</span>'
-	card +=       '<select class="AP">'
+	card +=       '<select class="devolo_wifi_view">'
+	card +=         '<option value="ap">{{AP}}</option>'
+	card +=         '<option value="client">{{client}}</option>'
+	card +=       '</select>'
+	card +=       '<select class="graphview" data-view="ap">'
 	for (name in eqList) {
 		if (eqList[name]['wifi'] == 1) {
 			card += '<option value="' + eqList[name]['serial'] + '">'
 			card += name
 			card += '</option>'
 		}
+	}
+	card +=       '</select>'
+	card +=       '<select class="graphview" data-view="client">'
+	for (id in macinfo) {
+		card += '<option value="' + macinfo[id]['mac'] + '">' + macinfo[id]['displayname'] + '</option>'
 	}
 	card +=       '</select>'
 	card +=       '<span class="button ok cursor">{{OK}}</span>'
@@ -36,6 +45,7 @@ function add_wifi_card() {
 	card +=   '</div>'
 	card += '</div>'
 	$('#devolo_cpl_wifi').append(card)
+	$('#devolo_cpl_wifi div.card').last().find('select.devolo_wifi_view').trigger('change')
 }
 
 /*
@@ -46,18 +56,35 @@ $('#bt_add-wifi-graph').on('click', function() {
 })
 
 /*
+ * changement de vue
+ */
+$('#devolo_cpl_wifi').on('change','div.card select.devolo_wifi_view', function() {
+	selected_view = $(this).val()
+	$(this).closest('.card-header').find('select.graphview[data-view!=' + selected_view + ']').addClass('hidden')
+	$(this).closest('.card-header').find('select.graphview[data-view=' + selected_view + ']').removeClass('hidden')
+})
+
+/*
  * Chargement des données sur click du bouron "OK"
  */
 $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
+	selected_view = $(this).closest('.card-header').find('select.devolo_wifi_view').val()
 	graphId = $(this).closest('.card').find('.card-content').attr('id')
+	title = $(this).closest('.card').find('select.graphview[data-view]:visible option:selected').text()
+	key = $(this).closest('.card').find('select.graphview[data-view]:visible option:selected').val()
+	if (selected_view == 'ap') {
+		actionAjax = "wifiHistorique_ap"
+	} else {
+		actionAjax = "wifiHistorique_client"
+	}
 	serial = $(this).closest('.card').find('select.AP').value()
 
 	$.ajax({
 		type: 'POST',
 		url: '/plugins/devolo_cpl/core/ajax/devolo_cpl.ajax.php',
 		data: {
-			action: 'wifiHistorique',
-			serial : serial
+			action: actionAjax,
+			key: key
 		},
 		dataType: 'json',
 		error: function(request, status, error) {
@@ -71,8 +98,8 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 			categories = []
 			networks = []
 			for (entry of data.result){
-				if (! categories.includes(entry.label)) {
-					categories.push(entry.label)
+				if (! categories.includes(entry.category)) {
+					categories.push(entry.category)
 				}
 				if (! networks.includes(entry.network)) {
 					networks.push(entry.network)
@@ -84,17 +111,24 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 			for (i=0; i < categories.length; i++) {
 				categoryNr[categories[i]] = i
 			}
+			if (selected_view == 'client') {
+				for (i=0; i < categories.length; i++) {
+					for (eq in eqList) {
+						if (eqList[eq].serial == categories[i]) {
+							categories[i] = eq
+						}
+					}
+				}
+			}
 			datas= []
 			for (network of networks) {
-				console.log(network)
 				datas[network] = []
 			}
-			console.log(datas)
 			for (entry of data.result){
 				data = {}
 				data.x = parseInt(entry.connect_time)
 				data.x2 = parseInt(entry.disconnect_time)
-				data.y = categoryNr[entry.label]
+				data.y = categoryNr[entry.category]
 				datas[entry.network].push(data)
 			}
 			chart_config = {...chart_defaults, ...{
@@ -111,7 +145,7 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 					},
 				},
 				title: {
-					text: 'Highcharts X-range'
+					text: title,
 				},
 				accessibility: {
 					point: {
@@ -137,12 +171,11 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 				},
 				series: []
 			}};
-			console.log(chart_config)
 			for (network of networks) {
 				chart_config.series.push({
 					name : network,
 					borderColor: 'gray',
-					pointWidth: 5,
+					pointWidth: 10,
 					data : datas[network],
 					dataLabels: {
 						enabled: true,
@@ -150,7 +183,6 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 					showInLegend: true,
 				})
 			}
-			console.log(chart_config)
 			chart = new Highcharts.chart(graphId,chart_config)
 
 		}

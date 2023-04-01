@@ -4,6 +4,7 @@ if (!isConnect()) {
 }
 
 sendVarToJs('eqList', devolo_cpl::getEqListToGraph());
+sendVarToJs('macinfo', devolo_macinfo::getMacWifiToGraph());
 include_file('desktop', 'panel', 'css', 'devolo_cpl');
 ?>
 

@@ -101,6 +101,14 @@ class devolo_macinfo {
 
 	}
 
+	public static function getMacWifiToGraph() {
+		$sql  = "SELECT mac,";
+		$sql .= "       if (ISNULL(name) or name = '',mac,name) AS displayname";
+		$sql .= "  FROM devolo_macinfo";
+		$sql .= " ORDER BY displayname";
+		return DB::Prepare($sql, [], DB::FETCH_TYPE_ALL);
+	}
+
 	/*     * *******************Méthodes d'instance************************** */
 
 	public function getTableName() {

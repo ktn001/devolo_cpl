@@ -77,13 +77,26 @@ try {
 	}
     }
 
-    if ($action == 'wifiHistorique') {
+    if ($action == 'wifiHistorique_ap') {
 	try {
-	    $serial = init('serial');
+	    $serial = init('key');
 	    if ($serial == '') {
 		throw new Exception(__("Le numéro de série est indéfinie.",__FILE__));
 	    }
-	    $histo = devolo_connection::getWifiHistorique($serial);
+	    $histo = devolo_connection::getWifiHistorique_ap($serial);
+	    ajax::success($histo);
+	} catch (Exception $e){
+	    ajax::error(displayException($e), $e->getCode());
+	}
+    }
+
+    if ($action == 'wifiHistorique_client') {
+	try {
+	    $mac = init('key');
+	    if ($mac == '') {
+		throw new Exception(__("L'adresse mac du client est indéfinie.",__FILE__));
+	    }
+	    $histo = devolo_connection::getWifiHistorique_client($mac);
 	    ajax::success($histo);
 	} catch (Exception $e){
 	    ajax::error(displayException($e), $e->getCode());

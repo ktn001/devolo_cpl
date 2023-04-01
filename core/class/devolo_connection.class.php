@@ -90,19 +90,31 @@ class devolo_connection {
 		return DB::Prepare($sql, [], DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
 	}
 
-	public static function getWifiHistorique($serial) {
+	public static function getWifiHistorique_ap($serial) {
 		$value = array(
 			'serial' => $serial,
 		);
 		$sql  = "SELECT macinfo.mac, network,";
 		$sql .= "       unix_timestamp(connect_time) * 1000 as connect_time,";
 		$sql .= "       unix_timestamp(IFNULL (disconnect_time,now())) * 1000 as disconnect_time,";
-		$sql .= "       if (ISNULL(name) or name = '',concat(connection.mac,' (',vendor, ')'),name) AS label";
+		$sql .= "       if (ISNULL(name) or name = '',connection.mac,name) AS category";
 		$sql .= "  FROM devolo_connection AS connection";
 		$sql .= "  JOIN devolo_macinfo AS macinfo ON connection.mac = macinfo.mac";
 		$sql .= " WHERE serial = :serial";
 		$sql .= " ORDER BY connect_time";
-		$sql .= " LIMIT 20";
+		return DB::Prepare($sql, $value, DB::FETCH_TYPE_ALL);
+	}
+
+	public static function getWifiHistorique_client($mac) {
+		$value = array(
+			'mac' => $mac,
+		);
+		$sql  = "SELECT serial as category, mac, network,";
+		$sql .= "       unix_timestamp(connect_time) * 1000 as connect_time,";
+		$sql .= "       unix_timestamp(IFNULL (disconnect_time,now())) * 1000 as disconnect_time";
+		$sql .= "  FROM devolo_connection";
+		$sql .= " WHERE mac = :mac";
+		$sql .= " ORDER BY connect_time";
 		return DB::Prepare($sql, $value, DB::FETCH_TYPE_ALL);
 	}
 
