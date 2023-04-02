@@ -92,9 +92,14 @@ class devolo_macinfo {
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			$response = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			$macinfo = new devolo_macinfo();
 			$macinfo->setMac($mac);
-			$macinfo->setVendor($response);
+			if ($httpcode == "200") {
+				$macinfo->setVendor($response);
+			} else {
+				$macinfo->setVendor('inconnu');
+			}
 			$macinfo->save();
 			sleep(1);
 		}

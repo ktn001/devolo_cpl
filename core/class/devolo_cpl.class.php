@@ -154,9 +154,25 @@ class devolo_cpl extends eqLogic {
      * Purge de données historiques
      */
     public static function purgeDB() {
+	log::add("devolo_cpl","info","purge DB");
 	$retention = config::byKey('data-retention','devolo_cpl');
-	$sql = "DELETE FROM devolo_cpl_rates";
+
+	$sql  = "DELETE FROM devolo_cpl_rates";
 	$sql .= " WHERE time < DATE_SUB(now(), INTERVAL " . $retention . ")";
+	log::add("devolo_cpl","debug",$sql);
+	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
+	log::add("devolo_cpl","debug",$response);
+
+	$sql  = "DELETE FROM devolo_connection";
+	$sql .= " WHERE disconnect_time < DATE_SUB(now(), INTERVAL " . $retention . ")";
+	log::add("devolo_cpl","debug",$sql);
+	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
+	log::add("devolo_cpl","debug",$response);
+
+	$sql  = "DELETE FROM devolo_macinfo";
+	$sql .= " wHERE name is NULL";
+	$sql .= "   AND mac not in (";
+	$sql .= "       SELECT mac FROM devolo_connection)";
 	log::add("devolo_cpl","debug",$sql);
 	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
 	log::add("devolo_cpl","debug",$response);
