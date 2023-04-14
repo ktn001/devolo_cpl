@@ -1,5 +1,6 @@
 {
   "pip3": {
+    "requests" :           {},
     "httpx" :              { "version" : "0.21.0" },
     "zeroconf" :           { "version" : "0.36.8" },
     "protobuf" :           { "version" : "3.17.3" },
