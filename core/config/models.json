@@ -92,7 +92,7 @@
 	},
 	"dLAN 1200+ WiFi ac": {
 		"texte" : "{{dLan 1200+ WiFi ac powerline}}",
-		"image" : "Repeater_ac.png",
+		"image" : "dLAN_1200+_WiFi_ac.png",
 		"features" : ["wifi"],
 		"cpl_speed" : "1200",
 		"manageable" : 1

@@ -25,16 +25,17 @@ class devolo_model {
             $model->$key = $value;
         }
         $model->code = $code;
+        $imgDir = realpath( __DIR__ . '/../../desktop/img' ) . '/';
+	$webDir = preg_replace('/^.*?(\/plugins\/.*)/','\1',$imgDir);
         if (isset ($model->image)) {
             $country = config::bykey('country','devolo_cpl','ch');
             if ($country == 'be') {
                 $country = 'fr';
             }
-            $imgDir = realpath( __DIR__ . '/../../desktop/img' ) . '/';
             $img = $country . '-' . $model->image;
+            $model->image = $webDir . $model->image;
             if ( file_exists($imgDir . $img)){
-		$dir = preg_replace('/^.*?(\/plugins\/.*)/','\1',$imgDir);
-                $model->image = $dir . $img;
+                $model->image = $webDir . $img;
             }
 	} else {
 	    $model->image = '/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png';
