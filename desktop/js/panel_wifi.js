@@ -65,19 +65,18 @@ $('#devolo_cpl_wifi').on('change','div.card select.devolo_wifi_view', function()
 })
 
 /*
- * Chargement des données sur click du bouron "OK"
+ * Chargement des données sur click du bouton "OK"
  */
 $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
-	selected_view = $(this).closest('.card-header').find('select.devolo_wifi_view').val()
-	graphId = $(this).closest('.card').find('.card-content').attr('id')
-	title = $(this).closest('.card').find('select.graphview[data-view]:visible option:selected').text()
-	key = $(this).closest('.card').find('select.graphview[data-view]:visible option:selected').val()
+	let selected_view = $(this).closest('.card-header').find('select.devolo_wifi_view').val()
+	let graphId = $(this).closest('.card').find('.card-content').attr('id')
+	let title = $(this).closest('.card').find('select.graphview[data-view=' + selected_view + '] option:selected').text()
+	let key = $(this).closest('.card').find('select.graphview[data-view=' + selected_view + '] option:selected').val()
 	if (selected_view == 'ap') {
 		actionAjax = "wifiHistorique_ap"
 	} else {
 		actionAjax = "wifiHistorique_client"
 	}
-	serial = $(this).closest('.card').find('select.AP').value()
 
 	$.ajax({
 		type: 'POST',
@@ -95,8 +94,8 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 				$.fn.showAlert({message: data.result, level: "danger"})
 				return
 			}
-			categories = []
-			networks = []
+			let categories = []
+			let networks = []
 			for (entry of data.result){
 				if (! categories.includes(entry.category)) {
 					categories.push(entry.category)
@@ -107,7 +106,7 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 			}
 			categories.sort()
 			networks.sort()
-			categoryNr = {}
+			let categoryNr = {}
 			for (i=0; i < categories.length; i++) {
 				categoryNr[categories[i]] = i
 			}
@@ -120,7 +119,7 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 					}
 				}
 			}
-			datas= []
+			let datas= []
 			for (network of networks) {
 				datas[network] = []
 			}
@@ -183,9 +182,9 @@ $('#devolo_cpl_wifi').on('click','div.card .button.ok', function() {
 					showInLegend: true,
 				})
 			}
-			chart = new Highcharts.chart(graphId,chart_config)
-
+			let chart = new Highcharts.chart(graphId,chart_config)
 		}
 	})
 })
 add_wifi_card()
+$('#devolo_cpl_wifi div.card').find('.button.ok').trigger('click')

@@ -11,7 +11,7 @@ function get_next_rates_id () {
  * Création d'une carte graphique
  */
 function add_rates_card() {
-	card  = '<div class=card>'
+	let card  = '<div class=card>'
 	card +=   '<div class="card-header">'
 	card +=     '<div class="col-sm-3">'
 	card +=       '<i class="fas fa-exchange-alt"></i>'
@@ -56,11 +56,11 @@ $('#bt_add-rates-graph').on('click', function() {
  * Changement de source
  */
 $('#devolo_cpl_rates').on('change','div.card select.from', function() {
-	mac = $(this).value()
-	network = $(this).find(':selected').data('network')
-	selectTo = $(this).closest('div.card').find('select.to')
-	macTo = selectTo.value()
-	changeNeeded = 0
+	let mac = $(this).value()
+	let network = $(this).find(':selected').data('network')
+	let selectTo = $(this).closest('div.card').find('select.to')
+	let macTo = selectTo.value()
+	let changeNeeded = 0
 	$(selectTo).find('option').each(function(){
 		if (($(this).data('network') != network) || ($(this).value() == mac)) {
 			$(this).hide()
@@ -82,11 +82,11 @@ $('#devolo_cpl_rates').on('change','div.card select.from', function() {
  * Chargement des données sur click du bouton "OK"
  */
 $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
-	graphId = $(this).closest('.card').find('.card-content').attr('id')
-	macFrom = $(this).closest('.card').find('select.from').value()
-	eqFrom =  $(this).closest('.card').find('select.from option:selected').text()
-	macTo = $(this).closest('.card').find('select.to').value()
-	eqTo =  $(this).closest('.card').find('select.to option:selected').text()
+	let graphId = $(this).closest('.card').find('.card-content').attr('id')
+	let macFrom = $(this).closest('.card').find('select.from').value()
+	let eqFrom =  $(this).closest('.card').find('select.from option:selected').text()
+	let macTo = $(this).closest('.card').find('select.to').value()
+	let eqTo =  $(this).closest('.card').find('select.to option:selected').text()
 
 	$.ajax({
 		type: 'POST',
@@ -105,8 +105,8 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 				$.fn.showAlert({message:data.result, level: "danger"})
 				return
 			}
-			tx_rates = []
-			rx_rates = []
+			let tx_rates = []
+			let rx_rates = []
 			for (d of data.result) {
 				tx_rates.push([parseInt(d['time'])*1000,parseInt(d['tx_rate'])])
 				rx_rates.push([parseInt(d['time'])*1000,parseInt(d['rx_rate'])])
@@ -133,7 +133,7 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
 					text: eqFrom + " -> " + eqTo,
 				},
 			}}
-			chart = new Highcharts.StockChart(graphId,chart_config)
+			let chart = new Highcharts.StockChart(graphId,chart_config)
 		}
 	})
 })
@@ -142,4 +142,4 @@ $('#devolo_cpl_rates').on('click','div.card .button.ok', function() {
  * Création d'une première carte graphique après chargement
  */
 add_rates_card()
-$('#devolo_cpl_rates div.card').last().find('.button.ok').trigger('click')
+$('#devolo_cpl_rates').find('div.card .button.ok').trigger('click')

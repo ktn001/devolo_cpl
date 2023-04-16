@@ -6,4 +6,3 @@
   </a>
 </div>
 <?php include_file('3rdparty', 'highstock/modules/xrange', 'js') ?>
-<?php include_file('3rdparty', 'highstock/modules/debugger', 'js') ?>
