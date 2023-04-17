@@ -32,6 +32,10 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_9() {
+	config::save('devolo_plc_api::version','1.3.0',devolo_cpl);
+}
+
 function devolo_cpl_goto_7() {
 	config::save('displayDesktopPanel','1',devolo_cpl);
 }
@@ -70,7 +74,7 @@ function devolo_upgrade_to_level($level) {
 function devolo_cpl_upgrade() {
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	for ($level = 1; $level <= 8; $level++) {
+	for ($level = 1; $level <= 9; $level++) {
 		if ($pluginLevel < $level) {
 			devolo_upgrade_to_level($level);
 			config::save('pluginLevel',$level,'devolo_cpl');
@@ -97,11 +101,3 @@ function devolo_cpl_update() {
 	$plc_api_version = config::byKey('devolo_plc_api::version',devolo_cpl);
 	config::save('devolo_plc_api::version',$plc_api_version,devolo_cpl);
 }
-
-// Fonction exécutée automatiquement après la suppression du plugin
-// function devolo_cpl_remove() {
-// 	$sql = 'DROP TABLE IF EXISTS devolo_cpl_rates';
-// 	log::add("devolo_cpl","debug",$sql);
-// 	$response = DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
-// 	log::add("devolo_cpl","debug",$response);
-// }

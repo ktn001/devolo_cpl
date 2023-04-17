@@ -98,7 +98,7 @@ function addMacinfoToTable(_macinfo) {
 	tr += '<span class="macinfoAttr" data-l1key="vendor"></span>'
 	tr += '</td>'
 	tr += '<td>'
-	tr += '<input class="macinfoAttr form-control input-sm" data-l1key="name"></input>'
+	tr += '<input class="macinfoAttr form-control input-sm" data-l1key="name" maxlength="30"></input>'
 	tr += '</td>'
 	tr += '<td>'
 	tr += '<i class="fas fa-minus-circle pull-right macinfoAction cursor" data-action="remove"></i>'

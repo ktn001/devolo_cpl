@@ -1,8 +1,5 @@
-nbproject/
-test.php
+resources/etc/devolo_plc_api.version
 core/config/common.config.php
-plugins
-sftp-config.json
 .project
 .DS_Store
 Thumbs.db
