@@ -104,5 +104,40 @@
 		"type"           : "info",
 		"subType"        : "string",
 		"order"          : "10"
+	},
+	"guest_duration": {
+		"level"          : "10",
+		"manageableOnly" : "1",
+		"name"           : "{{durée guest}}",
+		"type"           : "action",
+		"subType"        : "slider",
+		"order"          : "11"
+	},
+	"guest" : {
+		"level"          : "10",
+		"manageableOnly" : "1",
+		"name"           : "{{Wifi guest}}",
+		"type"           : "info",
+		"subType"        : "binary",
+		"visible"        : "0",
+		"order"          : "12"
+	},
+	"guest_on" : {
+		"level"          : "10",
+		"manageableOnly" : "1",
+		"name"           : "{{Guest ON}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "guest",
+		"order"          : "13"
+	},
+	"guest_off" : {
+		"level"          : "10",
+		"manageableOnly" : "1",
+		"name"           : "{{Guest OFF}}",
+		"type"           : "action",
+		"subType"        : "other",
+		"value"          : "guest",
+		"order"          : "14"
 	}
 }

@@ -58,16 +58,31 @@ async def getState (message):
         result['serial'] = message['serial']
         if message['password'] != '':
             dpa.password = message['password']
+
+        # leds
         if await dpa.device.async_get_led_setting():
             result['leds'] = 1
         else:
             result['leds'] = 0
+
+        # firmware
         firmware = await dpa.device.async_check_firmware_available()
         if firmware.result == devolo_plc_api.device_api.UPDATE_AVAILABLE:
             result['firmwareAvailable'] = 1
         else:
             result['firmwareAvailable'] = 0
         result['nextFirmware'] = firmware.new_firmware_version
+
+        # wifi guest
+        if 'wifi1' in dpa.device.features:
+            guest_wifi = await dpa.device.async_get_wifi_guest_access()
+            logging.info(" ")
+            logging.info("XXXXXXXXXXXX SSID    " + guest_wifi.ssid)
+            logging.info("XXXXXXXXXXXX KEY     " + guest_wifi.key)
+            logging.info("XXXXXXXXXXXX ENABLED " + str(guest_wifi.enabled))
+            logging.info("XXXXXXXXXXXX REMAIND " + str(guest_wifi.remaining_duration))
+            logging.info(" ")
+
         logging.debug(result)
         jeedom_com.send_change_immediate(result)
     logging.info("=============== end getState ===============")
@@ -144,7 +159,7 @@ async def execCmd (message):
                 logging.debug("commande 'leds': KO")
 
         ##### locate #####
-        if message['cmd'] == 'locate':
+        elif message['cmd'] == 'locate':
             logging.info("cmd: 'locate'")
             if message['param'] == 1:
                 success = await dpa.plcnet.async_identify_device_start()
@@ -165,6 +180,18 @@ async def execCmd (message):
                     result['serial'] = message['serial']
                     result['locate'] = 0
                     jeedom_com.send_change_immediate(result)
+
+        ##### guest_on #####
+        elif message['cmd'] == 'guest_on':
+            logging.info("cmd: 'guest_on'")
+            if int(message['param']) > 0:
+                await dpa.device.async_set_wifi_guest_access(enable=True,duration=int(message['param']))
+            else:
+                await dpa.device.async_set_wifi_guest_access(enable=True)
+
+        ##### guest_off #####
+        elif message['cmd'] == 'guest_off':
+            await dpa.device.async_set_wifi_guest_access(enable=False)
 
         ##### actualisation de l'équipement #####
         await getState(message)

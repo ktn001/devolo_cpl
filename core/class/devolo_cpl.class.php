@@ -33,6 +33,7 @@ class devolo_cpl extends eqLogic {
 		continue;
 	    }
 	    $equipement->getWifiConnectedDevices();
+	    $equipement->getEqState();
 	}
 	devolo_connection::setIps();
     }
@@ -42,12 +43,14 @@ class devolo_cpl extends eqLogic {
     */
     public static function cron5() {
 	$equipements = eqLogic::byType(__CLASS__,True);
+    /*
 	foreach($equipements as $equipement) {
 	    if (! $equipement->isManageable()){
 		continue;
 	    }
 	    $equipement->getEqState();
 	}
+    */
 	devolo_cpl::getRates();
     }
 
@@ -280,10 +283,13 @@ class devolo_cpl extends eqLogic {
      */
     public static function syncDevolo() {
 	$path = realpath(dirname(__FILE__) . '/../../resources/bin');
-	$cmd = "python3 " . $path . '/devolo_cpl.py';
-	$cmd .= ' --syncDevolo';
-	$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
-	$cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_out');
+	$cmd = "python3 " . $path . '/devolo_synchronize.py';
+	$loglevel = log::convertLogLevel(log::getLogLevel(__CLASS__));
+	if ($loglevel == 'debug' and ! config::bykey('debuglimite','devolo_cpl')) {
+	    $loglevel = "fulldebug";
+	}
+	$cmd .= ' --loglevel ' . $loglevel;
+	$cmd .= ' 2>>' . log::getPathToLog('devolo_synchronize');
 	$lines = [];
 	$result = exec($cmd ,$lines, $exitStatus);
 	if ($result === false) {
@@ -591,20 +597,37 @@ class devolo_cplCmd extends cmd {
 
     // Exécution d'une commande
     public function execute($_options = array()) {
-	if ($this->getLogicalId() == 'refresh') {
-	    $this->getEqLogic()->getEqState();
-	}
-	if ($this->getLogicalId() == 'leds_on') {
-	    $this->sendActionToDaemon('leds', 1);
-	}
-	if ($this->getLogicalId() == 'leds_off') {
-	    $this->sendActionToDaemon('leds', 0);
-	}
-	if ($this->getLogicalId() == 'locate_on') {
-	    $this->sendActionToDaemon('locate', 1);
-	}
-	if ($this->getLogicalId() == 'locate_off') {
-	    $this->sendActionToDaemon('locate', 0);
+	switch ($this->getLogicalId()) {
+	    case 'refresh':
+		$this->getEqLogic()->getEqState();
+		break;
+	    case  'leds_on':
+		$this->sendActionToDaemon('leds', 1);
+		break;
+	    case 'leds_off':
+		$this->sendActionToDaemon('leds', 0);
+		break;
+	    case 'locate_on':
+		$this->sendActionToDaemon('locate', 1);
+		break;
+	    case 'locate_off':
+		$this->sendActionToDaemon('locate', 0);
+		break;
+	    case 'guest_duration':
+		log::add("devolo_cpl","info",print_r($_options,true));
+		break;
+	    case 'guest_on':
+		$durationCmd = $this->getEqLogic()->getCmd('action','guest_duration');
+		if (is_object($durationCmd)) {
+		    $duration = $durationCmd->getLastValue();
+		} else {
+		    $duration = 0;
+		}
+		$this->sendActionToDaemon('guest_on', $duration);
+		break;
+	    case 'guest_off':
+		$this->sendActionToDaemon('guest_off');
+		break;
 	}
     }
 

@@ -32,6 +32,10 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_10() {
+	config::save('devolo_plc_api::version','1.3.1',devolo_cpl);
+}
+
 function devolo_cpl_goto_9() {
 	config::save('devolo_plc_api::version','1.3.0',devolo_cpl);
 }
@@ -74,7 +78,7 @@ function devolo_upgrade_to_level($level) {
 function devolo_cpl_upgrade() {
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	for ($level = 1; $level <= 9; $level++) {
+	for ($level = 1; $level <= 10; $level++) {
 		if ($pluginLevel < $level) {
 			devolo_upgrade_to_level($level);
 			config::save('pluginLevel',$level,'devolo_cpl');
