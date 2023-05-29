@@ -76,12 +76,13 @@ async def getState (message):
         # wifi guest
         if 'wifi1' in dpa.device.features:
             guest_wifi = await dpa.device.async_get_wifi_guest_access()
-            logging.info(" ")
-            logging.info("XXXXXXXXXXXX SSID    " + guest_wifi.ssid)
-            logging.info("XXXXXXXXXXXX KEY     " + guest_wifi.key)
-            logging.info("XXXXXXXXXXXX ENABLED " + str(guest_wifi.enabled))
-            logging.info("XXXXXXXXXXXX REMAIND " + str(guest_wifi.remaining_duration))
-            logging.info(" ")
+            if guest_wifi:
+                result['wifi_guest'] = {}
+                if guest_wifi.enabled:
+                    result['wifi_guest']['enabled'] = 1
+                else:
+                    result['wifi_guest']['enabled'] = 0
+                result['wifi_guest']['remaining'] = guest_wifi.remaining_duration
 
         logging.debug(result)
         jeedom_com.send_change_immediate(result)
@@ -97,7 +98,6 @@ async def getWifiConnectedDevices (message):
             result['serial'] = message['serial']
             result['connections'] = []
             for connected_device in await dpa.device.async_get_wifi_connected_station():
-                logging.info(connected_device)
                 connection = {}
                 connection['mac'] = connected_device.mac_address
                 connection['band'] = band_txt[connected_device.band]
@@ -185,8 +185,10 @@ async def execCmd (message):
         elif message['cmd'] == 'guest_on':
             logging.info("cmd: 'guest_on'")
             if int(message['param']) > 0:
+                logging.debug(f'gest on, duration: {message["param"]}')
                 await dpa.device.async_set_wifi_guest_access(enable=True,duration=int(message['param']))
             else:
+                logging.debug(f'gest on, duration: indéfini')
                 await dpa.device.async_set_wifi_guest_access(enable=True)
 
         ##### guest_off #####

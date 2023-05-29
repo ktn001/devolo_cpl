@@ -42,15 +42,6 @@ class devolo_cpl extends eqLogic {
     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
     */
     public static function cron5() {
-	$equipements = eqLogic::byType(__CLASS__,True);
-    /*
-	foreach($equipements as $equipement) {
-	    if (! $equipement->isManageable()){
-		continue;
-	    }
-	    $equipement->getEqState();
-	}
-    */
 	devolo_cpl::getRates();
     }
 
@@ -63,6 +54,8 @@ class devolo_cpl extends eqLogic {
 
     /*
      * Changement de version pour devolo_plc_api
+     *
+     * Appelée par le core sur modification de la config "devolo_plc_api::version"
      */
     public static function preConfig_devolo_plc_api_version($version){
 	$etcPath = __DIR__ . '/../../resources/etc';
@@ -194,6 +187,13 @@ class devolo_cpl extends eqLogic {
 			    '#_icon_on_#' => '<i class="icon_green icon fas fa-podcast"></i>',
 			    '#_icon_off_#' => '<i class="icon_blue icon jeedom2-case"></i>'
 			]
+		    ],
+		    'wifi' => [
+			'template' => 'tmplicon',
+			'replace' => [
+			    '#_icon_on_#' => '<i class="icon_green icon fas fa-wifi"></i>',
+			    '#_icon_off_#' => '<i class="icon_blue icon fas fa-times"></i>'
+			]
 		    ]
 		]
 	    ]
@@ -216,6 +216,19 @@ class devolo_cpl extends eqLogic {
 	    }
 	}
 	return $eqLogics[0];
+    }
+
+    /*
+     * Cherche les equipements ayant une feature
+     */
+    public static function byFeature($feature, $onlyEnable=false){
+	$result = [];
+	foreach (self::byType(__CLASS__, $onlyEnable) as $eqLogic){
+	    if ($eqLogic->haveFeature($feature)){
+		$result[] = $eqLogic;
+	    }
+	}
+	return $result;
     }
 
     /*
@@ -445,6 +458,11 @@ class devolo_cpl extends eqLogic {
 	    if (! $this->isManageable() and $config['manageableOnly']){
 		continue;
 	    }
+	    if (array_key_exists('feature',$config)){
+		if (! $this->haveFeature($config['feature'])){
+		    continue;
+		}
+	    }
 	    $cmd = $this->getCmd(null, $logicalId);
 	    if (is_object($cmd)) {
 		continue;
@@ -536,8 +554,12 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    public function getModel () {
+    public function getModel() {
 	return devolo_model::byCode($this->getConfiguration('model'));
+    }
+
+    public function haveFeature($feature){
+	return in_array($feature, $this->getModel()->getFeatures());
     }
 
     /*
@@ -624,6 +646,19 @@ class devolo_cplCmd extends cmd {
 		    $duration = 0;
 		}
 		$this->sendActionToDaemon('guest_on', $duration);
+		$guestCmd = $this->getEqLogic()->getCmd('info','guest');
+		if (is_object($guestCmd)){
+			$cmd = __DIR__ . "/../php/waitGuestAndRefresh.php -i " . $guestCmd->getId();
+			log::add("devolo_cpl","debug",sprintf(__("Lancement de %s",__FILE),$cmd ));
+			system::php($cmd . ' >> ' . log::getPathToLog('devolo_cpl_script') . ' 2>&1 &');
+		}
+		/*
+		foreach (devolo_cpl::byFeature('wifi', true) as $eqLogic){
+		    if ($eqLogic->getId() != $this->getEqLogic_id()){
+		    	$eqLogic->getEqLogic()->getEqState();
+		    }
+		}
+		*/
 		break;
 	    case 'guest_off':
 		$this->sendActionToDaemon('guest_off');

@@ -106,6 +106,7 @@
 		"order"          : "10"
 	},
 	"guest_duration": {
+		"feature"        : "wifi",
 		"level"          : "10",
 		"manageableOnly" : "1",
 		"name"           : "{{durée guest}}",
@@ -114,6 +115,7 @@
 		"order"          : "11"
 	},
 	"guest" : {
+		"feature"        : "wifi",
 		"level"          : "10",
 		"manageableOnly" : "1",
 		"name"           : "{{Wifi guest}}",
@@ -123,21 +125,40 @@
 		"order"          : "12"
 	},
 	"guest_on" : {
+		"feature"        : "wifi",
 		"level"          : "10",
 		"manageableOnly" : "1",
 		"name"           : "{{Guest ON}}",
 		"type"           : "action",
 		"subType"        : "other",
 		"value"          : "guest",
+		"template"       : {
+			"dashboard" : "devolo_cpl::wifi",
+			"mobile"    : "devolo_cpl::wifi"
+		},
 		"order"          : "13"
 	},
 	"guest_off" : {
+		"feature"        : "wifi",
 		"level"          : "10",
 		"manageableOnly" : "1",
 		"name"           : "{{Guest OFF}}",
 		"type"           : "action",
 		"subType"        : "other",
 		"value"          : "guest",
+		"template"       : {
+			"dashboard" : "devolo_cpl::wifi",
+			"mobile"    : "devolo_cpl::wifi"
+		},
 		"order"          : "14"
+	},
+	"guest_remaining" : {
+		"feature"        : "wifi",
+		"level"          : "10",
+		"manageableOnly" : "1",
+		"name"           : "{{Guest temps restant}}",
+		"type"           : "info",
+		"subType"        : "numeric",
+		"order"          : "15"
 	}
 }

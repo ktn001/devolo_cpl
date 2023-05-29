@@ -10,6 +10,20 @@ function process_infoState($result, $eqLogic) {
     if (isset($result['firmwareAvailable'])) {
 	$eqLogic->checkAndUpdateCmd('update_available', $result['firmwareAvailable']);
     }
+    if (isset($result['wifi_guest'])) {
+	$eqLogic->checkAndUpdateCmd('guest', $result['wifi_guest']['enabled']);
+	$remaindCmd = $eqLogic->getCmd('info','guest_remaining');
+	if (is_object($remaindCmd)){
+	    $oldValue=$remaindCmd->execCmd();
+	    $eqLogic->checkAndUpdateCmd('guest_remaining', $result['wifi_guest']['remaining']);
+	    $newValue=$remaindCmd->execCmd();
+	    if ($newValue > $oldValue) {
+		$remaindCmd->setConfiguration('maxValue',$newValue);
+		$remaindCmd->setConfiguration('minValue',0);
+		$remaindCmd->save();
+	    }
+	}
+    }
 }
 
 function process_firmwares($result, $eqLogic) {
