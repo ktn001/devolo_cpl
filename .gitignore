@@ -4,6 +4,7 @@ core/config/common.config.php
 .DS_Store
 Thumbs.db
 *.php~
+.*.swp
 docs/_site/
 docs/Gemfile.lock
 docs/.sass-cache/

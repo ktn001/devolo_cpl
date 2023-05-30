@@ -15,6 +15,11 @@ function process_infoState($result, $eqLogic) {
 	$remaindCmd = $eqLogic->getCmd('info','guest_remaining');
 	if (is_object($remaindCmd)){
 	    $oldValue=$remaindCmd->execCmd();
+	    $maxValue=$remaindCmd->getConfiguration('maxValue');
+	    if ($maxValue < $result['wifi_guest']['remaining']) {
+		$remaindCmd->setConfiguration('maxValue',$result['wifi_guest']['remaining']);
+		$remaindCmd->save();
+	    }
 	    $eqLogic->checkAndUpdateCmd('guest_remaining', $result['wifi_guest']['remaining']);
 	    $newValue=$remaindCmd->execCmd();
 	    if ($newValue > $oldValue) {

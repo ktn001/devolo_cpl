@@ -25,28 +25,44 @@ if (! ($options and array_key_exists("i", $options))) {
 	exit (1);
 }
 
-$cmd = devolo_cplCmd::byId($options['i']);
-if (! is_object($cmd)){
+$masterCmd = devolo_cplCmd::byId($options['i']);
+if (! is_object($masterCmd)){
 	log::add("devolo_cpl","error", __FILE__ . ": " .  sprintf(__("CMD id %s introuvable!",__FILE__),$options['i']));
 	exit (2);
 }
-if ($cmd->getEqType_name() != 'devolo_cpl') {
+if ($masterCmd->getEqType_name() != 'devolo_cpl') {
 	log::add("devolo_cpl","error", __FILE__ . ": " . sprintf(__("La commande %s n'est pas une commande d'un équipement devolo_cpl",__FILE__),$options['i']));
 	exit (2);
 }
-if ($cmd->getLogicalId() != 'guest') {
+if ($masterCmd->getLogicalId() != 'guest') {
 	log::add("devolo_cpl","error", __FILE__ . ": " . sprintf(__("Le logicalId de la commande %s n'est pas guest",__FILE__),$options['i']));
 	exit (2);
 }
 
 log::add("devolo_cpl","debug", __FILE__ . ": " . sprintf(__("Attente de la cmd %s",__FILE__),$options['i']));
-
+$masterEqLogicId = $masterCmd->getEqLogic_id();
+/*
+foreach (devolo_cpl::byFeature('wifi',true) as $eqLogic){
+	if ($eqLogic->getId() != $masterEqLogicId){
+		$eqLogic->getEqState();
+	}
+}
+*/
 for ($i=0; $i < 20; $i++){
-	if ($cmd->execCmd() == 1) {
+	log::add("devolo_cpl","debug",$i);
+	if ($masterCmd->execCmd() == 1) {
+		for ($j=0; $j < 5; $j++){
+			sleep(3);
+			foreach (devolo_cpl::byFeature('wifi',true) as $eqLogic){
+				if ($eqLogic->getId() != $masterEqLogicId){
+					log::add("devolo_cpl","debug", __FILE__ . ": " . sprintf(__("getstate pour %s",__FILE__),$eqLogic->getName()));
+					$eqLogic->getEqState();
+				}
+			}
+		}
 		break;
 	}
-	usleep(500000);
-	log::add("devolo_cpl","debug",$i);
+	sleep(1);
 }
 
 exit(0);
