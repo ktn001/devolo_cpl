@@ -17,6 +17,7 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
+
 function devolo_cpl_checkMac() {
 	$ok = true;
 	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
@@ -29,6 +30,27 @@ function devolo_cpl_checkMac() {
 	}
 	if (! $ok) {
 		message::add("devolo_cpl",__("Veuillez renseigner l'adresse mac dans la configuration des équipements",__FILE__));
+	}
+}
+
+function devolo_cpl_goto_11() {
+	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+		$cmd = $eqLogic->getCmd('info','guest_remaining');
+		if (! is_object($cmd)){
+			continue;
+		}
+		$changed = false;
+		if ($cmd->getTemplate('dashboard') == 'default') {
+			$cmd->setTemplate('dashboard','devolo_cpl::j_h_m');
+			$changed = true;
+		}
+		if ($cmd->getTemplate('mobile') == 'default') {
+			$cmd->setTemplate('mobile','devolo_cpl::j_h_m');
+			$changed = true;
+		}
+		if ($changed) {
+			$cmd->save();
+		}
 	}
 }
 
@@ -76,9 +98,12 @@ function devolo_upgrade_to_level($level) {
 }
 
 function devolo_cpl_upgrade() {
+
+	$lastLevel = 11;
+
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
-	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel);
-	for ($level = 1; $level <= 10; $level++) {
+	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel . " => " . $lastLevel);
+	for ($level = 1; $level <= $lastLevel; $level++) {
 		if ($pluginLevel < $level) {
 			devolo_upgrade_to_level($level);
 			config::save('pluginLevel',$level,'devolo_cpl');

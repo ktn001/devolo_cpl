@@ -159,6 +159,10 @@
 		"name"           : "{{Guest temps restant}}",
 		"type"           : "info",
 		"subType"        : "numeric",
+		"template"       : {
+			"dashboard" : "devolo_cpl::j_h_m",
+			"mobile"    : "devolo_cpl::j_h_m"
+		},
 		"order"          : "15"
 	}
 }
