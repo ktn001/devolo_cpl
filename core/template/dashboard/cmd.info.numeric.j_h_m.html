@@ -34,7 +34,7 @@
           if (heures < 10) {
             txt = '0' + txt
           }
-	  txt = jours.toString() + 'j ' + txt
+	  txt = jours.toString() + '{{j}} ' + txt
         }
       }
       $('.cmd[data-cmd_id=#id#] .state').empty().append(txt)

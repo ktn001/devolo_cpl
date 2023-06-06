@@ -1,0 +1,63 @@
+<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="slider" data-template="j_h_m" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div class="title #hide_name#">
+		<div class="cmdName">#name_display#</div>
+	</div>
+	<div class="content-xs">
+		<a class="btn btn-sm btn-default action tooltips">#state#</a>
+	</div>
+	<template></template>
+	<script>
+	$(function() {
+		let txt = ""
+		let heures = Math.trunc(#state# / 60)
+		let minutes = #state# % 60
+		let jours = Math.trunc(heures / 24)
+		heures = heures % 24
+		if (jours == 0 && heures == 0) {
+			txt = minutes + " min."
+		} else {
+			txt = minutes
+			if (minutes < 10) {
+				txt = '0' + txt
+			}
+			txt = heures + ":" + txt
+			if (jours > 0) {
+				if (heures < 10) {
+					txt = '0' + txt
+				}
+				txt = jours + '{{j}} ' + txt
+			}
+		}
+		$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt) 
+	})
+	$('.cmd[data-cmd_uid=#uid#]:last .action').off('click').on('click', function () {
+		jeedom.cmd.execute({id: '#id#'})
+		$('#md_modal').dialog({
+			title: "{{Durée de fonctionnement du WiFi guest}}",
+			open: function(event,ui) {
+				setTimeout(function() {
+					j_h_m_init(#state#)
+				},500)
+			},
+			buttons : [{
+				text: '{{OK}}',
+				click: function() {
+				}
+			},{
+				text: '{{Annuler}}',
+				click: function() {
+					$(this).dialog('close')
+				}
+			}]
+		}).load('index.php?v=d&plugin=devolo_cpl&modal=modal.j_h_m&state=#id#').dialog('open')
+	})
+
+	if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
+	&& $('.cmd[data-cmd_uid=#uid#]').last().prev().css('display') != 'block') {
+		$('.cmd[data-cmd_uid=#uid#]').last().prepend('<br/>');
+	}
+	if ("#name#" != '#name_display#') {
+		$('.cmd[data-cmd_uid=#uid#]:last .action').attr('title',"#name#")
+	}
+	</script>
+</div>
