@@ -51,6 +51,23 @@ function devolo_cpl_goto_11() {
 		if ($changed) {
 			$cmd->save();
 		}
+
+		$cmd = $eqLogic->getCmd('action','guest_duration');
+		if (! is_object($cmd)){
+			continue;
+		}
+		$changed = false;
+		if ($cmd->getTemplate('dashboard') == 'default') {
+			$cmd->setTemplate('dashboard','devolo_cpl::j_h_m');
+			$changed = true;
+		}
+		if ($cmd->getTemplate('mobile') == 'default') {
+			$cmd->setTemplate('mobile','devolo_cpl::j_h_m');
+			$changed = true;
+		}
+		if ($changed) {
+			$cmd->save();
+		}
 	}
 }
 

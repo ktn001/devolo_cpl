@@ -16,6 +16,10 @@
 	"documentation" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
 	"changelog_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
 	"documentation_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
+	"link" : {
+		"forum" : "https://community.jeedom.com/tag/plugin-devolo_cpl",
+		"video" : ""
+	},
 	"language": [
 		"fr_FR"
 	],
