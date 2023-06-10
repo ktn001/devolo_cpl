@@ -1,47 +1,77 @@
 <div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="slider" data-template="j_h_m" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
-	<STYLE>
-		.j_h_m-container_#uid# {
-			max-width: 400px;
-			margin-left: auto;
-			margin-right:auto;
+	<style>
+		#popup_#uid# a.ui-btn {
+			background: linear-gradient( var(--btnEq-default-color), var(--btnEq-default-color)) fixed !important;
 		}
-		.j_h_m-container_#uid# input {
-			width: 70px !important;
-			font-size 12px;
-			padding:2px;
+		#popup_#uid# a.ui-btn:hover {
+			color: var(--linkHoverLight-color) !important;
 		}
-		.j_h_m-container_#uid# .ui-button-icon.ui-icon {
-			margin-top: -8px;
+		#popup_#uid# label {
+			font-weight : 700;
+			font-size : 15px;
 		}
-		.j_h_m-field_#uid# {
-			display : inline-block;
+		.footer-#uid# {
+			padding-top: 15px;
+			text-align : right;
 		}
-		.btn-container_#uid# {
-			max-width: 370px;
-			margin-top: 20px;
-			margin-left: auto;
-			margin-right:auto;
-		}
-		.btn-container_#uid# a{
-			width: 100px;
-			margin-top: 6px;
-			margin-left: 2px;
-			margin-right:2px;
-		}
-		.btn-container_#uid# a#set-0-#uid# {
-			width: 316px;
-		}
-	</STYLE>
+	</style>
 	<div class="title #hide_name#">
 		<div class="cmdName">#name_display#</div>
 	</div>
-	<div class="content-xs">
-		<a class="btn btn-sm btn-default action tooltips">#state#</a>
+	<div class="content-sm">
+		<a class="btn btn-sm btn-default action tooltips" data-rel="popup" href="#popup_#uid#">#state#</a>
+	</div>
+	<div id="popup_#uid#" class="j_h_m-container_#uid# ui-content" data-role="popup">
+		<form>
+			<div class="form-group">
+				<label class="col-sm-3">{{jours}}</label>	
+				<div class="col-sm-9">
+					<input id="inputDays_#uid#" class="form-control" type="number" min="0" max="14" value=0 step="1">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3">{{heures}}</label>	
+				<div class="col-sm-9">
+					<input id="inputHours_#uid#" class="form-control" type="number" min="0" max="23" value=0 step="1">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3">{{minutes}}</label>	
+				<div class="col-sm-9">
+					<input id="inputMinutes_#uid#" class="form-control" type="number" min="0" max="59" value=0 step="1">
+				</div>
+			</div>
+		</form>
+		<div class="footer-#uid#">
+			<a id="btn-cancel_#uid#" class="ui-btn  ui-mini ui-btn-inline ui-btn-raised">{{Annuler}}</a>
+			<a id="btn-ok_#uid#" class="ui-btn  ui-mini ui-btn-inline ui-btn-raised">{{OK}}</a>
+		</div>
 	</div>
 	<template></template>
 	<script>
+	$('#popup_#uid#').popup({
+		dismissible : false,
+		positionTo : 'window',
+		transition : 'pop',
+		overlayTheme : 'b'
+	})
+
+	$('#btn-cancel_#uid#').on('click', function() {
+		$('#popup_#uid#').popup('close')
+	})
+
+	$('#btn-ok_#uid#').on('click', function() {
+		result  = $('#inputDays_#uid#').value() * 1440
+		result += $('#inputHours_#uid#').value() * 60
+		result += $('#inputMinutes_#uid#').value() * 1
+		setDisplayValue_#uid#(result)
+		jeedom.cmd.execute({id: '#id#', value: {slider: result}})
+		$('#popup_#uid#').popup('close')
+	})
+
 	$(function() {
 		setDisplayValue_#uid#(#state#)
+		j_h_m_init_#uid#(#state#)
 	})
 
 	function setDisplayValue_#uid#(value) {
@@ -68,113 +98,15 @@
 		$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt) 
 	}
 
-	function j_h_m_dialog_#uid#() {
-		html  = '<div class="j_h_m-container_#uid# row">'
-		html += '	<div class="col-sm-4 j_h_m-field_#uid#">'
-		html += '		<div>Jours</div>'
-		html += '		<input id="sliderInputDays_#uid#" type="number" min="0" max="14" value=0 step="1" style="width:50%">'
-		html += '	</div>'
-		html += '	<div class="col-sm-4 j_h_m-field_#uid#">'
-		html += '		<div>Heures</div>'
-		html += '		<input id="sliderInputHours_#uid#" type="number" min="0" max="23" value=0 step="1">'
-		html += '	</div>'
-		html += '	<div class="col-sm-4 j_h_m-field_#uid#">'
-		html += '		<div>minutes</div>'
-		html += '		<input id="sliderInputMinutes_#uid#" type="number" min="0" max="59" value=0 step="1">'
-		html += '	</div>'
-		html += '</div>'
-		html += '<div class="row btn-container_#uid#">'
-		html += '	<a id="set-30m-#uid#" class="btn btn-sm btn-primary">{{30 minutes}}</a>'
-		html += '	<a id="set-1h-#uid#" class="btn btn-sm btn-primary">{{1 heure}}</a>'
-		html += '	<a id="set-2h-#uid#" class="btn btn-sm btn-primary">{{2 heures}}</a>'
-		html += '	<a id="set-3h-#uid#" class="btn btn-sm btn-primary">{{3 heures}}</a>'
-		html += '	<a id="set-6h-#uid#" class="btn btn-sm btn-primary">{{6 heures}}</a>'
-		html += '	<a id="set-12h-#uid#" class="btn btn-sm btn-primary">{{12 heures}}</a>'
-		html += '	<a id="set-1j-#uid#" class="btn btn-sm btn-primary">{{1 jour}}</a>'
-		html += '	<a id="set-2j-#uid#" class="btn btn-sm btn-primary">{{2 jours}}</a>'
-		html += '	<a id="set-7j-#uid#" class="btn btn-sm btn-primary">{{7 jours}}</a>'
-		html += '	<a id="set-0-#uid#" class="btn btn-sm btn-primary">{{Zéro}}</a>'
-		html += '</div>'
-		return html
-	}
-
 	function j_h_m_init_#uid#(value) {
 		minutes = value % 60
 		hours = Math.trunc (value / 60)
 		days = Math.trunc (hours / 24)
 		hours = hours % 24
-		$("#sliderInputDays_#uid#").value(days)
-		$("#sliderInputHours_#uid#").value(hours)
-		$("#sliderInputMinutes_#uid#").value(minutes)
+		$("#inputDays_#uid#").value(days)
+		$("#inputHours_#uid#").value(hours)
+		$("#inputMinutes_#uid#").value(minutes)
 	}
-
-	$('.cmd[data-cmd_uid=#uid#]:last .action').off('click').on('click', function () {
-		bootbox.dialog({
-			title: "{{Durée de l'activation du WiFi guest}}",
-			message: j_h_m_dialog_#uid#(),
-			size: 'large',
-			onEscape: true,
-			buttons: {
-				cancel: {
-					label: '{{Annuler}}',
-					className: 'btn-warning',
-					callback: true
-				},
-				success: {
-					label: '{{Ok}}',
-					className: 'btn-success',
-					callback: function(){
-						result  = $("#sliderInputDays_#uid#").value() * 1440
-						result += $("#sliderInputHours_#uid#").value() * 60
-						result += $("#sliderInputMinutes_#uid#").value() * 1
-						jeedom.cmd.execute({id: '#id#', value: {slider: result}})
-						setDisplayValue_#uid#(result)
-					}
-				}
-			}
-		})
-		$("#sliderInputDays_#uid#").spinner({
-			icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-		})
-		$("#sliderInputHours_#uid#").spinner({
-			icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-		})
-		$("#sliderInputMinutes_#uid#").spinner({
-			icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-		})
-		$('#set-0-#uid#').on('click', function () {
-			j_h_m_init_#uid#(0)
-		})
-		$('#set-30m-#uid#').on('click', function () {
-			j_h_m_init_#uid#(30)
-		})
-		$('#set-1h-#uid#').on('click', function () {
-			j_h_m_init_#uid#(60)
-		})
-		$('#set-2h-#uid#').on('click', function () {
-			j_h_m_init_#uid#(120)
-		})
-		$('#set-3h-#uid#').on('click', function () {
-			j_h_m_init_#uid#(180)
-		})
-		$('#set-6h-#uid#').on('click', function () {
-			j_h_m_init_#uid#(360)
-		})
-		$('#set-12h-#uid#').on('click', function () {
-			j_h_m_init_#uid#(720)
-		})
-		$('#set-1j-#uid#').on('click', function () {
-			j_h_m_init_#uid#(1440)
-		})
-		$('#set-2j-#uid#').on('click', function () {
-			j_h_m_init_#uid#(2880)
-		})
-		$('#set-7j-#uid#').on('click', function () {
-			j_h_m_init_#uid#(10080)
-		})
-
-		j_h_m_init_#uid#(#state#)
-	})
 
 	if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
 	&& $('.cmd[data-cmd_uid=#uid#]').last().prev().css('display') != 'block') {

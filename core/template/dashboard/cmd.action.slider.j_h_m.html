@@ -127,8 +127,8 @@
 						result  = $("#sliderInputDays_#uid#").value() * 1440
 						result += $("#sliderInputHours_#uid#").value() * 60
 						result += $("#sliderInputMinutes_#uid#").value() * 1
-						jeedom.cmd.execute({id: '#id#', value: {slider: result}})
 						setDisplayValue_#uid#(result)
+						jeedom.cmd.execute({id: '#id#', value: {slider: result}})
 					}
 				}
 			}
