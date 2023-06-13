@@ -65,7 +65,7 @@
 				txt = jours + '{{j}} ' + txt
 			}
 		}
-		$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt) 
+		$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt).data('updatedValue',value)
 	}
 
 	function j_h_m_dialog_#uid#() {
@@ -173,7 +173,7 @@
 			j_h_m_init_#uid#(10080)
 		})
 
-		j_h_m_init_#uid#(#state#)
+		j_h_m_init_#uid#($('.cmd[data-cmd_id=#id#] a.btn').data('updatedValue'))
 	})
 
 	if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
