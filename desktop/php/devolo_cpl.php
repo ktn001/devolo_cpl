@@ -197,6 +197,17 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="sync_model" disabled />
 				</div>
 			    </div>
+			    <div class="form-group">
+				<label class="col-sm-4 control-label">{{Surveillance}}
+				    <sup><i class="fas fa-question-circle tooltips" title="{{Enregistre un message d'erreur si...}}"></i></sup>
+				</label>
+				<div class="col-sm-6">
+				    <label class="checkbox-inline">
+					<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alert_offline" checked/>
+					{{Offline}}
+				    </label>
+				</div>
+			    </div>
 			</div>
 
 			<!-- Partie droite de l'onglet "Équipement" -->

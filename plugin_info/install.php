@@ -33,6 +33,13 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_13() {
+	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+		$eqLogic->setConfiguration("alert_offline",1);
+		$eqLogic->save();
+	}
+}
+
 function devolo_cpl_goto_12() {
 	config::save('devolo_plc_api::version','1.3.2',devolo_cpl);
 }
@@ -120,7 +127,7 @@ function devolo_upgrade_to_level($level) {
 
 function devolo_cpl_upgrade() {
 
-	$lastLevel = 12;
+	$lastLevel = 13;
 
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel . " => " . $lastLevel);
