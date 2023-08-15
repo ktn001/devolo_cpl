@@ -24,8 +24,8 @@ class devolo_cpl extends eqLogic {
     /*     * ***********************Methode static*************************** */
 
     /*
-    * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    */
+     * Fonction exécutée automatiquement toutes les minutes par Jeedom
+     */
     public static function cron() {
 	$equipements = eqLogic::byType(__CLASS__,True);
 	foreach($equipements as $equipement) {
@@ -39,17 +39,24 @@ class devolo_cpl extends eqLogic {
     }
 
     /*
-    * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-    */
+     * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
+     */
     public static function cron5() {
 	devolo_cpl::getRates();
     }
 
     /*
-    * Fonction exécutée automatiquement chaque jour par Jeedom
-    */
+     * Fonction exécutée automatiquement chaque jour par Jeedom
+     */
     public static function cronDaily() {
 	self::purgeDB();
+    }
+
+    public static function postConfig_active($value) {
+	log::add("toto","info","##################### " . $value);
+	if ($value == 1) {
+	    $this->setListeners();
+	}
     }
 
     /*
@@ -58,6 +65,7 @@ class devolo_cpl extends eqLogic {
      * Appelée par le core sur modification de la config "devolo_plc_api::version"
      */
     public static function preConfig_devolo_plc_api_version($version){
+	log::add("toto","info","##################### " . $version);
 	$etcPath = __DIR__ . '/../../resources/etc';
 	if (! file_exists($etcPath)){
 	    mkdir ($etcPath);
@@ -144,6 +152,28 @@ class devolo_cpl extends eqLogic {
 	sleep(2);
 	system::kill('python.*devolo_cpld.py'); // nom du démon à modifier
 	sleep(1);
+    }
+
+    /*
+     * Mise à jour des listener
+     */
+    public static function setListeners() {
+	log::add("devolo_cpl","info","setListeners");
+	foreach (eqLogic::byType('devolo_cpl') as $eqLogic) {
+	    $eqLogic->setListener();
+	}
+    }
+
+    /*
+     * Fonction appelée par le listener en cas de changement de valuer pour la cmd 'online'
+     */
+    public static function alertNoOnline($_option) {
+	log::add ("devolo_cpl","info","alertNoOnline called: " . print_r($_option,true));
+	if ($_option['value'] == 1) {
+	    return;
+	}
+	$eqLogic = devolo_cpl::byId($_option['id']);
+	$eqLogic->execAlertOffline();
     }
 
     /*
@@ -413,6 +443,9 @@ class devolo_cpl extends eqLogic {
 
     /*     * *********************Méthodes d'instance************************* */
 
+    /*
+     * Complète un message avec les infos standards avant de l'envoyer au daemon
+     */
     public function PrepareToDaemon($params) {
 	$params['serial'] = $this->getLogicalId();
 	$params['ip'] = $this->getConfiguration('ip');
@@ -420,18 +453,25 @@ class devolo_cpl extends eqLogic {
 	devolo_cpl::sendToDaemon($params);
     }
 
-    // Remontée de l'état de l'équipement
+    /*
+     * Demande au daemon de remonter l'état de l'équipement
+     */
     public function getEqState () {
 	$this::PrepareToDaemon(['action' => 'getState']);
     }
 
+    /*
+     * Demande au daemon de remonter la liste des appareils connectés au WiFi
+     */
     public function getWifiConnectedDevices() {
 	if (in_array('wifi', $this->getFeatures())) {
 	    $this::PrepareToDaemon(['action' => 'getWifiConnectedDevices']);
 	}
     }
 
-    // Function pour tirer les commandes
+    /*
+     * Function pour trier les commandes
+     */
     public function sortCmds () {
 	log::add("devolo_cpl","info",sprintf(__("Tri des commandes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
 	$cmdFile = __DIR__ . "/../config/cmds.json";
@@ -446,7 +486,9 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    // Function pour la création des CMD
+    /*
+     * Function pour la création des CMD
+     */
     public function createCmds ($level=0) {
 	log::add("devolo_cpl","info",sprintf(__("Création des commandes manquantes pour l'équipement %s (%s)",__FILE__),$this->getName(), $this->getLogicalId()));
 	$cmdFile = __DIR__ . "/../config/cmds.json";
@@ -515,20 +557,89 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
+    /*
+     * Fonctions pour la gestion du listener
+     */
+    private function getListener() {
+	return listener::byClassAndFunction(__CLASS__, 'alertNoOnline', array('id' => $this->getId()));
+    }
+
+    private function removeListener() {
+        $listener = $this->getListener();
+        if (is_object($listener)) {
+            $listener->remove();
+        }
+    }
+
+    private function setListener() {
+	if ($this->getIsEnable() == 0) {
+            $this->removeListener();
+            return;
+        }
+
+	if ($this->getConfiguration('alert_offline') == 0) {
+            $this->removeListener();
+            return;
+        }
+
+	$cmd = $this->getCmd('info','online');
+	if (!is_object($cmd)){
+            $this->removeListener();
+            return;
+	}
+
+	$listener = $this->getListener();
+        if (!is_object($listener)) {
+            $listener = new listener();
+            $listener->setClass(__CLASS__);
+            $listener->setFunction('alertNoOnline');
+            $listener->setOption(array('id' => $this->getId()));
+        }
+	$listener->emptyEvent();
+	$listener->addEvent($cmd->getId());
+	$listener->save();
+    }
+
+    /*
+     * function appelée par 'alertNoOnline'
+     */
+    private function execAlertOffline() {
+	log::add("devolo_cpl","info","11111111111111111111111111111");
+	if ($this->getConfiguration('alert_offline') != 1) {
+	    return;
+	}
+	log::add("devolo_cpl","info","222222222222222222222222222222");
+	$cmd = $this->getCmd('info','online');
+	if (!is_object($cmd)){
+            return;
+	}
+	log::add("devolo_cpl","info","33333333333333333333333333333");
+	if ($cmd->execCmd() == 1){
+            return;
+	}
+	log::add("devolo_cpl","info","444444444444444444444444444444");
+	log::add("devolo_cpl","error",sprintf(__("%s est inatteignable",__FILE__),$this->getHumanName()));
+    }
+
+    /*
+     * Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
+     */
     public function preSave() {
 	if ($this->getConfiguration('model') == ""){
 	    $this->setConfiguration('model','autre');
 	}
-	log::add("devolo_cpl","debug","Presave: manageable: " . $this->IsManageable());
     }
 
-    // Fonction exécutée automatiquement avant la création de l'équipement
+    /*
+     * Fonction exécutée automatiquement avant la création de l'équipement
+     */
     public function preInsert() {
 	$this->_wasManageable = 0;
     }
 
-    // Fonction exécutée automatiquement avant la mise à jour de l'équipement
+    /*
+     * Fonction exécutée automatiquement avant la mise à jour de l'équipement
+     */
     public function preUpdate() {
 	if ($this->getConfiguration('mac') != ''){
 	    $mac = trim(strtoupper($this->getConfiguration('mac')));
@@ -547,11 +658,20 @@ class devolo_cpl extends eqLogic {
 	}
     }
 
-    // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
+    /*
+     * Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
+     */
     public function postSave() {
 	if ($this->isManageable() and ($this->_wasManageable == 0)) {
 	    $this->createCmds();
 	}
+    }
+
+    /* 
+     * Fonction executée automatiquement après l'update de l'équipement
+     */
+    public function postUpdate() {
+	$this->setListener();
     }
 
     public function getModel() {
@@ -563,8 +683,10 @@ class devolo_cpl extends eqLogic {
     }
 
     /*
-    * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
-    */
+     * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
+     *
+     * Ces méthodes sont appelées automatiquement par la class DB.
+     */
     public function decrypt() {
       $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
     }

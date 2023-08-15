@@ -170,7 +170,7 @@ class devolo_connection {
 	}
 
 	public static function setIps() {
-		$connection = devolo_connection::byNoIp();
+		$connections = devolo_connection::byNoIp();
 		if (! exec ('/usr/sbin/arp', $result)) {
 			log::add("devolo_cpl","warning","Erreur lors de l'exécution de /usr/bin/arp");
 			return;

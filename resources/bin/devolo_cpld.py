@@ -47,12 +47,6 @@ except ImportError:
 async def getState (message):
     logging.info("============== begin getState ==============")
     async with Device(ip=message['ip']) as dpa:
-        # logging.info("++++++++++++++++++++++++++++++++++++")
-        # logging.info(await dpa.device.async_get_wifi_connected_station())
-        # logging.info("++++++++++++++++++++++++++++++++++++")
-        # logging.info("++++++++++++++++++++++++++++++++++++")
-        # logging.info(dpa.device.__dict__)
-        # logging.info("++++++++++++++++++++++++++++++++++++")
         result = {}
         result['action'] = 'infoState'
         result['serial'] = message['serial']
@@ -218,7 +212,6 @@ def read_socket():
             if message['action'] == 'execCmd':
                 asyncio.run(execCmd(message))
         except DeviceNotFound as e:
-            logging.error('Send command to demon error : '+str(e))
             reponse = {}
             reponse['action'] = 'message'
             reponse['code'] = 'devNotAnswer'

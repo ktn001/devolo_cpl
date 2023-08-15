@@ -148,6 +148,7 @@ function devolo_cpl_install() {
 	devolo_cpl_upgrade();
 	$plc_api_version = config::byKey('devolo_plc_api::version',devolo_cpl);
 	config::save('devolo_plc_api::version',$plc_api_version,devolo_cpl);
+	devolo_cpl::setListeners();
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
@@ -157,4 +158,5 @@ function devolo_cpl_update() {
 	devolo_cpl_upgrade();
 	$plc_api_version = config::byKey('devolo_plc_api::version',devolo_cpl);
 	config::save('devolo_plc_api::version',$plc_api_version,devolo_cpl);
+	devolo_cpl::setListeners();
 }

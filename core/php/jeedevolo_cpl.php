@@ -29,6 +29,7 @@ function process_infoState($result, $eqLogic) {
 	    }
 	}
     }
+    $eqLogic->checkAndUpdateCmd('online', 1);
 }
 
 function process_firmwares($result, $eqLogic) {
@@ -36,6 +37,7 @@ function process_firmwares($result, $eqLogic) {
 		$eqLogic = devolo_cpl::byMacAddress ($firmware['mac']);
 		$eqLogic->checkAndUpdateCmd('firmware',$firmware['version']);
 	}
+    	$eqLogic->checkAndUpdateCmd('online', 1);
 }
 
 function process_getRates($result, $eqLogic) {
@@ -51,12 +53,12 @@ function process_getRates($result, $eqLogic) {
 	$sql .= '`rx_rate`="' . $rate['rx_rate'] . '"';
 	DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
     }
+    $eqLogic->checkAndUpdateCmd('online', 1);
 }
 
 function process_message($result, $eqLogic) {
     if ($result['code'] == 'devNotAnswer') {
-	$texte = sprintf(__("L'équipement %s (%s) ne répond pas",__FILE__),$result['serial'],$result['ip']);
-	log::add("devolo_cpl","error",$texte);
+    	$eqLogic->checkAndUpdateCmd('online', 0);
     } elseif ($result['code'] == 'devPasswordError') {
 	$texte = sprintf(__("L'équipement %s (%s): erreur de password",__FILE__),$result['serial'],$result['ip']);
 	log::add("devolo_cpl","error",$texte);

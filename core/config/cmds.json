@@ -168,5 +168,14 @@
 			"mobile"    : "devolo_cpl::j_h_m"
 		},
 		"order"          : "15"
+	},
+	"online" : {
+		"level"          : "13",
+		"manageableOnly" : "1",
+		"name"           : "{{online}}",
+		"type"           : "info",
+		"subType"        : "binary",
+		"visible"        : "1",
+		"order"          : "16"
 	}
 }
