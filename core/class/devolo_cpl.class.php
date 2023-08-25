@@ -55,7 +55,7 @@ class devolo_cpl extends eqLogic {
     public static function postConfig_active($value) {
 	log::add("toto","info","##################### " . $value);
 	if ($value == 1) {
-	    $this->setListeners();
+	    devolo_cpl::setListeners();
 	}
     }
 
