@@ -53,7 +53,6 @@ function process_getRates($result, $eqLogic) {
 	$sql .= '`rx_rate`="' . $rate['rx_rate'] . '"';
 	DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
     }
-    $eqLogic->checkAndUpdateCmd('online', 1);
 }
 
 function process_message($result, $eqLogic) {
