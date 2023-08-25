@@ -53,7 +53,6 @@ class devolo_cpl extends eqLogic {
     }
 
     public static function postConfig_active($value) {
-	log::add("toto","info","##################### " . $value);
 	if ($value == 1) {
 	    devolo_cpl::setListeners();
 	}
@@ -65,7 +64,6 @@ class devolo_cpl extends eqLogic {
      * Appelée par le core sur modification de la config "devolo_plc_api::version"
      */
     public static function preConfig_devolo_plc_api_version($version){
-	log::add("toto","info","##################### " . $version);
 	$etcPath = __DIR__ . '/../../resources/etc';
 	if (! file_exists($etcPath)){
 	    mkdir ($etcPath);
