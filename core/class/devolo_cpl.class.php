@@ -602,20 +602,16 @@ class devolo_cpl extends eqLogic {
      * function appelée par 'alertNoOnline'
      */
     private function execAlertOffline() {
-	log::add("devolo_cpl","info","11111111111111111111111111111");
 	if ($this->getConfiguration('alert_offline') != 1) {
 	    return;
 	}
-	log::add("devolo_cpl","info","222222222222222222222222222222");
 	$cmd = $this->getCmd('info','online');
 	if (!is_object($cmd)){
             return;
 	}
-	log::add("devolo_cpl","info","33333333333333333333333333333");
 	if ($cmd->execCmd() == 1){
             return;
 	}
-	log::add("devolo_cpl","info","444444444444444444444444444444");
 	log::add("devolo_cpl","error",sprintf(__("%s est inatteignable",__FILE__),$this->getHumanName()));
     }
 

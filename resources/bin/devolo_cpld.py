@@ -211,7 +211,7 @@ def read_socket():
                 asyncio.run(getWifiConnectedDevices(message))
             if message['action'] == 'execCmd':
                 asyncio.run(execCmd(message))
-        except DeviceNotFound as e:
+        except (DeviceNotFound, DeviceUnavailable) as e:
             reponse = {}
             reponse['action'] = 'message'
             reponse['code'] = 'devNotAnswer'
