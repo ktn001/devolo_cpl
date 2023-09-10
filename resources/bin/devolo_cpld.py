@@ -43,6 +43,18 @@ try:
 except ImportError:
     print("Error: importing module jeedom.jeedom")
     sys.exit(1)
+activSerial = dict()
+
+def setActivSerial(serial, ip):
+    global activSerial
+    now = time.time()
+    activSerial[serial] = {
+            'ip' : ip,
+            'time' : now
+            }
+    for s in activSerial.copy():
+        if activSerial[s]['time'] < (now - 300):
+            activSerial.pop(s)
 
 async def getState (message):
     logging.info("============== begin getState ==============")
@@ -79,6 +91,7 @@ async def getState (message):
                 result['wifi_guest']['remaining'] = guest_wifi.remaining_duration
 
         logging.debug(result)
+        setActivSerial(message['serial'],message['ip'])
         jeedom_com.send_change_immediate(result)
     logging.info("=============== end getState ===============")
 
@@ -97,6 +110,7 @@ async def getWifiConnectedDevices (message):
                 connection['band'] = band_txt[connected_device.band]
                 result['connections'].append(connection)
             logging.debug(result)
+            setActivSerial(message['serial'],message['ip'])
             jeedom_com.send_change_immediate(result)
     logging.info("=============== end getWifiConnectedDevices ===============")
 
@@ -127,6 +141,7 @@ async def getRates (message):
                 result = {}
                 result['action'] = 'firmwares'
                 result['firmwares'] = firmwares
+                setActivSerial(message['serial'],message['ip'])
                 jeedom_com.send_change_immediate(result)
                 break
         except:
@@ -257,6 +272,23 @@ def listen():
 
 # ----------------------------------------------------------------------------
 
+def alrm_handler(signum=None, frame=None):
+    logging.debug("========================= SIGALRM ======================")
+    signal.alarm(15)
+    for serial in activSerial.copy():
+        message = {
+                'serial' : serial,
+                'ip' : activSerial[serial]['ip']
+        }
+        try:
+            loop = asyncio.get_running_loop()
+        except:
+            loop = None
+        if loop and loop.is_running():
+            loop.create_task (getWifiConnectedDevices(message))
+        else:
+            asyncio.run (getWifiConnectedDevices(message))
+
 def handler(signum=None, frame=None):
     logging.debug("Signal %i caught, exiting..." % int(signum))
     shutdown()
@@ -328,6 +360,8 @@ logging.info('└─devolo_plc_api : ' +str(devolo_plc_api_version))
 
 signal.signal(signal.SIGINT, handler)
 signal.signal(signal.SIGTERM, handler)
+signal.signal(signal.SIGALRM, alrm_handler)
+signal.alarm(15)
 
 try:
     jeedom_utils.write_pid(str(_pidfile))

@@ -32,7 +32,6 @@ class devolo_cpl extends eqLogic {
 	    if (! $equipement->isManageable()){
 		continue;
 	    }
-	    $equipement->getWifiConnectedDevices();
 	    $equipement->getEqState();
 	}
 	devolo_connection::setIps();
