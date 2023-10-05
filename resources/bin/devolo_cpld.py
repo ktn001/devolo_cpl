@@ -113,13 +113,13 @@ async def getWifiConnectedDevices (message):
                 logging.debug(result)
                 setActivSerial(message['serial'],message['ip'])
                 jeedom_com.send_change_immediate(result)
-        except (DeviceNotFound, DeviceUnavailable) as e:
-            reponse = {}
-            reponse['action'] = 'message'
-            reponse['code'] = 'devNotAnswer'
-            reponse['serial'] = message['serial']
-            reponse['ip'] = message['ip']
-            jeedom_com.send_change_immediate(reponse)
+   except (DeviceNotFound, DeviceUnavailable) as e:
+       reponse = {}
+       reponse['action'] = 'message'
+       reponse['code'] = 'devNotAnswer'
+       reponse['serial'] = message['serial']
+       reponse['ip'] = message['ip']
+       jeedom_com.send_change_immediate(reponse)
     logging.info("=============== end getWifiConnectedDevices ===============")
 
 async def getRates (message):
