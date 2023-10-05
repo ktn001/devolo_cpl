@@ -98,20 +98,28 @@ async def getState (message):
 async def getWifiConnectedDevices (message):
     logging.info("============== begin getWifiConnectedDevices ==============")
     band_txt = ['wifi','wifi 2 Ghz','wifi 5 Ghz']
-    async with Device(ip=message['ip']) as dpa:
-        if 'wifi1' in dpa.device.features:
-            result = {}
-            result['action'] = 'wifiConnectedDevices'
-            result['serial'] = message['serial']
-            result['connections'] = []
-            for connected_device in await dpa.device.async_get_wifi_connected_station():
-                connection = {}
-                connection['mac'] = connected_device.mac_address
-                connection['band'] = band_txt[connected_device.band]
-                result['connections'].append(connection)
-            logging.debug(result)
-            setActivSerial(message['serial'],message['ip'])
-            jeedom_com.send_change_immediate(result)
+    try:
+        async with Device(ip=message['ip']) as dpa:
+            if 'wifi1' in dpa.device.features:
+                result = {}
+                result['action'] = 'wifiConnectedDevices'
+                result['serial'] = message['serial']
+                result['connections'] = []
+                for connected_device in await dpa.device.async_get_wifi_connected_station():
+                    connection = {}
+                    connection['mac'] = connected_device.mac_address
+                    connection['band'] = band_txt[connected_device.band]
+                    result['connections'].append(connection)
+                logging.debug(result)
+                setActivSerial(message['serial'],message['ip'])
+                jeedom_com.send_change_immediate(result)
+        except (DeviceNotFound, DeviceUnavailable) as e:
+            reponse = {}
+            reponse['action'] = 'message'
+            reponse['code'] = 'devNotAnswer'
+            reponse['serial'] = message['serial']
+            reponse['ip'] = message['ip']
+            jeedom_com.send_change_immediate(reponse)
     logging.info("=============== end getWifiConnectedDevices ===============")
 
 async def getRates (message):
