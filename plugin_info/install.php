@@ -41,7 +41,7 @@ function devolo_cpl_goto_13() {
 }
 
 function devolo_cpl_goto_12() {
-	config::save('devolo_plc_api::version','1.3.2',devolo_cpl);
+	config::save('devolo_plc_api::version','1.3.2','devolo_cpl');
 }
 
 function devolo_cpl_goto_11() {
@@ -122,11 +122,7 @@ function devolo_upgrade_to_level($level) {
 	$sqlFile = __DIR__ . "/sql/upgrade_" . $level . ".sql";
 	if (file_exists($sqlFile)){
 		$sql = file_get_contents($sqlFile);
-		$statments = explode(";",$sql);
-		foreach ($statments as $statment) {
-			log::add("devolo_cpl","info","exeution de  " . $statment);
-			DB::Prepare($statment, array(), DB::FETCH_TYPE_ALL);
-		}
+		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
 	}
 	$function = 'devolo_cpl_goto_' . $level;
 	if (function_exists($function)){
