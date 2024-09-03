@@ -28,21 +28,18 @@ import json
 import argparse
 import asyncio
 import httpx
-
-with open (os.path.dirname(__file__) + '/../etc/devolo_plc_api.version') as versionFile:
-    devolo_plc_api_version = versionFile.readlines()[0]
-
-libDir = os.path.realpath(os.path.dirname(__file__) + '/../../3rdparty/devolo_plc_api-' + devolo_plc_api_version + '/')
-sys.path.append (libDir)
 import devolo_plc_api
 from devolo_plc_api import Device
 from devolo_plc_api.exceptions.device import *
 
 try:
+    import jeedom
+    print
     from jeedom.jeedom import *
 except ImportError:
     print("Error: importing module jeedom.jeedom")
     sys.exit(1)
+
 activSerial = dict()
 
 def setActivSerial(serial, ip):
@@ -363,8 +360,7 @@ logging.info('│ Socket port    : '+str(_socket_port))
 logging.info('│ Socket host    : '+str(_socket_host))
 logging.info('│ PID file       : '+str(_pidfile))
 logging.info('│ Apikey         : '+str(_apikey))
-logging.info('│ Callback       : '+str(_callback))
-logging.info('└─devolo_plc_api : ' +str(devolo_plc_api_version))
+logging.info('└ Callback       : '+str(_callback))
 
 signal.signal(signal.SIGINT, handler)
 signal.signal(signal.SIGTERM, handler)

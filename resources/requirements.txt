@@ -1,0 +1,2 @@
+devolo-plc-api >= 1.4.1
+requests
