@@ -83,11 +83,15 @@ function devolo_cpl_goto_11() {
 }
 
 function devolo_cpl_goto_10() {
-	config::save('devolo_plc_api::version','1.3.1',devolo_cpl);
+	if (file_exists(__DIR__ . "/../3rdParty/devolo_plc_api-1.3.r10")) {
+		config::save('devolo_plc_api::version','1.3.1',devolo_cpl);
+	}
 }
 
 function devolo_cpl_goto_9() {
-	config::save('devolo_plc_api::version','1.3.0',devolo_cpl);
+	if (file_exists(__DIR__ . "/../3rdParty/devolo_plc_api-1.3.0")) {
+		config::save('devolo_plc_api::version','1.3.0',devolo_cpl);
+	}
 }
 
 function devolo_cpl_goto_7() {
@@ -105,7 +109,9 @@ function devolo_cpl_goto_4() {
 }
 
 function devolo_cpl_goto_3() {
-	config::save('devolo_plc_api::version','1.2.0',devolo_cpl);
+	if (file_exists(__DIR__ . "/../3rdParty/devolo_plc_api-1.2.0")) {
+		config::save('devolo_plc_api::version','1.2.0',devolo_cpl);
+	}
 }
 
 function devolo_upgrade_to_level($level) {
