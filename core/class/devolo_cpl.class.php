@@ -63,7 +63,7 @@ class devolo_cpl extends eqLogic {
 
 	private static function pythonRequirementsInstalled(string $pythonPath, string $requirementsPath) {
 		if (!file_exists($pythonPath) || !file_exists($requirementsPath)) {
-			log::add(__CLASS__,"debug", sprintf(__("%s ou %s introubable",__FILE),$pythonPath, $requirementsPath));
+			log::add(__CLASS__,"debug", sprintf(__("%s ou %s introubable",__FILE__),$pythonPath, $requirementsPath));
 			return false;
 		}
 		exec("{$pythonPath} -m pip freeze", $packages_installed);
@@ -797,7 +797,7 @@ class devolo_cplCmd extends cmd {
 				$guestCmd = $this->getEqLogic()->getCmd('info','guest');
 				if (is_object($guestCmd)){
 						$cmd = __DIR__ . "/../php/waitGuestAndRefresh.php -i " . $guestCmd->getId();
-						log::add("devolo_cpl","debug",sprintf(__("Lancement de %s",__FILE),$cmd ));
+						log::add("devolo_cpl","debug",sprintf(__("Lancement de %s",__FILE__),$cmd ));
 						system::php($cmd . ' >> ' . log::getPathToLog('devolo_cpl_script') . ' 2>&1 &');
 				}
 				/*
