@@ -116,7 +116,11 @@ function devolo_upgrade_to_level($level) {
 	$sqlFile = __DIR__ . "/sql/upgrade_" . $level . ".sql";
 	if (file_exists($sqlFile)){
 		$sql = file_get_contents($sqlFile);
-		DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
+		$statments = explode(";",$sql);
+		foreach ($statments as $statment) {
+			log::add("devolo_cpl","info","exeution de  " . $statment);
+			DB::Prepare($statment, array(), DB::FETCH_TYPE_ALL);
+		}
 	}
 	$function = 'devolo_cpl_goto_' . $level;
 	if (function_exists($function)){
@@ -146,8 +150,6 @@ function devolo_cpl_install() {
 	log::add("devolo_cpl","info","Lancement de 'devolo_cpl_install()'");
 	devolo_cpl_checkMac();
 	devolo_cpl_upgrade();
-	$plc_api_version = config::byKey('devolo_plc_api::version',devolo_cpl);
-	config::save('devolo_plc_api::version',$plc_api_version,devolo_cpl);
 	devolo_cpl::setListeners();
 }
 
@@ -156,7 +158,5 @@ function devolo_cpl_update() {
 	log::add("devolo_cpl","info","Lancement de 'devolo_cpl_update()'");
 	devolo_cpl_checkMac();
 	devolo_cpl_upgrade();
-	$plc_api_version = config::byKey('devolo_plc_api::version',devolo_cpl);
-	config::save('devolo_plc_api::version',$plc_api_version,devolo_cpl);
 	devolo_cpl::setListeners();
 }
