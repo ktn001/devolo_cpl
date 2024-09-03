@@ -10,6 +10,7 @@
 	"category" : "communication",
 	"display" : "panel",
 	"hasDependency" : true,
+	"maxDependancyInstallTime" : 20,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 5,
 	"changelog" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
