@@ -1,181 +1,181 @@
 {
-	"refresh" : {
-		"level"          : "0",
-		"manageableOnly" : "1",
-		"name"           : "{{Rafraichir}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"order"          : "1"
-	},
-	"leds" : {
-		"level"          : "0",
-		"manageableOnly" : "1",
-		"name"           : "{{LEDS}}",
-		"type"           : "info",
-		"subType"        : "binary",
-		"visible"        : "0",
-		"order"          : "2"
-	},
-	"leds_on" : {
-		"level"          : "0",
-		"manageableOnly" : "1",
-		"name"           : "{{Leds ON}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "leds",
-		"template": {
-			"dashboard" : "core::light",
-			"mobile"    : "core::light"
-		},
-		"order"          : "3"
-	},
-	"leds_off" : {
-		"level"          : "0",
-		"manageableOnly" : "1",
-		"name"           : "{{Leds OFF}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "leds",
-		"template"       : {
-			"dashboard" : "core::light",
-			"mobile"    : "core::light"
-		},
-		"order"          : "4"
-	},
-	"locate" : {
-		"level"          : "2",
-		"manageableOnly" : "1",
-		"name"           : "{{Locate}}",
-		"type"           : "info",
-		"subType"        : "binary",
-		"visible"        : "0",
-		"configuration"  : {
-			"returnStateValue" : "0",
-			"returnStateTime"  : "2"
-		},
-		"order"          : "5"
-	},
-	"locate_on" : {
-		"level"          : "2",
-		"manageableOnly" : "1",
-		"name"           : "{{Locate ON}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "locate",
-		"template": {
-			"dashboard" : "devolo_cpl::locate",
-			"mobile"    : "devolo_cpl::locate"
-		},
-		"order"          : "6"
-	},
-	"locate_off" : {
-		"level"          : "2",
-		"manageableOnly" : "1",
-		"name"           : "{{Locate OFF}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "locate",
-		"template"       : {
-			"dashboard" : "devolo_cpl::locate",
-			"mobile"    : "devolo_cpl::locate"
-		},
-		"order"          : "7"
-	},
-	"firmware" : {
-		"level"          : "6",
-		"manageableOnly" : "1",
-		"name"           : "{{firmware}}",
-		"type"           : "info",
-		"subType"        : "string",
-		"order"          : "8"
-	},
-	"update_available" : {
-		"level"          : "6",
-		"manageableOnly" : "1",
-		"name"           : "{{Update disponible}}",
-		"type"           : "info",
-		"subType"        : "binary",
-		"order"          : "9"
-	},
-	"next_firmware" : {
-		"level"          : "6",
-		"manageableOnly" : "1",
-		"name"           : "{{firmware disponible}}",
-		"type"           : "info",
-		"subType"        : "string",
-		"order"          : "10"
-	},
-	"guest_duration": {
-		"feature"        : "wifi",
-		"level"          : "10",
-		"manageableOnly" : "1",
-		"name"           : "{{durée guest}}",
-		"type"           : "action",
-		"subType"        : "slider",
-		"template"       : {
-			"dashboard" : "devolo_cpl::j_h_m",
-			"mobile"    : "devolo_cpl::j_h_m"
-		},
-		"order"          : "11"
-	},
-	"guest" : {
-		"feature"        : "wifi",
-		"level"          : "10",
-		"manageableOnly" : "1",
-		"name"           : "{{Wifi guest}}",
-		"type"           : "info",
-		"subType"        : "binary",
-		"visible"        : "0",
-		"order"          : "12"
-	},
-	"guest_on" : {
-		"feature"        : "wifi",
-		"level"          : "10",
-		"manageableOnly" : "1",
-		"name"           : "{{Guest ON}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "guest",
-		"template"       : {
-			"dashboard" : "devolo_cpl::wifi",
-			"mobile"    : "devolo_cpl::wifi"
-		},
-		"order"          : "13"
-	},
-	"guest_off" : {
-		"feature"        : "wifi",
-		"level"          : "10",
-		"manageableOnly" : "1",
-		"name"           : "{{Guest OFF}}",
-		"type"           : "action",
-		"subType"        : "other",
-		"value"          : "guest",
-		"template"       : {
-			"dashboard" : "devolo_cpl::wifi",
-			"mobile"    : "devolo_cpl::wifi"
-		},
-		"order"          : "14"
-	},
-	"guest_remaining" : {
-		"feature"        : "wifi",
-		"level"          : "10",
-		"manageableOnly" : "1",
-		"name"           : "{{Guest temps restant}}",
-		"type"           : "info",
-		"subType"        : "numeric",
-		"template"       : {
-			"dashboard" : "devolo_cpl::j_h_m",
-			"mobile"    : "devolo_cpl::j_h_m"
-		},
-		"order"          : "15"
-	},
-	"online" : {
-		"level"          : "13",
-		"manageableOnly" : "1",
-		"name"           : "{{online}}",
-		"type"           : "info",
-		"subType"        : "binary",
-		"visible"        : "1",
-		"order"          : "16"
-	}
+  "refresh": {
+    "level": "0",
+    "manageableOnly": "1",
+    "name": "{{Rafraichir}}",
+    "type": "action",
+    "subType": "other",
+    "order": "1"
+  },
+  "leds": {
+    "level": "0",
+    "manageableOnly": "1",
+    "name": "{{LEDS}}",
+    "type": "info",
+    "subType": "binary",
+    "visible": "0",
+    "order": "2"
+  },
+  "leds_on": {
+    "level": "0",
+    "manageableOnly": "1",
+    "name": "{{Leds ON}}",
+    "type": "action",
+    "subType": "other",
+    "value": "leds",
+    "template": {
+      "dashboard": "core::light",
+      "mobile": "core::light"
+    },
+    "order": "3"
+  },
+  "leds_off": {
+    "level": "0",
+    "manageableOnly": "1",
+    "name": "{{Leds OFF}}",
+    "type": "action",
+    "subType": "other",
+    "value": "leds",
+    "template": {
+      "dashboard": "core::light",
+      "mobile": "core::light"
+    },
+    "order": "4"
+  },
+  "locate": {
+    "level": "2",
+    "manageableOnly": "1",
+    "name": "{{Locate}}",
+    "type": "info",
+    "subType": "binary",
+    "visible": "0",
+    "configuration": {
+      "returnStateValue": "0",
+      "returnStateTime": "2"
+    },
+    "order": "5"
+  },
+  "locate_on": {
+    "level": "2",
+    "manageableOnly": "1",
+    "name": "{{Locate ON}}",
+    "type": "action",
+    "subType": "other",
+    "value": "locate",
+    "template": {
+      "dashboard": "devolo_cpl::locate",
+      "mobile": "devolo_cpl::locate"
+    },
+    "order": "6"
+  },
+  "locate_off": {
+    "level": "2",
+    "manageableOnly": "1",
+    "name": "{{Locate OFF}}",
+    "type": "action",
+    "subType": "other",
+    "value": "locate",
+    "template": {
+      "dashboard": "devolo_cpl::locate",
+      "mobile": "devolo_cpl::locate"
+    },
+    "order": "7"
+  },
+  "firmware": {
+    "level": "6",
+    "manageableOnly": "1",
+    "name": "{{firmware}}",
+    "type": "info",
+    "subType": "string",
+    "order": "8"
+  },
+  "update_available": {
+    "level": "6",
+    "manageableOnly": "1",
+    "name": "{{Update disponible}}",
+    "type": "info",
+    "subType": "binary",
+    "order": "9"
+  },
+  "next_firmware": {
+    "level": "6",
+    "manageableOnly": "1",
+    "name": "{{firmware disponible}}",
+    "type": "info",
+    "subType": "string",
+    "order": "10"
+  },
+  "guest_duration": {
+    "feature": "wifi",
+    "level": "10",
+    "manageableOnly": "1",
+    "name": "{{durée guest}}",
+    "type": "action",
+    "subType": "slider",
+    "template": {
+      "dashboard": "devolo_cpl::j_h_m",
+      "mobile": "devolo_cpl::j_h_m"
+    },
+    "order": "11"
+  },
+  "guest": {
+    "feature": "wifi",
+    "level": "10",
+    "manageableOnly": "1",
+    "name": "{{Wifi guest}}",
+    "type": "info",
+    "subType": "binary",
+    "visible": "0",
+    "order": "12"
+  },
+  "guest_on": {
+    "feature": "wifi",
+    "level": "10",
+    "manageableOnly": "1",
+    "name": "{{Guest ON}}",
+    "type": "action",
+    "subType": "other",
+    "value": "guest",
+    "template": {
+      "dashboard": "devolo_cpl::wifi",
+      "mobile": "devolo_cpl::wifi"
+    },
+    "order": "13"
+  },
+  "guest_off": {
+    "feature": "wifi",
+    "level": "10",
+    "manageableOnly": "1",
+    "name": "{{Guest OFF}}",
+    "type": "action",
+    "subType": "other",
+    "value": "guest",
+    "template": {
+      "dashboard": "devolo_cpl::wifi",
+      "mobile": "devolo_cpl::wifi"
+    },
+    "order": "14"
+  },
+  "guest_remaining": {
+    "feature": "wifi",
+    "level": "10",
+    "manageableOnly": "1",
+    "name": "{{Guest temps restant}}",
+    "type": "info",
+    "subType": "numeric",
+    "template": {
+      "dashboard": "devolo_cpl::j_h_m",
+      "mobile": "devolo_cpl::j_h_m"
+    },
+    "order": "15"
+  },
+  "online": {
+    "level": "13",
+    "manageableOnly": "1",
+    "name": "{{online}}",
+    "type": "info",
+    "subType": "binary",
+    "visible": "1",
+    "order": "16"
+  }
 }

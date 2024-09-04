@@ -1,29 +1,38 @@
-<span class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="j_h_m" data-version="#version#" data-eqLogic_id="#eqLogic_id#" data-cmd_id="#id#" data-cmd_uid="#uid#">
-	<span class='ui-bar ui-bar-a state label-info'></span>
-	<script>
-		 jeedom.cmd.addUpdateFunction('#id#',function(_options) {
-			let tyt = ""
-			let heures = Math.trunc(_options.value / 60)
-			let minutes = _options.value % 60
-			let jours = Math.trunc(heures / 24)
-			heures = heures % 24
-			if (jours == 0 && heures == 0) {
-				txt = minutes + " min."
-			} else {
-				txt = minutes
-				if (minutes < 10) {
-					txt = '0' + txt
-				}
-				txt = heures + ":" + txt
-				if (jours > 0) {
-					if (heures < 10){
-						txt = '0' + txt
-					}
-				}
-				txt = jours + 'j ' + txt
-			}
-			$('.cmd[data-cmd_id=#id#] .state').empty().append(txt)
-		});
-		jeedom.cmd.refreshValue([{cmd_id : '#id#', value: '#value#'}])
-	</script>
+<span
+  class="cmd cmd-widget"
+  data-type="info"
+  data-subtype="numeric"
+  data-template="j_h_m"
+  data-version="#version#"
+  data-eqLogic_id="#eqLogic_id#"
+  data-cmd_id="#id#"
+  data-cmd_uid="#uid#"
+>
+  <span class="ui-bar ui-bar-a state label-info"></span>
+  <script>
+    jeedom.cmd.addUpdateFunction("#id#", function (_options) {
+      let tyt = "";
+      let heures = Math.trunc(_options.value / 60);
+      let minutes = _options.value % 60;
+      let jours = Math.trunc(heures / 24);
+      heures = heures % 24;
+      if (jours == 0 && heures == 0) {
+        txt = minutes + " min.";
+      } else {
+        txt = minutes;
+        if (minutes < 10) {
+          txt = "0" + txt;
+        }
+        txt = heures + ":" + txt;
+        if (jours > 0) {
+          if (heures < 10) {
+            txt = "0" + txt;
+          }
+        }
+        txt = jours + "j " + txt;
+      }
+      $(".cmd[data-cmd_id=#id#] .state").empty().append(txt);
+    });
+    jeedom.cmd.refreshValue([{ cmd_id: "#id#", value: "#value#" }]);
+  </script>
 </span>

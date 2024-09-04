@@ -1,13 +1,27 @@
-<div class="cmd cmd-widget #history#" data-type="info" data-subtype="numeric" data-template="badge" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+<div
+  class="cmd cmd-widget #history#"
+  data-type="info"
+  data-subtype="numeric"
+  data-template="badge"
+  data-cmd_id="#id#"
+  data-cmd_uid="#uid#"
+  data-version="#version#"
+  data-eqLogic_id="#eqLogic_id#"
+>
   <div class="title #hide_name#">
-    <div  class="cmdName">#name_display#</div>
+    <div class="cmdName">#name_display#</div>
   </div>
-  <div class="content-sm ">
-    <span class='label label-info state'></span>
+  <div class="content-sm">
+    <span class="label label-info state"></span>
   </div>
   <div class="cmdStats #hide_history#">
     <div class="col-xs-12 center-block">
-      <span title='{{Min}}' class='tooltips'>#minHistoryValue#</span>|<span title='{{Moyenne}}' class='tooltips'>#averageHistoryValue#</span>|<span title='{{Max}}' class='tooltips'>#maxHistoryValue#</span> <i class="#tendance#"></i>
+      <span title="{{Min}}" class="tooltips">#minHistoryValue#</span>|<span
+        title="{{Moyenne}}"
+        class="tooltips"
+        >#averageHistoryValue#</span
+      >|<span title="{{Max}}" class="tooltips">#maxHistoryValue#</span>
+      <i class="#tendance#"></i>
     </div>
   </div>
   <template>
@@ -15,37 +29,60 @@
     <div>fontcolor : rgb(20,20,20) ({{Couleur du texte}})</div>
   </template>
   <script>
-     jeedom.cmd.addUpdateFunction('#id#',function(_options) {
-      $('.cmd[data-cmd_id=#id#]').attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
-      let txt = ""
-      let heures = Math.trunc(_options.value / 60)
-      let minutes = _options.value % 60
-      let jours = Math.trunc(heures / 24)
-      heures = heures % 24
+    jeedom.cmd.addUpdateFunction("#id#", function (_options) {
+      $(".cmd[data-cmd_id=#id#]").attr(
+        "title",
+        "{{Date de valeur}} : " +
+          _options.valueDate +
+          "<br/>{{Date de collecte}} : " +
+          _options.collectDate,
+      );
+      let txt = "";
+      let heures = Math.trunc(_options.value / 60);
+      let minutes = _options.value % 60;
+      let jours = Math.trunc(heures / 24);
+      heures = heures % 24;
       if (jours == 0 && heures == 0) {
-        txt = minutes.toString() + " min."
+        txt = minutes.toString() + " min.";
       } else {
-        txt = minutes.toString()
+        txt = minutes.toString();
         if (minutes < 10) {
-          txt = '0' + txt
+          txt = "0" + txt;
         }
-	txt = heures + ":" + txt
+        txt = heures + ":" + txt;
         if (jours > 0) {
           if (heures < 10) {
-            txt = '0' + txt
+            txt = "0" + txt;
           }
-	  txt = jours.toString() + '{{j}} ' + txt
+          txt = jours.toString() + "{{j}} " + txt;
         }
       }
-      $('.cmd[data-cmd_id=#id#] .state').empty().append(txt)
+      $(".cmd[data-cmd_id=#id#] .state").empty().append(txt);
     });
-    jeedom.cmd.refreshValue([{cmd_id :'#id#',value: '#value#', valueDate: '#valueDate#', collectDate: '#collectDate#', alertLevel: '#alertLevel#', unit: '#unite#'}])
+    jeedom.cmd.refreshValue([
+      {
+        cmd_id: "#id#",
+        value: "#value#",
+        valueDate: "#valueDate#",
+        collectDate: "#collectDate#",
+        alertLevel: "#alertLevel#",
+        unit: "#unite#",
+      },
+    ]);
 
-    if ($.issetWidgetOptParam('#color#', 'color')) {
-      $('.cmd[data-cmd_id=#id#] .label.state').style('background-color', '#color#', 'important')
+    if ($.issetWidgetOptParam("#color#", "color")) {
+      $(".cmd[data-cmd_id=#id#] .label.state").style(
+        "background-color",
+        "#color#",
+        "important",
+      );
     }
-    if ($.issetWidgetOptParam('#fontcolor#', 'fontcolor')) {
-      $('.cmd[data-cmd_id=#id#] .label.state').style('color', '#fontcolor#', 'important')
+    if ($.issetWidgetOptParam("#fontcolor#", "fontcolor")) {
+      $(".cmd[data-cmd_id=#id#] .label.state").style(
+        "color",
+        "#fontcolor#",
+        "important",
+      );
     }
   </script>
 </div>
