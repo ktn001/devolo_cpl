@@ -1,119 +1,171 @@
-<div class="cmd cmd-widget reportModeHidden" data-type="action" data-subtype="slider" data-template="j_h_m" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
-	<style>
-		#popup_#uid# a.ui-btn {
-			background: linear-gradient( var(--btnEq-default-color), var(--btnEq-default-color)) fixed !important;
-		}
-		#popup_#uid# a.ui-btn:hover {
-			color: var(--linkHoverLight-color) !important;
-		}
-		#popup_#uid# label {
-			font-weight : 700;
-			font-size : 15px;
-		}
-		.footer-#uid# {
-			padding-top: 15px;
-			text-align : right;
-		}
-	</style>
-	<div class="title #hide_name#">
-		<div class="cmdName">#name_display#</div>
-	</div>
-	<div class="content-sm">
-		<a class="btn btn-sm btn-default action tooltips" data-rel="popup" href="#popup_#uid#">#state#</a>
-	</div>
-	<div id="popup_#uid#" class="j_h_m-container_#uid# ui-content" data-role="popup">
-		<form>
-			<div class="form-group">
-				<label class="col-sm-3">{{jours}}</label>	
-				<div class="col-sm-9">
-					<input id="inputDays_#uid#" class="form-control" type="number" min="0" max="14" value=0 step="1">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3">{{heures}}</label>	
-				<div class="col-sm-9">
-					<input id="inputHours_#uid#" class="form-control" type="number" min="0" max="23" value=0 step="1">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3">{{minutes}}</label>	
-				<div class="col-sm-9">
-					<input id="inputMinutes_#uid#" class="form-control" type="number" min="0" max="59" value=0 step="1">
-				</div>
-			</div>
-		</form>
-		<div class="footer-#uid#">
-			<a id="btn-cancel_#uid#" class="ui-btn  ui-mini ui-btn-inline ui-btn-raised">{{Annuler}}</a>
-			<a id="btn-ok_#uid#" class="ui-btn  ui-mini ui-btn-inline ui-btn-raised">{{OK}}</a>
-		</div>
-	</div>
-	<template></template>
-	<script>
-	$('#popup_#uid#').popup({
-		dismissible : false,
-		positionTo : 'window',
-		transition : 'pop',
-		overlayTheme : 'b'
-	})
+<div
+  class="cmd cmd-widget reportModeHidden"
+  data-type="action"
+  data-subtype="slider"
+  data-template="j_h_m"
+  data-cmd_id="#id#"
+  data-cmd_uid="#uid#"
+  data-version="#version#"
+  data-eqLogic_id="#eqLogic_id#"
+>
+  <style>
+    #popup_#uid# a.ui-btn {
+      background: linear-gradient(
+          var(--btnEq-default-color),
+          var(--btnEq-default-color)
+        )
+        fixed !important;
+    }
+    #popup_#uid# a.ui-btn:hover {
+      color: var(--linkHoverLight-color) !important;
+    }
+    #popup_#uid# label {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .footer-#uid# {
+      padding-top: 15px;
+      text-align: right;
+    }
+  </style>
+  <div class="title #hide_name#">
+    <div class="cmdName">#name_display#</div>
+  </div>
+  <div class="content-sm">
+    <a
+      class="btn btn-sm btn-default action tooltips"
+      data-rel="popup"
+      href="#popup_#uid#"
+      >#state#</a
+    >
+  </div>
+  <div
+    id="popup_#uid#"
+    class="j_h_m-container_#uid# ui-content"
+    data-role="popup"
+  >
+    <form>
+      <div class="form-group">
+        <label class="col-sm-3">{{jours}}</label>
+        <div class="col-sm-9">
+          <input
+            id="inputDays_#uid#"
+            class="form-control"
+            type="number"
+            min="0"
+            max="14"
+            value="0"
+            step="1"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">{{heures}}</label>
+        <div class="col-sm-9">
+          <input
+            id="inputHours_#uid#"
+            class="form-control"
+            type="number"
+            min="0"
+            max="23"
+            value="0"
+            step="1"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">{{minutes}}</label>
+        <div class="col-sm-9">
+          <input
+            id="inputMinutes_#uid#"
+            class="form-control"
+            type="number"
+            min="0"
+            max="59"
+            value="0"
+            step="1"
+          />
+        </div>
+      </div>
+    </form>
+    <div class="footer-#uid#">
+      <a
+        id="btn-cancel_#uid#"
+        class="ui-btn ui-mini ui-btn-inline ui-btn-raised"
+        >{{Annuler}}</a
+      >
+      <a id="btn-ok_#uid#" class="ui-btn ui-mini ui-btn-inline ui-btn-raised"
+        >{{OK}}</a
+      >
+    </div>
+  </div>
+  <template></template>
+  <script>
+    $('#popup_#uid#').popup({
+    	dismissible : false,
+    	positionTo : 'window',
+    	transition : 'pop',
+    	overlayTheme : 'b'
+    })
 
-	$('#btn-cancel_#uid#').on('click', function() {
-		$('#popup_#uid#').popup('close')
-	})
+    $('#btn-cancel_#uid#').on('click', function() {
+    	$('#popup_#uid#').popup('close')
+    })
 
-	$('#btn-ok_#uid#').on('click', function() {
-		result  = $('#inputDays_#uid#').value() * 1440
-		result += $('#inputHours_#uid#').value() * 60
-		result += $('#inputMinutes_#uid#').value() * 1
-		setDisplayValue_#uid#(result)
-		jeedom.cmd.execute({id: '#id#', value: {slider: result}})
-		$('#popup_#uid#').popup('close')
-	})
+    $('#btn-ok_#uid#').on('click', function() {
+    	result  = $('#inputDays_#uid#').value() * 1440
+    	result += $('#inputHours_#uid#').value() * 60
+    	result += $('#inputMinutes_#uid#').value() * 1
+    	setDisplayValue_#uid#(result)
+    	jeedom.cmd.execute({id: '#id#', value: {slider: result}})
+    	$('#popup_#uid#').popup('close')
+    })
 
-	$(function() {
-		setDisplayValue_#uid#(#state#)
-		j_h_m_init_#uid#(#state#)
-	})
+    $(function() {
+    	setDisplayValue_#uid#(#state#)
+    	j_h_m_init_#uid#(#state#)
+    })
 
-	function setDisplayValue_#uid#(value) {
-		let txt = ""
-		let heures = Math.trunc(value / 60)
-		let minutes = value % 60
-		let jours = Math.trunc(heures / 24)
-		heures = heures % 24
-		if (jours == 0 && heures == 0) {
-			txt = minutes + " min."
-		} else {
-			txt = minutes
-			if (minutes < 10) {
-				txt = '0' + txt
-			}
-			txt = heures + ":" + txt
-			if (jours > 0) {
-				if (heures < 10) {
-					txt = '0' + txt
-				}
-				txt = jours + '{{j}} ' + txt
-			}
-		}
-		$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt) 
-	}
+    function setDisplayValue_#uid#(value) {
+    	let txt = ""
+    	let heures = Math.trunc(value / 60)
+    	let minutes = value % 60
+    	let jours = Math.trunc(heures / 24)
+    	heures = heures % 24
+    	if (jours == 0 && heures == 0) {
+    		txt = minutes + " min."
+    	} else {
+    		txt = minutes
+    		if (minutes < 10) {
+    			txt = '0' + txt
+    		}
+    		txt = heures + ":" + txt
+    		if (jours > 0) {
+    			if (heures < 10) {
+    				txt = '0' + txt
+    			}
+    			txt = jours + '{{j}} ' + txt
+    		}
+    	}
+    	$('.cmd[data-cmd_id=#id#] a.btn').empty().append(txt)
+    }
 
-	function j_h_m_init_#uid#(value) {
-		minutes = value % 60
-		hours = Math.trunc (value / 60)
-		days = Math.trunc (hours / 24)
-		hours = hours % 24
-		$("#inputDays_#uid#").value(days)
-		$("#inputHours_#uid#").value(hours)
-		$("#inputMinutes_#uid#").value(minutes)
-	}
+    function j_h_m_init_#uid#(value) {
+    	minutes = value % 60
+    	hours = Math.trunc (value / 60)
+    	days = Math.trunc (hours / 24)
+    	hours = hours % 24
+    	$("#inputDays_#uid#").value(days)
+    	$("#inputHours_#uid#").value(hours)
+    	$("#inputMinutes_#uid#").value(minutes)
+    }
 
-	if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
-	&& $('.cmd[data-cmd_uid=#uid#]').last().prev().css('display') != 'block') {
-		$('.cmd[data-cmd_uid=#uid#]').last().prepend('<br/>');
-	}
-	if ("#name#" != '#name_display#') {
-		$('.cmd[data-cmd_uid=#uid#]:last .action').attr('title',"#name#")
-	}
-	</script>
+    if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
+    && $('.cmd[data-cmd_uid=#uid#]').last().prev().css('display') != 'block') {
+    	$('.cmd[data-cmd_uid=#uid#]').last().prepend('<br/>');
+    }
+    if ("#name#" != '#name_display#') {
+    	$('.cmd[data-cmd_uid=#uid#]:last .action').attr('title',"#name#")
+    }
+  </script>
 </div>

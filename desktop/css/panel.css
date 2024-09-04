@@ -1,7 +1,6 @@
-
 #div_devolo_cpl .btn.panel-top {
-	position: relative;
-	top: -12px;
+  position: relative;
+  top: -12px;
 }
 
 /*
@@ -9,58 +8,58 @@
  * La barre de navigaton
  */
 .subnavbar {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .subnavbar-inner {
-	height: 60px;
-	background: rgb(var(--defaultBkg-color)) !important;
-	border-bottom: 1px solid #636363;
+  height: 60px;
+  background: rgb(var(--defaultBkg-color)) !important;
+  border-bottom: 1px solid #636363;
 }
 
 .subnavbar .container > ul {
-	display: inline-block;
-	height: 60px;
-	padding: 0;
-	margin: 0;
+  display: inline-block;
+  height: 60px;
+  padding: 0;
+  margin: 0;
 }
 
 .subnavbar .container > ul > li {
-	float: left;
-	min-width: 20px;
-	height: 100%;
-	padding: 0 10px;
-	margin: 0;
-	text-align: center;
-	list-style: none;
-	font-size: 12px;
-	font-weight: bold;
-	border-left: 1px solid #d9d9d9;
+  float: left;
+  min-width: 20px;
+  height: 100%;
+  padding: 0 10px;
+  margin: 0;
+  text-align: center;
+  list-style: none;
+  font-size: 12px;
+  font-weight: bold;
+  border-left: 1px solid #d9d9d9;
 }
 
 .subnavbar .container > ul > li:last-child {
-	border-right: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
 }
 .subnavbar .container > ul > li:hover {
-	color: #888;
-	text-decoration: none;
+  color: #888;
+  text-decoration: none;
 }
 
 .subnavbar .container > ul > li.active {
-	border-bottom: 3px solid #ff7f74;
+  border-bottom: 3px solid #ff7f74;
 }
 
 .subnavbar .container > ul > li > i {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	margin-top: 11px;
-	margin-bottom: -3px;
-	font-size: 20px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: 11px;
+  margin-bottom: -3px;
+  font-size: 20px;
 }
 
 .subnavbar .container > ul > li > span {
-	display: block;
+  display: block;
 }
 
 /*
@@ -68,98 +67,98 @@
  * Les cards
  */
 .card {
-	position: relative;
-	clear: both;
-	width: auto;
-	margin-bottom: 2em;
-	overflow: hidden;
+  position: relative;
+  clear: both;
+  width: auto;
+  margin-bottom: 2em;
+  overflow: hidden;
 }
 
 .card-header {
-	position: relative;
-	height: 40px;
-	line-height: 40px;
-	background: var(--form-bg-color);
-	border: 1px solid #d6d6d6;
-	color: rgb(var(--txt-color));
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  background: var(--form-bg-color);
+  border: 1px solid #d6d6d6;
+  color: rgb(var(--txt-color));
 }
 
 .card-header > i {
-	margin-left: 13px;
-	margin-right: -2px;
-	font-size: 20px;
+  margin-left: 13px;
+  margin-right: -2px;
+  font-size: 20px;
 }
 
-.card-header h3{
-	position: relative;
-	top: -2px;
-	left: 10px;
-	display: inline-block;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	margin-right: 2em;
-	font-size: 14px;
-	font-weight: 800;
-	line-height: 18px;
+.card-header h3 {
+  position: relative;
+  top: -2px;
+  left: 10px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 2em;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 18px;
 }
 
 .card-header .label,
 .card-header .button {
-	position: relative;
-	top: -2px;
-	font-size: 14px;
-	background-color: var(--btn-default-color) !important;
+  position: relative;
+  top: -2px;
+  font-size: 14px;
+  background-color: var(--btn-default-color) !important;
 }
 
 .card-header .button {
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	font-weight : 800;
-	color: var(--sc-lightTxt-color);
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: 800;
+  color: var(--sc-lightTxt-color);
 }
 
 .card-header .label {
-	padding-top: 12px;
-	padding-bottom: 12px;
-	color: var(--sc-lightTxt-color);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: var(--sc-lightTxt-color);
 }
 
-.card-header input[type=radio] {
-	margin-top: 12px !important;
+.card-header input[type="radio"] {
+  margin-top: 12px !important;
 }
 
 .card-header select {
-	padding-top: 0px !important;
-	height: 30px;
-	max-width:30% ;
-	width: unset;
+  padding-top: 0px !important;
+  height: 30px;
+  max-width: 30%;
+  width: unset;
 }
 
 .card-header > i.bt-close_card {
-	float: right;
-	position: relative;
-	top: 9px;
-	left: -9px;
-	font-size: 20px;
+  float: right;
+  position: relative;
+  top: 9px;
+  left: -9px;
+  font-size: 20px;
 }
 
 .card-content {
-	padding: 0px 15px 15px;
-	background: rgba(var(--panel-bg-color), var(--opacity));
-	border: 1px solid #D5D5D5;
-	border-radius: 5px;
-	width: 100%;
-	height: 400px;
+  padding: 0px 15px 15px;
+  background: rgba(var(--panel-bg-color), var(--opacity));
+  border: 1px solid #d5d5d5;
+  border-radius: 5px;
+  width: 100%;
+  height: 400px;
 }
 
-.card-header+.card-content {
-	border-top: none;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
+.card-header + .card-content {
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .highcharts-title {
-	fill: var(--sc-lightTxt-color) !important;
+  fill: var(--sc-lightTxt-color) !important;
 }

@@ -1,9 +1,8 @@
-
 #div_devoloMacInfo table {
-	margin: auto;
-	width: auto;
+  margin: auto;
+  width: auto;
 }
 
 .no-close .ui-dialog-titlebar-close {
-	display: none;
+  display: none;
 }
