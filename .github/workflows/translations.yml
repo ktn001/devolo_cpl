@@ -1,0 +1,17 @@
+name: translate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - translations
+
+jobs:
+  auto-translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Mips2648/plugins-translations@main
+        with:
+          deepl_api_key: 7cee80f2-936c-4895-838c-a8dc30353a62:fx
+          target_languages: fr_FR, en_US, es_ES, de_DE, it_IT, pt_PT
+

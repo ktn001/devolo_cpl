@@ -106,6 +106,12 @@ class devolo_cpl extends eqLogic {
 		return array('script' => __DIR__ . '/../../resources/install_#stype#.sh', 'log' => log::getPathToLog(__CLASS__ . '_update'));
 	}
 
+	public static function backupExclude() {
+		return [
+			'resources/venv'
+		];
+	}
+
 	/*
 	 * Etat du daemon
 	 */
