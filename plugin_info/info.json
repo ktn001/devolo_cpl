@@ -1,28 +1,37 @@
 {
-	"id" : "devolo_cpl",
-	"name" : "Devolo CPL",
-	"description" : {
-		"fr_FR": "Plugin pour les réseaux CPL de Devolo"
+	"id": "devolo_cpl",
+	"name": "Devolo CPL",
+	"description": {
+		"fr_FR": "Plugin pour les réseaux CPL de Devolo",
+		"en_US": "Plugin for Devolo PLC networks",
+		"es_ES": "Plugin para redes PLC Devolo",
+		"de_DE": "Plugin für Powerline-Netzwerke von Devolo",
+		"it_IT": "Plugin per reti PLC Devolo",
+		"pt_PT": "Plugin para redes PLC Devolo"
 	},
-	"licence" : "AGPL",
-	"author" : "ktn",
-	"require" : "4.2.0",
-	"category" : "communication",
-	"display" : "panel",
-	"hasDependency" : true,
-	"maxDependancyInstallTime" : 20,
-	"hasOwnDeamon" : true,
-	"maxDependancyInstallTime" : 5,
-	"changelog" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
-	"documentation" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
-	"changelog_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
-	"documentation_beta" : "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
-	"link" : {
-		"forum" : "https://community.jeedom.com/tag/plugin-devolo_cpl",
-		"video" : ""
+	"licence": "AGPL",
+	"author": "ktn",
+	"require": "4.2.0",
+	"category": "communication",
+	"display": "panel",
+	"hasDependency": true,
+	"maxDependancyInstallTime": 5,
+	"hasOwnDeamon": true,
+	"changelog": "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
+	"documentation": "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
+	"changelog_beta": "https://ktn001.github.io/fr_FR/devolo_cpl/changelog.html",
+	"documentation_beta": "https://ktn001.github.io/fr_FR/devolo_cpl/index.html",
+	"link": {
+		"forum": "https://community.jeedom.com/tag/plugin-devolo_cpl",
+		"video": ""
 	},
 	"language": [
-		"fr_FR"
+		"de_DE",
+		"en_US",
+		"es_ES",
+		"fr_FR",
+		"it_IT",
+		"pt_PT"
 	],
 	"compatibility": [
 		"miniplus",
