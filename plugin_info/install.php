@@ -133,6 +133,10 @@ function devolo_upgrade_to_level($level) {
 
 function devolo_cpl_upgrade() {
 
+	$packagesFile = __DIR__ . '/packages.json';
+	if (file_exists($packagesFile)) {
+		unlink($packagesFile);
+	}
 	$lastLevel = 13;
 
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
