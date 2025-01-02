@@ -467,7 +467,7 @@ class devolo_cpl extends eqLogic {
 	public static function sendToDaemon($params) {
 		$daemon_info = self::daemon_info();
 		if ($daemon_info['state'] != 'ok') {
-			throw new Exception(_("Le démon n'est pas démarré",__FILE__));
+			throw new Exception(__("Le démon n'est pas démarré",__FILE__));
 		}
 		$params['apikey'] = jeedom::getApiKey(__CLASS__);
 		$payLoad = json_encode($params);
