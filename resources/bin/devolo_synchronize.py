@@ -9,7 +9,7 @@ import time
 import ipaddress
 import asyncio
 import traceback
-from logging import debug, info, warning, error
+import logging 
 from jeedom.jeedom import *
 import devolo_plc_api
 import devolo_plc_api.network
@@ -24,7 +24,7 @@ action = ""
 # function appelée automatiquement à la fermeture du programme
 # ===============================================================================
 def exit_handler():
-    info("===================== END =====================")
+    logging.info("===================== END =====================")
 
 
 # ===============================================================================
@@ -41,6 +41,8 @@ def options():
     args = parser.parse_known_args()
 
     if args[0].loglevel:
+        if args[0].loglevel == "fulldebug":
+            jeedom_utils.set_log_level("debug")
         jeedom_utils.set_log_level(args[0].loglevel)
     else:
         jeedom_utils.set_log_level()
@@ -88,7 +90,7 @@ async def getDeviceInfos(device, names):
             dev = network.devices[i]
             if dev.mac_address in names:
                 if names[dev.mac_address] != dev.user_device_name:
-                    warning(
+                    logging.warning(
                         f"Deux noms différents pour la mac address {dev.mac_address}: {names[dev.mac_address]} et {dev.user_device_name}"
                     )
             else:
@@ -147,5 +149,5 @@ async def syncDevolo():
 
 atexit.register(exit_handler)
 args = options()
-info("==================== START ====================")
+logging.info("==================== START ====================")
 asyncio.run(syncDevolo())

@@ -369,6 +369,7 @@ class devolo_cpl extends eqLogic {
 		}
 		$cmd .= ' --loglevel ' . $loglevel;
 		$cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_synchronize');
+		log::add("devolo_cpl","info",sprintf(__("Lancement de '%s'",__FILE__),$cmd));
 		$lines = [];
 		$result = exec($cmd ,$lines, $exitStatus);
 		if ($result === false) {
