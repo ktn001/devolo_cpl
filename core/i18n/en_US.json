@@ -26,6 +26,7 @@
         "L'ip de l'équipement %s été changé:": "The ip of the %s equipment has been changed:",
         "La commande '%s' est introuvable": "Command '%s' not found",
         "Lancement de %s": "Launch %s",
+        "Lancement de '%s'": "Launch '%s",
         "Le démon n'est pas démarré": "Daemon not started",
         "Le model de l'équipement %s été changé:": "Equipment model %s changed:",
         "Le nom de l'équipement a été changé:": "The equipment name has been changed:",
