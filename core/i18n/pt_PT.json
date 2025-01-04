@@ -26,6 +26,7 @@
         "L'ip de l'équipement %s été changé:": "O ip do equipamento %s foi alterado:",
         "La commande '%s' est introuvable": "O comando \"%s\" não pode ser encontrado",
         "Lancement de %s": "Lançamento de %s",
+        "Lancement de '%s'": "Lançar \"%s",
         "Le démon n'est pas démarré": "O daemon não foi iniciado",
         "Le model de l'équipement %s été changé:": "O modelo do equipamento %s foi alterado:",
         "Le nom de l'équipement a été changé:": "O nome do equipamento foi alterado:",
