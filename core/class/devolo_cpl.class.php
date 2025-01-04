@@ -368,7 +368,7 @@ class devolo_cpl extends eqLogic {
 			$loglevel = "fulldebug";
 		}
 		$cmd .= ' --loglevel ' . $loglevel;
-		$cmd .= ' 2>>' . log::getPathToLog('devolo_synchronize');
+		$cmd .= ' 2>>' . log::getPathToLog('devolo_cpl_synchronize');
 		$lines = [];
 		$result = exec($cmd ,$lines, $exitStatus);
 		if ($result === false) {
