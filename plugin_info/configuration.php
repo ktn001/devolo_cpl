@@ -66,7 +66,24 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
         <label class="col-sm-5 control-label">{{Port}}
           <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
         </label>
-        <input class="configKey col-sm-2 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
+        <input class="configKey col-sm-3 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
+      </div>
+      <legend><i class="fas fa-file"></i> {{Logs}}</legend>
+      <div class="row">
+        <label class="col-sm-5 control-label">{{Discret}}
+          <sup><i class="fas fa-question-circle" title="{{Cacher les passwords et autres données sensibles}}"></i></sup>
+        </label>
+	<div class="col-sm-3">
+          <input class="configKey form-control" type="checkbox" data-l1key="logDiscrets" checked></input>
+        </div>
+      </div>
+      <div class="row">
+        <label class="col-sm-5 control-label">{{Debug complet}}
+          <sup><i class="fas fa-question-circle" title="{{Log debug des modules python (log warning sinon)}}"></i></sup>
+        </label>
+	<div class="col-sm-3">
+          <input class="configKey form-control" type="checkbox" data-l1key="fullDebug"></input>
+        </div>
       </div>
     </div>
   </fieldset>

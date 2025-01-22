@@ -1,3 +1,4 @@
+# vim: tabstop=4 autoindent expandtab
 # This file is part of Jeedom.
 #
 # Jeedom is free software: you can redistribute it and/or modify
@@ -32,17 +33,12 @@ import devolo_plc_api
 from devolo_plc_api import Device
 from devolo_plc_api.exceptions.device import *
 
-try:
-    import jeedom
+libDir = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + "/../lib")
+sys.path.append(libDir)
 
-    print
-    from jeedom.jeedom import *
-except ImportError:
-    print("Error: importing module jeedom.jeedom")
-    sys.exit(1)
+from jeedom import *
 
 activSerial = dict()
-
 
 def setActivSerial(serial, ip):
     global activSerial
@@ -54,11 +50,9 @@ def setActivSerial(serial, ip):
 
 
 async def getState(message):
-    logging.info("============== begin getState ==============")
+    logger.info("============== begin getState ==============")
     async with Device(ip=message["ip"]) as dpa:
         result = {}
-        result["action"] = "infoState"
-        result["serial"] = message["serial"]
         if message["password"] != "":
             dpa.password = message["password"]
 
@@ -87,14 +81,72 @@ async def getState(message):
                     result["wifi_guest"]["enabled"] = 0
                 result["wifi_guest"]["remaining"] = guest_wifi.remaining_duration
 
-        logging.debug(result)
+        key = "infoState::" + message['serial']
+        logger.info(key + str(result))
         setActivSerial(message["serial"], message["ip"])
-        jeedom_com.send_change_immediate(result)
-    logging.info("=============== end getState ===============")
+        jeedom_com.add_changes(key, json.dumps(result))
+    logger.info("=============== end getState ===============")
+
+
+async def getRates(message):
+    logger.info("============== begin getRates ==============")
+    rates = {}
+    for ip in message["ip"].split(":"):
+        try:
+            async with Device(ip) as dpa:
+                network = await dpa.plcnet.async_get_network_overview()
+                for rate in network.data_rates:
+                    mac_from = rate.mac_address_from
+                    mac_to = rate.mac_address_to
+                    if mac_from not in rates:
+                        rates[mac_from] = {}
+                    if mac_to not in rates[mac_from]:
+                        rates[mac_from][mac_to] = {}
+                    rates[mac_from][mac_to]['tx_rate'] = rate.tx_rate
+                    rates[mac_from][mac_to]['rx_rate'] = rate.rx_rate
+        except:
+            pass
+    for src in rates.keys():
+        for dst in rates[src].keys():
+            key = f'rates::{src}::{dst}'
+            jeedom_com.add_changes(key, json.dumps(rates[src][dst]))
+
+    #    try:
+    #        async with Device(ip) as dpa:
+    #            infos = await dpa.plcnet.async_get_network_overview()
+    #            logger.info("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
+    #            logger.info(str(infos))
+    #            rates = []
+    #            for i in range(0, len(infos.data_rates)):
+    #                rate = {}
+    #                rate["mac_address_from"] = infos.data_rates[i].mac_address_from
+    #                rate["mac_address_to"] = infos.data_rates[i].mac_address_to
+    #                rate["tx_rate"] = infos.data_rates[i].tx_rate
+    #                rate["rx_rate"] = infos.data_rates[i].rx_rate
+    #                rates.append(rate)
+    #            result = {}
+    #            result["action"] = "getRates"
+    #            result["rates"] = rates
+    #            jeedom_com.send_change_immediate(result)
+    #            firmwares = []
+    #            for i in range(0, len(infos.devices)):
+    #                firmware = {}
+    #                firmware["mac"] = infos.devices[i].mac_address
+    #                firmware["version"] = infos.devices[i].friendly_version
+    #                firmwares.append(firmware)
+    #            result = {}
+    #            result["action"] = "firmwares"
+    #            result["firmwares"] = firmwares
+    #            setActivSerial(message["serial"], message["ip"])
+    #            jeedom_com.send_change_immediate(result)
+    #            break
+    #    except:
+    #        pass
+    logger.info("=============== end getRates ===============")
 
 
 async def getWifiConnectedDevices(message):
-    logging.info("============== begin getWifiConnectedDevices ==============")
+    logger.info("============== begin getWifiConnectedDevices ==============")
     band_txt = ["wifi", "wifi 2 Ghz", "wifi 5 Ghz"]
     try:
         async with Device(ip=message["ip"]) as dpa:
@@ -110,7 +162,7 @@ async def getWifiConnectedDevices(message):
                     connection["mac"] = connected_device.mac_address
                     connection["band"] = band_txt[connected_device.band]
                     result["connections"].append(connection)
-                logging.debug(result)
+                logger.debug(result)
                 setActivSerial(message["serial"], message["ip"])
                 jeedom_com.send_change_immediate(result)
     except (DeviceNotFound, DeviceUnavailable) as e:
@@ -120,66 +172,31 @@ async def getWifiConnectedDevices(message):
         reponse["serial"] = message["serial"]
         reponse["ip"] = message["ip"]
         jeedom_com.send_change_immediate(reponse)
-    logging.info("=============== end getWifiConnectedDevices ===============")
-
-
-async def getRates(message):
-    logging.info("============== begin getRates ==============")
-    for ip in message["ip"].split(":"):
-        try:
-            async with Device(ip) as dpa:
-                infos = await dpa.plcnet.async_get_network_overview()
-                rates = []
-                for i in range(0, len(infos.data_rates)):
-                    rate = {}
-                    rate["mac_address_from"] = infos.data_rates[i].mac_address_from
-                    rate["mac_address_to"] = infos.data_rates[i].mac_address_to
-                    rate["tx_rate"] = infos.data_rates[i].tx_rate
-                    rate["rx_rate"] = infos.data_rates[i].rx_rate
-                    rates.append(rate)
-                result = {}
-                result["action"] = "getRates"
-                result["rates"] = rates
-                jeedom_com.send_change_immediate(result)
-                firmwares = []
-                for i in range(0, len(infos.devices)):
-                    firmware = {}
-                    firmware["mac"] = infos.devices[i].mac_address
-                    firmware["version"] = infos.devices[i].friendly_version
-                    firmwares.append(firmware)
-                result = {}
-                result["action"] = "firmwares"
-                result["firmwares"] = firmwares
-                setActivSerial(message["serial"], message["ip"])
-                jeedom_com.send_change_immediate(result)
-                break
-        except:
-            pass
-    logging.info("=============== end getRates ===============")
+    logger.info("=============== end getWifiConnectedDevices ===============")
 
 
 async def execCmd(message):
-    logging.info("============== begin execCmd ==============")
+    logger.info("============== begin execCmd ==============")
     async with Device(ip=message["ip"]) as dpa:
         if message["password"] != "":
             dpa.password = message["password"]
 
         ##### leds #####
         if message["cmd"] == "leds":
-            logging.info("cmd: 'leds'")
+            logger.info("cmd: 'leds'")
             if message["param"] == 0:
                 enable = False
             else:
                 enable = True
             success = await dpa.device.async_set_led_setting(enable=enable)
             if success:
-                logging.debug("commande 'leds': OK")
+                logger.debug("commande 'leds': OK")
             else:
-                logging.debug("commande 'leds': KO")
+                logger.debug("commande 'leds': KO")
 
         ##### locate #####
         elif message["cmd"] == "locate":
-            logging.info("cmd: 'locate'")
+            logger.info("cmd: 'locate'")
             if message["param"] == 1:
                 success = await dpa.plcnet.async_identify_device_start()
                 result = {}
@@ -202,14 +219,14 @@ async def execCmd(message):
 
         ##### guest_on #####
         elif message["cmd"] == "guest_on":
-            logging.info("cmd: 'guest_on'")
+            logger.info("cmd: 'guest_on'")
             if int(message["param"]) > 0:
-                logging.debug(f'gest on, duration: {message["param"]}')
+                logger.debug(f'gest on, duration: {message["param"]}')
                 await dpa.device.async_set_wifi_guest_access(
                     enable=True, duration=int(message["param"])
                 )
             else:
-                logging.debug(f"gest on, duration: indéfini")
+                logger.debug(f"gest on, duration: indéfini")
                 await dpa.device.async_set_wifi_guest_access(enable=True)
 
         ##### guest_off #####
@@ -218,16 +235,16 @@ async def execCmd(message):
 
         ##### actualisation de l'équipement #####
         await getState(message)
-    logging.info("=============== end execCmd ===============")
+    logger.info("=============== end execCmd ===============")
 
 
 def read_socket():
     global JEEDOM_SOCKET_MESSAGE
     if not JEEDOM_SOCKET_MESSAGE.empty():
         message = json.loads(JEEDOM_SOCKET_MESSAGE.get().decode())
-        logging.debug("received message: " + str(message))
+        logger.debug("received message: " + str(message))
         if message["apikey"] != _apikey:
-            logging.error("Invalid apikey from socket : " + str(message))
+            logger.error("Invalid apikey from socket : " + str(message))
             return
         try:
             if message["action"] == "getState":
@@ -246,7 +263,7 @@ def read_socket():
             reponse["ip"] = message["ip"]
             jeedom_com.send_change_immediate(reponse)
         except DevicePasswordProtected as e:
-            logging.error("Send command to demon error : " + str(e))
+            logger.error("Send command to demon error : " + str(e))
             reponse = {}
             reponse["action"] = "message"
             reponse["code"] = "devPasswordError"
@@ -254,7 +271,7 @@ def read_socket():
             reponse["ip"] = message["ip"]
             jeedom_com.send_change_immediate(reponse)
         except httpx.HTTPStatusError as e:
-            logging.error("Send command to demon error : " + str(e))
+            logger.error("Send command to demon error : " + str(e))
             reponse = {}
             reponse["action"] = "message"
             reponse["code"] = "httpxStatusError"
@@ -263,23 +280,23 @@ def read_socket():
             reponse["ip"] = message["ip"]
             jeedom_com.send_change_immediate(reponse)
         except Exception as e:
-            logging.error(
+            logger.error(
                 "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
-            logging.error("┃Send command to demon error : " + str(e))
-            logging.error(
+            logger.error("┃Send command to demon error : " + str(e))
+            logger.error(
                 "┠────────────────────────────────────────────────────────────────────"
             )
-            logging.error("┃" + e.__class__.__name__)
-            logging.error(
+            logger.error("┃" + e.__class__.__name__)
+            logger.error(
                 "┠────────────────────────────────────────────────────────────────────"
             )
-            logging.error("┃" + e.__str__())
-            logging.error(
+            logger.error("┃" + e.__str__())
+            logger.error(
                 "┠────────────────────────────────────────────────────────────────────"
             )
-            logging.error(sys.exc_info()[2])
-            logging.error(
+            logger.error(sys.exc_info()[2])
+            logger.error(
                 "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
@@ -298,7 +315,7 @@ def listen():
 
 
 def alrm_handler(signum=None, frame=None):
-    logging.debug("========================= SIGALRM ======================")
+    logger.debug("========================= SIGALRM ======================")
     signal.alarm(15)
     for serial in activSerial.copy():
         message = {"serial": serial, "ip": activSerial[serial]["ip"]}
@@ -313,13 +330,13 @@ def alrm_handler(signum=None, frame=None):
 
 
 def handler(signum=None, frame=None):
-    logging.debug("Signal %i caught, exiting..." % int(signum))
+    logger.debug("Signal %i caught, exiting..." % int(signum))
     shutdown()
 
 
 def shutdown():
-    logging.debug("Shutdown")
-    logging.debug("Removing PID file " + str(_pidfile))
+    logger.debug("Shutdown")
+    logger.debug("Removing PID file " + str(_pidfile))
     try:
         os.remove(_pidfile)
     except:
@@ -332,7 +349,7 @@ def shutdown():
         jeedom_serial.close()
     except:
         pass
-    logging.debug("Exit 0")
+    logger.debug("Exit 0")
     sys.stdout.flush()
     os._exit(0)
 
@@ -345,7 +362,8 @@ _socket_host = "localhost"
 _pidfile = "/tmp/demond.pid"
 _apikey = ""
 _callback = ""
-_cycle = 0.3
+_cycle = 0.5
+_discret_log = False
 
 parser = argparse.ArgumentParser(description="Desmond Daemon for Jeedom plugin")
 parser.add_argument("--loglevel", help="Log Level for the daemon", type=str)
@@ -354,6 +372,7 @@ parser.add_argument("--apikey", help="Apikey", type=str)
 parser.add_argument("--cycle", help="Cycle to send event", type=str)
 parser.add_argument("--pid", help="Pid file", type=str)
 parser.add_argument("--socketport", help="Port for message from Jeedom", type=str)
+parser.add_argument("--discretLogs", help="hide passwords in log", action='store_true')
 args = parser.parse_args()
 
 if args.loglevel:
@@ -368,18 +387,28 @@ if args.cycle:
     _cycle = float(args.cycle)
 if args.socketport:
     _socket_port = args.socketport
+if args.discretLogs:
+    _discret_log = True
 
 _socket_port = int(_socket_port)
 
-jeedom_utils.set_log_level(_log_level)
+if _log_level == 'debug':
+    jeedom_utils.set_log_level(_log_level)
+    for module in ['urllib3', 'asyncio', 'httpx', 'httpcore', 'devolo_plc_api'] :
+        logging.getLogger(module).setLevel(logging.WARNING)
+elif _log_level == 'fulldebug':
+    jeedom_utils.set_log_level('debug')
+else:    
+    jeedom_utils.set_log_level(_log_level)
+logger = logging.getLogger('devolo_cpld')
 
-logging.info("┌─Start demond")
-logging.info("│ Log level      : " + str(_log_level))
-logging.info("│ Socket port    : " + str(_socket_port))
-logging.info("│ Socket host    : " + str(_socket_host))
-logging.info("│ PID file       : " + str(_pidfile))
-logging.info("│ Apikey         : " + str(_apikey))
-logging.info("└ Callback       : " + str(_callback))
+logger.info("┌─Start demond")
+logger.info("│ Log level      : " + str(_log_level))
+logger.info("│ Socket port    : " + str(_socket_port))
+logger.info("│ Socket host    : " + str(_socket_host))
+logger.info("│ PID file       : " + str(_pidfile))
+logger.info("│ Apikey         : " + str(_apikey))
+logger.info("└ Callback       : " + str(_callback))
 
 signal.signal(signal.SIGINT, handler)
 signal.signal(signal.SIGTERM, handler)
@@ -390,13 +419,13 @@ try:
     jeedom_utils.write_pid(str(_pidfile))
     jeedom_com = jeedom_com(apikey=_apikey, url=_callback, cycle=_cycle)
     if not jeedom_com.test():
-        logging.error(
+        logger.error(
             "Network communication issues. Please fixe your Jeedom network configuration."
         )
         shutdown()
-    jeedom_socket = jeedom_socket(port=_socket_port, address=_socket_host)
+    jeedom_socket = jeedom_socket(port=_socket_port, address=_socket_host, discret=_discret_log)
     listen()
 except Exception as e:
-    logging.error("Fatal error : " + str(e))
-    logging.info(traceback.format_exc())
+    logger.error("Fatal error : " + str(e))
+    logger.info(traceback.format_exc())
     shutdown()

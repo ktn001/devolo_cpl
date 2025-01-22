@@ -10,10 +10,14 @@ import ipaddress
 import asyncio
 import traceback
 import logging 
-from jeedom.jeedom import *
 import devolo_plc_api
 import devolo_plc_api.network
 from devolo_plc_api import Device
+
+libDir = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + "/../lib")
+sys.path.append(libDir)
+
+from jeedom import *
 
 action = ""
 
