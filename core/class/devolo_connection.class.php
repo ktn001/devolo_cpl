@@ -1,5 +1,5 @@
 <?php
-
+// vi: tabstop=4 autoindent
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -119,20 +119,8 @@ class devolo_connection {
 	}
 
 	public static function set_connected_devices ($serial, $connected_devices) {
-		if (! exec ('/usr/sbin/arp', $output)) {
-			log::add("devolo_cpl","warning","Erreur lors de l'exécution de /usr/bin/arp");
-			return;
-		}
-		array_shift($output);
-		$ip = [];
-		foreach ($output as $line) {
-			if (preg_match('/\(incomplete\)/', $line)){
-				continue;
-			}
-			$tokens = preg_split('/\s+/',$line);
-			$ip[strtoupper($tokens[2])] = $tokens[0];
-		}
 		$mac_connected = [];
+		$ip = null;
 		foreach ($connected_devices as $connected_device) {
 			array_push($mac_connected, $connected_device['mac']);
 			$connections = devolo_connection::byMac($connected_device['mac']);
@@ -149,14 +137,13 @@ class devolo_connection {
 				}
 			}
 			if (! $found) {
+				$macInfo = devolo_macinfo::byMac($connected_device['mac'],true);
 				$connection = new devolo_connection();
 				$connection->setSerial($serial);
 				$connection->setMac($connected_device['mac']);
 				$connection->setNetwork($connected_device['band']);
 				$connection->setConnect_time(date('Y-m-d H:i:s'));
-				if (array_key_exists($connected_device['mac'], $ip)) {
-					$connection->setIp($ip[$connected_device['mac']]);
-				}
+				$connection->setIp($macInfo->searchAddr(true));
 				$connection->save();
 			}
 		}
@@ -169,16 +156,27 @@ class devolo_connection {
 		}
 	}
 
-	public static function setIps() {
+	public static function setIps($runFillArp=false) {
 		$connections = devolo_connection::byNoIp();
-		if (! exec ('/usr/sbin/arp', $result)) {
-			log::add("devolo_cpl","warning","Erreur lors de l'exécution de /usr/bin/arp");
-			return;
-		}
-		log::add("devolo_cpl","info",print_r($result,true));
+		$fullyDefined = true;
 		foreach ($connections as $connection) {
-			$mac = $connection->getMac();
-
+			$macInfo = devolo_macinfo::byMac($connection->getMac());
+			$ip = $macInfo->searchAddr();
+			if ($ip) {
+				$connection->setIp($ip);
+				$connection->save();
+			} else {
+				$fullyDefined = false;
+			}
+		}
+		if ($runFillArp and ! $fullyDefined)  {
+			$path = realpath(dirname(__FILE__) . '/../../resources/bin/');
+			$cmd = devolo_cpl::PYTHON_PATH . ' ' . $path . '/devolo_updatearp.py';
+			$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel('devolo_cpl'));
+			$cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_cpl/core/php/jeedevolo_cpl.php';
+			$cmd .= ' --apikey ' . jeedom::getApiKey('devolo_cpl');
+			log::add("devolo_cpl","info", sprintf(__('Lancement de: %s',__FILE__),$cmd));
+			exec ($cmd . ' >> ' . log::getPathToLog('devolo_cpl_updatearp') . ' 2>&1 &');
 		}
 	}
 

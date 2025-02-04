@@ -65,6 +65,14 @@ try {
 		}
 	}
 	
+	function process_wifiConnectedDevices($wifiConnections) {
+		foreach ($wifiConnections as $serial => $connections) {
+			$connections = is_json($connections,$connections);
+			devolo_connection::set_connected_devices($serial,$connections);
+		}
+		//devolo_connection::set_connected_devices($result['serial'],$result['connections']);
+	}
+
 	function process_firmwares($result, $eqLogic) {
 		foreach ($result['firmwares'] as $firmware) {
 			$eqLogic = devolo_cpl::byMacAddress ($firmware['mac']);
@@ -86,10 +94,6 @@ try {
 		}
 	}
 	
-	function process_wifiConnectedDevices($result, $eqLogic) {
-		devolo_connection::set_connected_devices($result['serial'],$result['connections']);
-	}
-
 	if (!jeedom::apiAccess(init('apikey'), 'devolo_cpl')) {
 		echo __('Vous n\'etes pas autorisé à effectuer cette action', __FILE__);
 		die();
@@ -100,11 +104,11 @@ try {
 	}
 
 	$payload = json_decode(file_get_contents("php://input"),true);
+	log::add("devolo_cpl","info","[jeedevolo_cpl] " . __("Message reçu du démon",__FILE__) . ": " . print_r($payload,true));
 	$payload = is_json($payload,$payload);
 	if (!is_array($payload)) {
 		die();
 	}
-	log::add("devolo_cpl","info","[jeedevolo_cpl] Message reçu du démon: " . print_r($payload,true));
 
 	if (array_key_exists('infoState',$payload)) {
 		foreach ($payload['infoState'] as $serial => $states) {
@@ -113,6 +117,12 @@ try {
 	}
 	if (array_key_exists('rates',$payload)) {
 		process_rates($payload['rates']);
+	}
+	if (array_key_exists('wifiConnectedDevices',$payload)) {
+		process_wifiConnectedDevices($payload['wifiConnectedDevices']);
+	}
+	if (array_key_exists('arpUpdated',$payload)) {
+		devolo_connection::setIps();
 	}
 
 	log::add("devolo_cpl","debug","payload: " . print_r($payload,true));

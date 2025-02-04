@@ -1,5 +1,5 @@
 <?php
-
+// vi: tabstop=4 autoindent
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -30,31 +30,13 @@ class devolo_macinfo {
 	private $mac;
 	private $vendor;
 	private $name;
-	private $_changed = false;
 
 	/*     * ********************Méthodes statiques************************** */
-
-	public static function isRandom () {
-		return isRandomMac ($this->mac);
-	}
 
 	public static function all() {
 		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
 		$sql .= '  FROM devolo_macinfo';
 		return DB::Prepare($sql, [], DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
-	}
-
-	public static function byId ($_id) {
-		if ($_id == '') {
-			return;
-		}
-		$value = array(
-			'id' => $_id,
-		);
-		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
-		$sql .= '  FROM devolo_macinfo';
-		$sql .= ' WHERE id=:id';
-		return DB::Prepare($sql, $value, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
 	}
 
 	public static function byMac ($_mac, $create=false) {
@@ -67,16 +49,18 @@ class devolo_macinfo {
 		$sql  = 'SELECT ' . DB::buildField(__CLASS__);
 		$sql .= '  FROM devolo_macinfo';
 		$sql .= ' WHERE mac=:mac';
-		$mac = DB::Prepare($sql, $value, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
-		if (is_object($mac)) {
-			return $mac;
+		$macInfo = DB::Prepare($sql, $value, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+		if (is_object($macInfo)) {
+			return $macInfo;
 		}
 		if ($create) {
-			$mac = new devolo_macinfo();
-			$mac->setMac($_mac);
-			return $mac;
+			$macInfo = new devolo_macinfo();
+			$macInfo->setMac($_mac);
+			$macInfo->recupVendor();
+			$macInfo->save();
+			return self::byMac ($_mac);
 		}
-		return;
+		return False;
 	}
 
 	public static function actualize () {
@@ -103,7 +87,6 @@ class devolo_macinfo {
 			$macinfo->save();
 			sleep(1);
 		}
-
 	}
 
 	public static function getMacWifiToGraph() {
@@ -121,17 +104,70 @@ class devolo_macinfo {
 	}
 
 	public function save() {
-		if ($this->getId() == '') {
-			$stored = self::byMac($this->getMac());
-			if (is_object($stored)) {
-				$this->setId($stored->getId());
-			}
-		}
 		DB::save($this);
 	}
 
 	public function remove() {
 		DB::remove($this);
+	}
+
+	public function isRandom () {
+		return isRandomMac ($this->mac);
+	}
+
+	public function recupVendor() {
+		log::add("devolo_cpl","debug",sprintf(__("Recherche du vendeur pour %s",__FILE__),$this->mac));
+		$url = "https://api.macvendors.com/" . urlencode($mac);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$response = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$macinfo = new devolo_macinfo();
+		$macinfo->setMac($mac);
+		if ($httpcode == "200") {
+			$macinfo->setVendor($response);
+		} else {
+			$macinfo->setVendor('inconnu');
+		}
+	}
+
+	public function searchAddr ($ping = false) {
+		log::add("devolo_cpl","debug",sprintf(__("Recherche de l'adresse pour %s",__FILE__),$this->mac));
+		if (! exec ('/usr/sbin/arp -a', $output)) {
+			log::add("devolo_cpl","warning",sprintf(__("Erreur lors de l'exécution de %s",__FILE__),"/usr/bin/arp"));
+			return;
+		}
+		array_shift($output);
+		foreach ($output as $line) {
+			if (preg_match('/incomplete/', $line)) {
+				continue;
+			}
+			$tokens = explode(" ",$line);
+			if (strtoupper($tokens[3]) == $this->mac) {
+				if ($tokens[0] == '?') {
+					return trim($tokens[1],'()');
+				} else {
+					return $tokens[0];
+				}
+			}
+		}
+		if ($ping) {
+		unset($output);
+			exec('/usr/sbin/ip add', $output);
+			$brdAddrs = array();
+			foreach ($output as $line) {
+				$token = preg_split('/\s+/',$line);
+				if ($token[1] == 'inet' and $token[3] == 'brd') {
+					$brdAddrs[$token[4]] = 1;
+				}
+			}
+			foreach (array_keys($brdAddrs) as $brdAddr) {
+				exec(sprintf("/usr/bin/ping -c 1 -b %s > /dev/null 2>&1 &", $brdAddr));
+			}
+		}
+		return $this->getName();
+
 	}
 
 	/*     * **********************Getteur Setteur*************************** */
@@ -141,7 +177,10 @@ class devolo_macinfo {
 	}
 
 	public function setId ($_id) {
-		$this->id = $_id;
+		if ($_id != $this->id) {
+			$this->id = $_id;
+		}
+		return $this;
 	}
 
 	public function getMac() {
@@ -151,8 +190,8 @@ class devolo_macinfo {
 	public function setMac ($_mac) {
 		if ($_mac != $this->mac) {
 			$this->mac = $_mac;
-			$this->_changed = true;
 		}
+		return $this;
 	}
 
 	public function getVendor() {
@@ -162,8 +201,8 @@ class devolo_macinfo {
 	public function setVendor ($_vendor) {
 		if ($_vendor != $this->vendor) {
 			$this->vendor = $_vendor;
-			$this->_changed = true;
 		}
+		return $this;
 	}
 
 	public function getName() {
@@ -173,8 +212,8 @@ class devolo_macinfo {
 	public function setName ($_name) {
 		if ($_name != $this->name) {
 			$this->name = $_name;
-			$this->_changed = true;
 		}
+		return $this;
 	}
 
 }

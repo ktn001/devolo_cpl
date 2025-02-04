@@ -147,24 +147,23 @@ async def getRates(message):
 
 async def getWifiConnectedDevices(message):
     logger.info("============== begin getWifiConnectedDevices ==============")
+    logger.info(message)
     band_txt = ["wifi", "wifi 2 Ghz", "wifi 5 Ghz"]
     try:
         async with Device(ip=message["ip"]) as dpa:
             if "wifi1" in dpa.device.features:
                 result = {}
-                result["action"] = "wifiConnectedDevices"
-                result["serial"] = message["serial"]
-                result["connections"] = []
+                connections = []
                 for (
                     connected_device
                 ) in await dpa.device.async_get_wifi_connected_station():
                     connection = {}
                     connection["mac"] = connected_device.mac_address
                     connection["band"] = band_txt[connected_device.band]
-                    result["connections"].append(connection)
-                logger.debug(result)
+                    connections.append(connection)
                 setActivSerial(message["serial"], message["ip"])
-                jeedom_com.send_change_immediate(result)
+                key = f'wifiConnectedDevices::{message["serial"]}'
+                jeedom_com.add_changes(key, json.dumps(connections))
     except (DeviceNotFound, DeviceUnavailable) as e:
         reponse = {}
         reponse["action"] = "message"

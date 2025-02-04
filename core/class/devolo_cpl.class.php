@@ -38,7 +38,6 @@ class devolo_cpl extends eqLogic {
 			}
 			$equipement->getEqState();
 		}
-		devolo_connection::setIps();
 	}
 
 	/*
@@ -46,6 +45,14 @@ class devolo_cpl extends eqLogic {
 	 */
 	public static function cron5() {
 		devolo_cpl::getRates();
+		devolo_connection::setIps();
+	}
+
+	/*
+	 * Fonction exécutée automatiquement toutes les heures par Jeedom
+	*/
+	public static function cronHourly() {
+		devolo_connection::setIps(true);
 	}
 
 	/*
@@ -155,7 +162,7 @@ class devolo_cpl extends eqLogic {
 		}
 		$cmd .= ' --loglevel ' . $logLevel;
 		$cmd .= ' --socketport ' . config::byKey('daemon::port', __CLASS__ );
-		$cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_cpl/core/php/jeedevolo_cpl.php'; // chemin de la callback url à modifier (voir ci-dessous)
+		$cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/devolo_cpl/core/php/jeedevolo_cpl.php';
 		$cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__); // l'apikey pour authentifier les échanges suivants
 		$cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/daemon.pid';
 		log::add(__CLASS__, 'info', 'Lancement démon');
