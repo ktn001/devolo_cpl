@@ -519,15 +519,6 @@ class devolo_cpl extends eqLogic {
 	}
 
 	/*
-	 * Demande au daemon de remonter la liste des appareils connectés au WiFi
-	 */
-	public function getWifiConnectedDevices() {
-		if (in_array('wifi', $this->getFeatures())) {
-			$this::PrepareToDaemon(['action' => 'getWifiConnectedDevices']);
-		}
-	}
-
-	/*
 	 * Function pour trier les commandes
 	 */
 	public function sortCmds () {

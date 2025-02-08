@@ -111,37 +111,6 @@ async def getRates(message):
             key = f'rates::{src}::{dst}'
             jeedom_com.add_changes(key, json.dumps(rates[src][dst]))
 
-    #    try:
-    #        async with Device(ip) as dpa:
-    #            infos = await dpa.plcnet.async_get_network_overview()
-    #            logger.info("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
-    #            logger.info(str(infos))
-    #            rates = []
-    #            for i in range(0, len(infos.data_rates)):
-    #                rate = {}
-    #                rate["mac_address_from"] = infos.data_rates[i].mac_address_from
-    #                rate["mac_address_to"] = infos.data_rates[i].mac_address_to
-    #                rate["tx_rate"] = infos.data_rates[i].tx_rate
-    #                rate["rx_rate"] = infos.data_rates[i].rx_rate
-    #                rates.append(rate)
-    #            result = {}
-    #            result["action"] = "getRates"
-    #            result["rates"] = rates
-    #            jeedom_com.send_change_immediate(result)
-    #            firmwares = []
-    #            for i in range(0, len(infos.devices)):
-    #                firmware = {}
-    #                firmware["mac"] = infos.devices[i].mac_address
-    #                firmware["version"] = infos.devices[i].friendly_version
-    #                firmwares.append(firmware)
-    #            result = {}
-    #            result["action"] = "firmwares"
-    #            result["firmwares"] = firmwares
-    #            setActivSerial(message["serial"], message["ip"])
-    #            jeedom_com.send_change_immediate(result)
-    #            break
-    #    except:
-    #        pass
     logger.info("=============== end getRates ===============")
 
 
@@ -166,11 +135,10 @@ async def getWifiConnectedDevices(message):
                 jeedom_com.add_changes(key, json.dumps(connections))
     except (DeviceNotFound, DeviceUnavailable) as e:
         reponse = {}
-        reponse["action"] = "message"
         reponse["code"] = "devNotAnswer"
         reponse["serial"] = message["serial"]
         reponse["ip"] = message["ip"]
-        jeedom_com.send_change_immediate(reponse)
+        jeedom_com.send_change_immediate({'message': reponse})
     logger.info("=============== end getWifiConnectedDevices ===============")
 
 
@@ -198,23 +166,16 @@ async def execCmd(message):
             logger.info("cmd: 'locate'")
             if message["param"] == 1:
                 success = await dpa.plcnet.async_identify_device_start()
-                result = {}
-                result["action"] = "locate"
-                result["serial"] = message["serial"]
                 if success:
                     result = {}
-                    result["action"] = "infoState"
-                    result["serial"] = message["serial"]
                     result["locate"] = 1
-                    jeedom_com.send_change_immediate(result)
+                    jeedom_com.send_change_immediate({'infoState': { message['serial']: result}})
             else:
                 success = await dpa.plcnet.async_identify_device_stop()
                 if success:
                     result = {}
-                    result["action"] = "infoState"
-                    result["serial"] = message["serial"]
                     result["locate"] = 0
-                    jeedom_com.send_change_immediate(result)
+                    jeedom_com.send_change_immediate({'infoState': { message['serial']: result}})
 
         ##### guest_on #####
         elif message["cmd"] == "guest_on":
@@ -250,34 +211,29 @@ def read_socket():
                 asyncio.run(getState(message))
             if message["action"] == "getRates":
                 asyncio.run(getRates(message))
-            if message["action"] == "getWifiConnectedDevices":
-                asyncio.run(getWifiConnectedDevices(message))
             if message["action"] == "execCmd":
                 asyncio.run(execCmd(message))
         except (DeviceNotFound, DeviceUnavailable) as e:
             reponse = {}
-            reponse["action"] = "message"
             reponse["code"] = "devNotAnswer"
             reponse["serial"] = message["serial"]
             reponse["ip"] = message["ip"]
-            jeedom_com.send_change_immediate(reponse)
+            jeedom_com.send_change_immediate({'message': reponse})
         except DevicePasswordProtected as e:
             logger.error("Send command to demon error : " + str(e))
             reponse = {}
-            reponse["action"] = "message"
             reponse["code"] = "devPasswordError"
             reponse["serial"] = message["serial"]
             reponse["ip"] = message["ip"]
-            jeedom_com.send_change_immediate(reponse)
+            jeedom_com.send_change_immediate({'message': reponse})
         except httpx.HTTPStatusError as e:
             logger.error("Send command to demon error : " + str(e))
             reponse = {}
-            reponse["action"] = "message"
             reponse["code"] = "httpxStatusError"
             reponse["message"] = str(e)
             reponse["serial"] = message["serial"]
             reponse["ip"] = message["ip"]
-            jeedom_com.send_change_immediate(reponse)
+            jeedom_com.send_change_immediate({'message': reponse})
         except Exception as e:
             logger.error(
                 "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -294,7 +250,8 @@ def read_socket():
             logger.error(
                 "┠────────────────────────────────────────────────────────────────────"
             )
-            logger.error(sys.exc_info()[2])
+            for line in traceback.format_exc().splitlines():
+                logger.error("┃" + line)
             logger.error(
                 "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
@@ -315,7 +272,7 @@ def listen():
 
 def alrm_handler(signum=None, frame=None):
     logger.debug("========================= SIGALRM ======================")
-    signal.alarm(15)
+    signal.alarm(15) # 15 secondes
     for serial in activSerial.copy():
         message = {"serial": serial, "ip": activSerial[serial]["ip"]}
         try:

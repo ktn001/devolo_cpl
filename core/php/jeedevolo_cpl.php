@@ -81,8 +81,10 @@ try {
 		$eqLogic->checkAndUpdateCmd('online', 1);
 	}
 	
-	function process_message($result, $eqLogic) {
+	function process_message($result) {
+		$eqLogic = devolo_cpl::byLogicalId($result['serial'], 'devolo_cpl');
 		if ($result['code'] == 'devNotAnswer') {
+			log::add("devolo_cpl","warning",sprintf(__("L'équipement %s(%s) ne répond pas",__FILE__),$eqLogic->getName(), $result['ip']));
 			$eqLogic->checkAndUpdateCmd('online', 0);
 		} elseif ($result['code'] == 'devPasswordError') {
 			$texte = sprintf(__("L'équipement %s (%s): erreur de password",__FILE__),$result['serial'],$result['ip']);
@@ -124,6 +126,9 @@ try {
 	if (array_key_exists('arpUpdated',$payload)) {
 		devolo_connection::setIps();
 	}
+	if (array_key_exists('message',$payload)) {
+		process_message($payload['message']);
+	}
 
 	log::add("devolo_cpl","debug","payload: " . print_r($payload,true));
 	if (! isset($payload['action'])) {
@@ -137,11 +142,6 @@ try {
 		}
 	} else {
 		$eqLogic = NULL;
-	}
-
-	$function = 'process_' . $payload['action'];
-	if (function_exists($function)){
-		$function($payload, $eqLogic);
 	}
 
 
