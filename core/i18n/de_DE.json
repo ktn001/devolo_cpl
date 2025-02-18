@@ -10,6 +10,9 @@
         "401 - Accès non autorisé": "401 - Nicht autorisierter Zugriff",
         "Aucune méthode correspondante à": "Keine passende Methode zu"
     },
+    "plugins\/devolo_cpl\/core\/class\/devolo_connection.class.php": {
+        "Lancement de: %s": "Lancierung von: %s"
+    },
     "plugins\/devolo_cpl\/core\/class\/devolo_cpl.class.php": {
         "  cmd: %s (première passe)": "  cmd: %s (erster Durchgang)",
         "  cmd: %s (seconde passe)": "  cmd: %s (zweiter Durchgang)",
@@ -39,6 +42,8 @@
         "Veuillez vérifier la configuration": "Bitte überprüfen Sie die Konfiguration"
     },
     "plugins\/devolo_cpl\/core\/class\/devolo_macinfo.class.php": {
+        "Erreur lors de l'exécution de %s": "Fehler bei der Ausführung von %s",
+        "Recherche de l'adresse pour %s": "Suche nach der Adresse für %s",
         "Recherche du vendeur pour %s": "Suche nach Verkäufer für %s"
     },
     "plugins\/devolo_cpl\/core\/config\/cmds.json": {
@@ -81,9 +86,11 @@
         "dLan+ 550 WiFi powerline": "dLan+ 550 WiFi powerline"
     },
     "plugins\/devolo_cpl\/core\/php\/jeedevolo_cpl.php": {
+        "Equipemment serial:%s introuvable": "Serial:%s-Ausrüstung nicht gefunden",
         "L'équipement %s (%s): erreur de password": "Gerät %s (%s): Password-Fehler",
+        "L'équipement %s(%s) ne répond pas": "Das Gerät %s(%s) reagiert nicht",
         "Message inconnu reçu du démon": "Unbekannte Nachricht vom Dämon erhalten",
-        "Message reçu par jeedevolo_cpl.php: ": "Nachricht erhalten von jeedevolo_cpl.php:",
+        "Message reçu du démon": "Nachricht vom Dämon erhalten",
         "Vous n\\'etes pas autorisé à effectuer cette action": "Sie sind nicht berechtigt, diese Aktion durchzuführen",
         "eqLogic pour le n° de serie %s introuvable": "eqLogic für Seriennummer %s nicht gefunden"
     },
@@ -268,9 +275,14 @@
         "Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'": "Anzeigen von 'gerätename' anstelle von '[objekt][gerätename] in Diagrammen und Tabellen'",
         "Base de données": "Datenbank",
         "Belgique": "Belgien",
+        "Cacher les passwords et autres données sensibles": "Verstecken von Passwörtern und anderen sensiblen Daten",
+        "Debug complet": "Vollständiges Debugging",
+        "Discret": "Diskret",
         "Durée de rétention de l'historique des débits CPL": "Dauer der Speicherung des Verlaufs der PLC-Bitraten",
         "Démon": "Dämon",
         "France": "Frankreich",
+        "Log debug des modules python (log warning sinon)": "Log debug der Python-Module (log warning sonst)",
+        "Logs": "Protokolle",
         "Nom des équipements sans l'objet": "Name der Geräte ohne den Gegenstand",
         "Pays": "Land",
         "Permet d'afficher les images des équipements avec le bon type de prise": "Ermöglicht die Anzeige von Bildern von Geräten mit dem richtigen Steckdosentyp",
