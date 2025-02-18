@@ -10,6 +10,9 @@
         "401 - Accès non autorisé": "401 - Accesso non autorizzato",
         "Aucune méthode correspondante à": "Nessun metodo corrispondente a"
     },
+    "plugins\/devolo_cpl\/core\/class\/devolo_connection.class.php": {
+        "Lancement de: %s": "Avvio di: %s"
+    },
     "plugins\/devolo_cpl\/core\/class\/devolo_cpl.class.php": {
         "  cmd: %s (première passe)": "  cmd: %s (primo passaggio)",
         "  cmd: %s (seconde passe)": "  cmd: %s (secondo passaggio)",
@@ -39,6 +42,8 @@
         "Veuillez vérifier la configuration": "Controllare la configurazione"
     },
     "plugins\/devolo_cpl\/core\/class\/devolo_macinfo.class.php": {
+        "Erreur lors de l'exécution de %s": "Errore durante l'esecuzione di %s",
+        "Recherche de l'adresse pour %s": "Ricerca indirizzo per %s",
         "Recherche du vendeur pour %s": "Ricerca del fornitore per %s"
     },
     "plugins\/devolo_cpl\/core\/config\/cmds.json": {
@@ -81,9 +86,11 @@
         "dLan+ 550 WiFi powerline": "dLan+ 550 WiFi powerline"
     },
     "plugins\/devolo_cpl\/core\/php\/jeedevolo_cpl.php": {
+        "Equipemment serial:%s introuvable": "Seriale:%s apparecchiatura non trovata",
         "L'équipement %s (%s): erreur de password": "Il dispositivo %s (%s): errore password",
+        "L'équipement %s(%s) ne répond pas": "L'apparecchiatura %s(%s) non risponde",
         "Message inconnu reçu du démon": "Messaggio sconosciuto ricevuto dal demone",
-        "Message reçu par jeedevolo_cpl.php: ": "Messaggio ricevuto da jeedevolo_cpl.php:",
+        "Message reçu du démon": "Messaggio ricevuto dal demone",
         "Vous n\\'etes pas autorisé à effectuer cette action": "Non siete autorizzati ad eseguire questa azione",
         "eqLogic pour le n° de serie %s introuvable": "eqLogic per il numero di serie %s non trovato"
     },
@@ -268,9 +275,14 @@
         "Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'": "Visualizzare 'nome_dispositivo' invece di '[oggetto][nome_dispositivo] nei grafici e nelle tabelle'",
         "Base de données": "Base de données",
         "Belgique": "Belgio",
+        "Cacher les passwords et autres données sensibles": "Nascondere password e altri dati sensibili",
+        "Debug complet": "Debug completo",
+        "Discret": "Discreto",
         "Durée de rétention de l'historique des débits CPL": "Tempo di conservazione dei dati storici del PLC",
         "Démon": "Demone",
         "France": "Francia",
+        "Log debug des modules python (log warning sinon)": "Log debug dei moduli python (altrimenti log warning)",
+        "Logs": "Logs",
         "Nom des équipements sans l'objet": "Nome dell'apparecchiatura senza oggetto",
         "Pays": "Pays",
         "Permet d'afficher les images des équipements avec le bon type de prise": "Visualizza le immagini delle apparecchiature con il tipo di presa corretto",
