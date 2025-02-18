@@ -15,6 +15,9 @@ try {
 		if (isset($states['locate'])) {
 			$eqLogic->checkAndUpdateCmd('locate', $states['locate']);
 		}
+		if (isset($states['firmware_version'])) {
+			$eqLogic->checkAndUpdateCmd('firmware', $states['firmware_version']);
+		}
 		if (isset($states['firmwareAvailable'])) {
 			$eqLogic->checkAndUpdateCmd('update_available', $states['firmwareAvailable']);
 		}

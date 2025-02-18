@@ -1,4 +1,4 @@
-
+# vim: tabstop=4 autoindent expandtab
 import sys
 import os
 import argparse
@@ -55,18 +55,6 @@ def options():
 
 
 # ===============================================================================
-# device_definition
-# ...............................................................................
-# Retourne les infos nécessaires à la création d'un eqLogic
-# ===============================================================================
-def device_definition(device):
-    device.connect()
-    print(device)
-    print(device.product)
-    device.disconnect()
-
-
-# ===============================================================================
 # getDeviceInfos
 # ...............................................................................
 # Retourne les infos d'un device
@@ -89,6 +77,8 @@ async def getDeviceInfos(device, names):
         ret["model"] = device.product
         ret["mac"] = device.mac
         ret["ip"] = device.ip
+        ret['firmwareVersion'] = device.firmware_version
+        ret['firmwareDate'] = str(device.firmware_date)
         network = await device.plcnet.async_get_network_overview()
         for i in range(0, len(network.devices)):
             dev = network.devices[i]
@@ -114,7 +104,6 @@ async def getDeviceInfos(device, names):
 async def syncDevolo():
     devices = await devolo_plc_api.network.async_discover_network()
     logging.info(f"{len(devices)} devices found.")
-    time.sleep(5)
     result = {}
     names = {}
     tasks = {}

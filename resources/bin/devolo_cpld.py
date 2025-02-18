@@ -63,6 +63,10 @@ async def getState(message):
             result["leds"] = 0
 
         # firmware
+        result["firmware_version"] = dpa.firmware_version
+        result["firmware_date"] = str(dpa.firmware_date)
+
+        # firmware update
         firmware = await dpa.device.async_check_firmware_available()
         if firmware.result == devolo_plc_api.device_api.UPDATE_AVAILABLE:
             result["firmwareAvailable"] = 1
