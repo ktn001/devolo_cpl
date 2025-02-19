@@ -33,6 +33,24 @@ function devolo_cpl_checkMac() {
 	}
 }
 
+function devolo_cpl_goto_15() {
+	config::remove('devolo:plc:api::version','devolo_cpl');
+	$etcDir = realpath (__DIR__ . '/../resources/etc');
+	if (file_exists($etcDir)) {
+		shell_exec('sudo rm -rf ' . $etcDir);
+	}
+
+	$file = realpath (__DIR__ . '/../resources/bin/devolo_cpl.py');
+	if (file_exists($file)) {
+		@unlink($file);
+	}
+
+	$jeeDir = realpath (__DIR__ . '/../resources/bin/jeedom');
+	if (file_exists($jeeDir)) {
+		shell_exec('sudo rm -rf ' . $jeeDir);
+	}
+}
+
 function devolo_cpl_goto_14() {
 	config::save('logDiscrets',1,'devolo_cpl');
 }
@@ -141,7 +159,7 @@ function devolo_cpl_upgrade() {
 	if (file_exists($packagesFile)) {
 		unlink($packagesFile);
 	}
-	$lastLevel = 14;
+	$lastLevel = 15;
 
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel . " => " . $lastLevel);
