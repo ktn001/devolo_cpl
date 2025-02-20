@@ -32,7 +32,7 @@ from jeedom import *
 _apikey = ''
 _callback = ''
 
-NB_THREADS = 30
+NB_THREADS = 20
 queue = queue.Queue()
 
 def pingIps():
