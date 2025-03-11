@@ -332,11 +332,16 @@ class devolo_cpl extends eqLogic {
 				$modified = true;
 				$eqLogic->setName($equipement['name']);
 			}
-			if ($eqLogic->getConfiguration("sync_model") != $equipement['model']){
+			if ($eqLogic->getConfiguration("model") != $equipement['model']){
 				log::add("devolo_cpl","info",sprintf(__("Le model de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('model') . " => " . $equipement['model']);
 				$modified = true;
 				$eqLogic->setConfiguration('sync_model',$equipement['model']);
-				$eqLogic->setConfiguration('model',$equipement['model']);
+				if (devolo_model::byCode($equipement['model']) == null){
+					log::add("devolo_cpl","error",sprintf(__("Configuration pour le modèle %s introuvable",__FILE__),$equipement['model']));
+					$eqLogic->setConfiguration("model","autre");
+				} else {
+					$eqLogic->setConfiguration("model",$equipement['model']);
+				}
 			}
 			if (strtoupper($eqLogic->getConfiguration("mac")) != str_replace(":","",$equipement['mac'])){
 				log::add("devolo_cpl","info",sprintf(__("L'adresse mac de l'équipement %s été changé:",__FILE__),$eqLogic->getName()) . " " . $eqLogic->getConfiguration('mac') . " => " . $equipement['mac']);
@@ -360,7 +365,8 @@ class devolo_cpl extends eqLogic {
 			$devolo->setConfiguration('mac',$equipement['mac']);
 			$devolo->setConfiguration("ip",$equipement['ip']);
 			$devolo->setConfiguration("sync_model",$equipement['model']);
-			if (devolo_model::byCode($equipement['model'] == Null)) {
+			if (devolo_model::byCode($equipement['model']) == null){
+				log::add("devolo_cpl","error",sprintf(__("Configuration pour le modèle %s introuvable",__FILE__),$equipement['model']));
 				$devolo->setConfiguration("model","autre");
 			} else {
 				$devolo->setConfiguration("model",$equipement['model']);
@@ -390,11 +396,15 @@ class devolo_cpl extends eqLogic {
 		if ($exitStatus != 0) {
 			throw new Exception(__("Erreur lors de l'exécution de syncDevolo.py",__FILE__));
 		}
-		log::add("devolo_cpl","info", join(" ",$lines));
+		log::add("devolo_cpl","info", "X" . join(" ",$lines));
 		$equipements = json_decode(join(" ",$lines),true);
 		foreach ($equipements as $equipement) {
 			log::add("devolo_cpl","debug",print_r($equipement,true));
-			self::createOrUpdate($equipement);
+			try {
+				self::createOrUpdate($equipement);
+			} catch (Exception $e) {
+				log::add("devolo_cpl","error",$e->getMessage());
+			}
 		}
 	}
 

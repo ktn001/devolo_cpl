@@ -1,4 +1,6 @@
 <?php
+// vim: tabstop=4 autoindent
+
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -19,76 +21,78 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class devolo_model {
-    private static function cast ($array, $code) {
-        $model = new devolo_model();
-        foreach ($array as $key => $value){
-            $model->$key = $value;
-        }
-        $model->code = $code;
-        $imgDir = realpath( __DIR__ . '/../../desktop/img' ) . '/';
-	$webDir = preg_replace('/^.*?(\/plugins\/.*)/','\1',$imgDir);
-        if (isset ($model->image)) {
-            $country = config::bykey('country','devolo_cpl','ch');
-            if ($country == 'be') {
-                $country = 'fr';
-            }
-            $img = $country . '-' . $model->image;
-            $model->image = $webDir . $model->image;
-            if ( file_exists($imgDir . $img)){
-                $model->image = $webDir . $img;
-            }
-	} else {
-	    $model->image = '/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png';
+	private static function cast ($array, $code) {
+		$model = new devolo_model();
+		foreach ($array as $key => $value){
+			$model->$key = $value;
+		}
+		$model->code = $code;
+		$imgDir = realpath( __DIR__ . '/../../desktop/img' ) . '/';
+		$webDir = preg_replace('/^.*?(\/plugins\/.*)/','\1',$imgDir);
+		if (isset ($model->image)) {
+			$country = config::bykey('country','devolo_cpl','ch');
+			if ($country == 'be') {
+				$country = 'fr';
+			}
+			$img = $country . '-' . $model->image;
+			$model->image = $webDir . $model->image;
+			if ( file_exists($imgDir . $img)){
+				$model->image = $webDir . $img;
+			}
+		} else {
+			$model->image = '/plugins/devolo_cpl/plugin_info/devolo_cpl_icon.png';
+		}
+		return $model;
 	}
-        return $model;
-    }
 
-    public static function all() {
-        $models = json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
-        $result = [];
-        foreach (array_keys($models) as $code) {
-            $result[] = self::cast($models[$code], $code);
-        }
-        return $result;
-    }
-
-    public static function byCode($code) {
-        $models = json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
-        $model = null;
-        if (isset ($models[$code])) {
-            $model = self::cast($models[$code], $code);;
-        }
-        return $model;
-    }
-
-    public function getText() {
-        return $this->texte;
-    }
-
-    public function getImage() {
-        return $this->image;
-    }
-
-    public function getFeatures() {
-	return $this->features;
-    }
-
-    public function getCplSpeed() {
-        return $this->cpl_speed;
-    }
-
-    public function isManageable() {
-	if ($this->manageable == 1) {
-	    return true;
+	public static function all() {
+		$models = json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
+		$result = [];
+		foreach (array_keys($models) as $code) {
+			$result[] = self::cast($models[$code], $code);
+		}
+		return $result;
 	}
-        return false;
-    }
 
-    public function getManageable() {
-        return $this->manageable;
-    }
+	public static function byCode($code) {
+		$models = json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
+		$model = null;
+		log::add("devolo_cpl","warning","XXXXXXXXXXXXx  " . $code);
+		if (isset ($models[$code])) {
+			log::add("devolo_cpl","warning","YYYYYYYYYYYYY  " . $code);
+			$model = self::cast($models[$code], $code);;
+		}
+		return $model;
+	}
 
-    public function getCode() {
-        return $this->code;
-    }
+	public function getText() {
+		return $this->texte;
+	}
+
+	public function getImage() {
+		return $this->image;
+	}
+
+	public function getFeatures() {
+		return $this->features;
+	}
+
+	public function getCplSpeed() {
+		return $this->cpl_speed;
+	}
+
+	public function isManageable() {
+		if ($this->manageable == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	public function getManageable() {
+		return $this->manageable;
+	}
+
+	public function getCode() {
+		return $this->code;
+	}
 }

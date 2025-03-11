@@ -46,7 +46,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 	<legend><i class="fas fa-table"></i> {{Mes équipements Devolo}}</legend>
 	<?php
 	if (count($eqLogics) == 0) {
-	    echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Template trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
+	    echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Devolo trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
 	} else {
 	    // Champ de recherche
 	    echo '<div class="input-group" style="margin:5px;">';

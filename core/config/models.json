@@ -25,8 +25,8 @@
     "cpl_speed": "2400",
     "manageable": 1
   },
-  "Magic 2 DinRail": {
-    "texte": "{{Devolo Magic 2 LAN DINRail}}",
+  "Magic 2 LAN DINrail": {
+    "texte": "{{Devolo Magic 2 LAN DINrail}}",
     "image": "Magic_2_DinRail.png",
     "features": [],
     "cpl_speed": "2400",
