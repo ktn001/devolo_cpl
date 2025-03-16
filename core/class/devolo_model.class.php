@@ -57,9 +57,7 @@ class devolo_model {
 	public static function byCode($code) {
 		$models = json_decode(file_get_contents(__DIR__ . "/../config/models.json"),true);
 		$model = null;
-		log::add("devolo_cpl","warning","XXXXXXXXXXXXx  " . $code);
 		if (isset ($models[$code])) {
-			log::add("devolo_cpl","warning","YYYYYYYYYYYYY  " . $code);
 			$model = self::cast($models[$code], $code);;
 		}
 		return $model;
