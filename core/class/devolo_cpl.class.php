@@ -213,7 +213,7 @@ class devolo_cpl extends eqLogic {
 	}
 
 	/*
-	 * Fonction appelée par le listener en cas de changement de valuer pour la cmd 'online'
+	 * Fonction appelée par le listener en cas de changement de valeur pour la cmd 'online'
 	 */
 	public static function alertNoOnline($_option) {
 		log::add ("devolo_cpl","info","alertNoOnline called: " . print_r($_option,true));
