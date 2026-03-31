@@ -24,22 +24,6 @@ require_once __DIR__ . '/../../core/php/devolo_cpl.inc.php';
 include_file('desktop', 'modal_macinfo', 'css', 'devolo_cpl');
 ?>
 
-<div class='input-group pull-right' style='display:inline-flex;'>
-	<span class='input-group-btn'>
-		<a class='btn btn-sm btn-warning roundedLeft macinfoAction' data-action='cancel'>
-			<i class='fas fa-times-circle'></i>
-			{{Annuler}}
-		</a>
-		<a class='btn btn-sm btn-success macinfoAction' data-action='save'>
-			<i class='fas fa-check-circle'></i>
-			{{Sauvegarder}}
-		</a>
-		<a class='btn btn-sm roundedRight macinfoAction' data-action='close'>
-			<i class='fas fa-window-close'></i>
-			{{fermer}}
-		</a>
-	</span>
-</div>
 <div id='div_devoloMacInfo'>
 	<h3 class="center">{{Adresses mac des composants découverts}}</h3>
 </div>

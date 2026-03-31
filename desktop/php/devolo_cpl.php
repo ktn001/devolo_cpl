@@ -7,6 +7,9 @@ $plugin = plugin::byId('devolo_cpl');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 
+sendVarToJs('createUploadCmd', config::byKey('cmd::upload','devolo_cpl','0'));
+sendVarToJs('createDownloadCmd', config::byKey('cmd::download','devolo_cpl','0'));
+
 $cmdsFile = __DIR__ . "/../../core/config/cmds.json";
 sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 ?>
@@ -254,7 +257,12 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 
 	    <!-- Onglet des commandes de l'équipement -->
 	    <div role="tabpanel" class="tab-pane" id="commandtab">
-		<a class="btn btn-default btn-sm pull-right cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
+		<div class="input-group pull-right" style="display:inline;">
+			<span class="input-group-btn">
+				<a class="btn btn-default btn-sm roundedLeft cmdAction" data-action="addSpeedTo" style="margin-top:5px;"><i class="fas fa-arrow-circle-up"></i><span> {{Ajouter débit sortant}}</span>
+				</a><a class="btn btn-default btn-sm roundedRight cmdAction" data-action="addSpeedFrom" style="margin-top:5px;"><i class="fas fa-arrow-circle-down"></i><span> {{Ajouter un débit entrant}}</span></a>
+			</span>
+		</div>
 		<br><br>
 		<div class="table-responsive">
 		    <table id="table_cmd" class="table table-bordered table-condensed">
@@ -283,3 +291,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 <?php include_file('desktop', 'devolo_cpl', 'js', 'devolo_cpl');?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js');?>
+
+<!--
+vim: tabstop=4 autoindent
+-->

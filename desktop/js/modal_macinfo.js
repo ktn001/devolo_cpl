@@ -1,120 +1,168 @@
 $("#table_macinfo tbody").on("input", ".macinfoAttr", function () {
-  macinfoChanged = true;
+	macinfoChanged = true;
 });
 
-function macinfo_canClose() {
-  if (!macinfoChanged) {
-    return true;
-  }
-  return confirm(
-    "{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}",
-  );
+if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
+	devolo_cplFrontEnd.mod_macAdresses = {
+		ajaxUrl: "/plugins/devolo_cpl/core/ajax/devolo_macinfo.ajax.php",
+
+		init: function() {
+			document.getElementById(devolo_cplFrontEnd.mId_macAdresses).addEventListener("click", function(event) {
+				let _target = null
+
+				if ((_target = event.target.closest(".macinfoAction[data-action=remove]"))) {
+					devolo_cplFrontEnd.mod_macAdresses.remove(_target)
+					return
+				}
+			})
+			document.getElementById(devolo_cplFrontEnd.mId_macAdresses).addEventListener("change", function(event) {
+				devolo_cplFrontEnd.mod_macAdresses.setChanged('1')
+			})
+		},
+
+		setChanged: function(value) {
+			document.getElementById(devolo_cplFrontEnd.mId_macAdresses).dataset.changed = value
+		},
+
+		changed: function() {
+			return document.getElementById(devolo_cplFrontEnd.mId_macAdresses).dataset.changed == '1'
+		},
+
+		remove: function(btn) {
+			btn.closest('tr').remove()
+			devolo_cplFrontEnd.mod_macAdresses.setChanged('1')
+		},
+
+		save: function(close=true) {
+			if (! devolo_cplFrontEnd.mod_macAdresses.changed()) {
+				if (close) {
+					document.getElementById(devolo_cplFrontEnd.mId_macAdresses)._jeeDialog.close()
+				}
+				return
+			}
+			macInfos = document.getElementById("table_macinfo").querySelectorAll(".macinfo").getJeeValues(".macinfoAttr")
+			domUtils.ajax({
+				type: "POST",
+				async: false,
+				global: false,
+				url: devolo_cplFrontEnd.mod_macAdresses.ajaxUrl,
+				data: {
+		 			action: "save",
+ 					macinfos: json_encode(macInfos),
+ 				},
+ 				dataType: "json",
+				success: function (data) {
+		 			if (data.state != "ok") {
+						jeedomUtils.showAlert({
+							message: data.result,
+							level: "danger",
+						})
+						return
+					}
+					if (close) {
+						document.getElementById(devolo_cplFrontEnd.mId_macAdresses)._jeeDialog.close()
+					}
+				},
+			})
+		},
+
+		loadAll: function() {
+			domUtils.ajax({
+				type: "POST",
+				async: false,
+				global: false,
+				url: devolo_cplFrontEnd.mod_macAdresses.ajaxUrl,
+				data: {
+					action: "getAll",
+				},
+				dataType: "json",
+				success: function (data) {
+		 			if (data.state != "ok") {
+						jeedomUtils.showAlert({
+							message: data.result,
+							level: "danger",
+						})
+						return
+					}
+					document.getElementById("table_macinfo").tBodies[0].replaceChildren()
+		 			for (macinfo of json_decode(data.result)) {
+		 				devolo_cplFrontEnd.mod_macAdresses.addMacinfoToTable(macinfo);
+		 			}
+		 			devolo_cplFrontEnd.mod_macAdresses.setChanged('0')
+				},
+			})
+		},
+
+		addMacinfoToTable: function(_macinfo) {
+			tr = '<tr>';
+			tr += '<td class="hidden-xs">';
+			tr += '<span class="macinfoAttr" data-l1key="id"></span>';
+			tr += "</td>";
+			tr += "<td>";
+			tr += '<span class="macinfoAttr" data-l1key="mac"></span>';
+			tr += "</td>";
+			tr += "<td>";
+			tr += '<span class="macinfoAttr" data-l1key="vendor"></span>';
+			tr += "</td>";
+			tr += "<td>";
+			tr +=
+				'<input class="macinfoAttr form-control input-sm" data-l1key="name" maxlength="30"></input>';
+			tr += "</td>";
+			tr += "<td>";
+			tr +=
+				'<i class="fas fa-minus-circle pull-right macinfoAction cursor" data-action="remove"></i>';
+			tr += "</td>";
+			tr += "</tr>";
+			let newRow = document.createElement("tr")
+			newRow.innerHTML = tr
+			newRow.addClass("macinfo")
+			newRow.dataset.macinfo_id = init(_macinfo.id)
+			newRow.setJeeValues(_macinfo, ".macinfoAttr");
+			document.getElementById("table_macinfo").querySelector("tbody").appendChild(newRow)
+		},
+	}
 }
+devolo_cplFrontEnd.mod_macAdresses.init()
+devolo_cplFrontEnd.mod_macAdresses.loadAll();
 
-$("#table_macinfo tbody").on(
-  "click",
-  ".macinfoAction[data-action=remove]",
-  function () {
-    $(this).closest("tr").remove();
-    macinfoChanged = true;
-  },
-);
 
-$(".macinfoAction[data-action=close]").on("click", function () {
-  $(this).closest("[id^=md_modal]").dialog("close");
-});
+// $(".macinfoAction[data-action=save]").on("click", function () {
+// 	if (!macinfoChanged) {
+// 		$.fn.showAlert({
+// 			message: "{{Pas de modification à sauvegarder}}",
+// 			level: "success",
+// 		});
+// 		return;
+// 	}
+// 	macInfos = $("#table_macinfo .macinfo").getValues(".macinfoAttr");
+// 	$.ajax({
+// 		type: "POST",
+// 		url: "/plugins/devolo_cpl/core/ajax/devolo_macinfo.ajax.php",
+// 		data: {
+// 			action: "save",
+// 			macinfos: json_encode(macInfos),
+// 		},
+// 		dataType: "json",
+// 		error: function (request, status, error) {
+// 			handleAjaxError(request, status, error);
+// 		},
+// 		success: function (data) {
+// 			if (data.state != "ok") {
+// 				$.fn.showAlert({ message: data.result, level: "danger" });
+// 				return;
+// 			}
+// 			$.fn.showAlert({
+// 				message: "{{Sauvegarde effectuée avec succès}}",
+// 				level: "success",
+// 			});
+// 			$("#table_macinfo tbody tr").remove();
+// 			for (macinfo of json_decode(data.result)) {
+// 				addMacinfoToTable(macinfo);
+// 			}
+// 			macinfoChanged = false;
+// 		},
+// 	});
+// });
 
-$(".macinfoAction[data-action=cancel]").on("click", function () {
-  macinfoChanged = false;
-  $(this).closest("[id^=md_modal]").dialog("close");
-});
 
-$(".macinfoAction[data-action=save]").on("click", function () {
-  if (!macinfoChanged) {
-    $.fn.showAlert({
-      message: "{{Pas de modification à sauvegarder}}",
-      level: "success",
-    });
-    return;
-  }
-  macInfos = $("#table_macinfo .macinfo").getValues(".macinfoAttr");
-  $.ajax({
-    type: "POST",
-    url: "/plugins/devolo_cpl/core/ajax/devolo_macinfo.ajax.php",
-    data: {
-      action: "save",
-      macinfos: json_encode(macInfos),
-    },
-    dataType: "json",
-    error: function (request, status, error) {
-      handleAjaxError(request, status, error);
-    },
-    success: function (data) {
-      if (data.state != "ok") {
-        $.fn.showAlert({ message: data.result, level: "danger" });
-        return;
-      }
-      $.fn.showAlert({
-        message: "{{Sauvegarde effectuée avec succès}}",
-        level: "success",
-      });
-      $("#table_macinfo tbody tr").remove();
-      for (macinfo of json_decode(data.result)) {
-        addMacinfoToTable(macinfo);
-      }
-      macinfoChanged = false;
-    },
-  });
-});
-
-function loadAll() {
-  $.ajax({
-    type: "POST",
-    url: "/plugins/devolo_cpl/core/ajax/devolo_macinfo.ajax.php",
-    data: {
-      action: "getAll",
-    },
-    dataType: "json",
-    error: function (request, status, error) {
-      handleAjaxError(request, status, error);
-    },
-    success: function (data) {
-      if (data.state != "ok") {
-        $.fn.showAlert({ message: data.result, level: "danger" });
-        return;
-      }
-      $("#table_macinfo tbody tr").remove();
-      for (macinfo of json_decode(data.result)) {
-        addMacinfoToTable(macinfo);
-      }
-    },
-  });
-}
-
-function addMacinfoToTable(_macinfo) {
-  tr = '<tr class="macinfo" data-macinfo_id="' + init(_macinfo.id) + '">';
-  tr += '<td class="hidden-xs">';
-  tr += '<span class="macinfoAttr" data-l1key="id"></span>';
-  tr += "</td>";
-  tr += "<td>";
-  tr += '<span class="macinfoAttr" data-l1key="mac"></span>';
-  tr += "</td>";
-  tr += "<td>";
-  tr += '<span class="macinfoAttr" data-l1key="vendor"></span>';
-  tr += "</td>";
-  tr += "<td>";
-  tr +=
-    '<input class="macinfoAttr form-control input-sm" data-l1key="name" maxlength="30"></input>';
-  tr += "</td>";
-  tr += "<td>";
-  tr +=
-    '<i class="fas fa-minus-circle pull-right macinfoAction cursor" data-action="remove"></i>';
-  tr += "</td>";
-  tr += "</tr>";
-  $("#table_macinfo tbody").append(tr);
-  tr = $("#table_macinfo tbody tr").last();
-  tr.setValues(_macinfo, ".macinfoAttr");
-}
-
-loadAll();
-macinfoChanged = false;
+// vim: tabstop=2 autoindent

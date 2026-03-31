@@ -27,62 +27,91 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 
 <form class="form-horizontal">
   <fieldset>
-    <div class="form-group col-md-6 col-sm-12">
-      <legend><i class="fas fa-wrench"></i> {{Plugin}}</legend>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Pays}}
-          <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
-        </label>
-        <select class="configKey col-sm-4 form-control" data-l1key="country">
-          <option value="be" selected>{{Belgique}}</option>
-          <option value="fr" selected>{{France}}</option>
-          <option value="ch" selected>{{Suisse}}</option>
-        </select>
-      </div>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Nom des équipements sans l'objet}}
-          <sup><i class="fas fa-question-circle" title="{{Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'}}"></i></sup>
-        </label>
-	<input class="configKey" type=checkbox data-l1key="noObject"></input>
-      </div>
-      <legend><i class="fas fa-database"></i> {{Base de données}}</legend>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Rétention}}
-          <sup><i class="fas fa-question-circle" title="{{Durée de rétention de l'historique des débits CPL}}"></i></sup>
-        </label>
-        <select class="configKey col-sm-4 form-control" data-l1key="data-retention">
-          <option value="1 DAY" selected>1 {{jour}}</option>
-          <option value="3 DAY" selected>3 {{jours}}</option>
-          <option value="7 DAY" selected>1 {{semaine}}</option>
-          <option value="14 DAY" selected>2 {{semaines}}</option>
-          <option value="1 MONTH" selected>1 {{mois}}</option>
-          <option value="2 MONTH" selected>2 {{mois}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group col-md-6 col-sm-12">
-      <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage du démon}})</sub></legend>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Port}}
-          <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
-        </label>
-        <input class="configKey col-sm-3 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
-      </div>
-      <legend><i class="fas fa-file"></i> {{Logs}}</legend>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Discret}}
-          <sup><i class="fas fa-question-circle" title="{{Cacher les passwords et autres données sensibles}}"></i></sup>
-        </label>
-	<div class="col-sm-3">
-          <input class="configKey form-control" type="checkbox" data-l1key="logDiscrets" checked></input>
+    <div class="row" style="margin:0; padding:0;">
+      <div class="form-group col-md-6 col-sm-12">
+        <legend><i class="fas fa-wrench"></i> {{Plugin}}</legend>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Pays}}
+            <sup><i class="fas fa-question-circle" title="{{Permet d'afficher les images des équipements avec le bon type de prise}}"></i></sup>
+          </label>
+          <select class="configKey col-sm-4 form-control" data-l1key="country">
+            <option value="be" selected>{{Belgique}}</option>
+            <option value="fr" selected>{{France}}</option>
+            <option value="ch" selected>{{Suisse}}</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Nom des équipements sans l'objet}}
+            <sup><i class="fas fa-question-circle" title="{{Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'}}"></i></sup>
+          </label>
+          <input class="configKey" type=checkbox data-l1key="noObject"></input>
         </div>
       </div>
-      <div class="row">
-        <label class="col-sm-5 control-label">{{Debug complet}}
-          <sup><i class="fas fa-question-circle" title="{{Log debug des modules python (log warning sinon)}}"></i></sup>
-        </label>
-	<div class="col-sm-3">
-          <input class="configKey form-control" type="checkbox" data-l1key="fullDebug"></input>
+      <div class="form-group col-md-6 col-sm-12">
+        <legend><i class="fas fa-database"></i> {{Base de données}}</legend>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Rétention}}
+            <sup><i class="fas fa-question-circle" title="{{Durée de rétention de l'historique des débits CPL}}"></i></sup>
+          </label>
+          <select class="configKey col-sm-4 form-control" data-l1key="data-retention">
+            <option value="1 DAY" selected>1 {{jour}}</option>
+            <option value="3 DAY" selected>3 {{jours}}</option>
+            <option value="7 DAY" selected>1 {{semaine}}</option>
+            <option value="14 DAY" selected>2 {{semaines}}</option>
+            <option value="1 MONTH" selected>1 {{mois}}</option>
+            <option value="2 MONTH" selected>2 {{mois}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:0; padding:0;">
+      <div class="form-group col-md-6 col-sm-12">
+        <legend><i class="fas fa-university"></i> {{Démon}} <sub>({{nécessite un redémarrage du démon}})</sub></legend>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Port}}
+            <sup><i class="fas fa-question-circle" title="{{Redémarrer le démon en cas de modification}}"></i></sup>
+          </label>
+          <input class="configKey col-sm-3 form-control" data-l1key="daemon::port" placeholder="<?= $defaultPort ?>"/>
+        </div>
+      </div>
+      <div class="form-group col-md-6 col-sm-12">
+        <legend><i class="fas fa-file"></i> {{Logs}}</legend>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Discret}}
+            <sup><i class="fas fa-question-circle" title="{{Cacher les passwords et autres données sensibles}}"></i></sup>
+          </label>
+          <div class="col-sm-3">
+            <input class="configKey form-control" type="checkbox" data-l1key="logDiscrets" checked></input>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Debug complet}}
+            <sup><i class="fas fa-question-circle" title="{{Log debug des modules python (log warning sinon)}}"></i></sup>
+          </label>
+          <div class="col-sm-3">
+            <input class="configKey form-control" type="checkbox" data-l1key="fullDebug"></input>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:0; padding:0;">
+      <div class="form-group col-md-6 col-sm-12">
+        <legend><i class="fas fa-exchange-alt"></i> {{Infos de débits}}</legend>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Flux montant}}
+            <sup><i class="fas fa-question-circle" title="{{Une commande sera créée pour chaque flux vers un autre équipement}}"></i></sup>
+          </label>
+          <div class="col-sm-3">
+            <input class="configKey form-control" type="checkbox" data-l1key="cmd::upload"></input>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-sm-5 control-label">{{Flux descendant}}
+            <sup><i class="fas fa-question-circle" title="{{Une commande sera créée pour chaque flux depuis un autre équipement}}"></i></sup>
+          </label>
+          <div class="col-sm-3">
+            <input class="configKey form-control" type="checkbox" data-l1key="cmd::download"></input>
+          </div>
         </div>
       </div>
     </div>
