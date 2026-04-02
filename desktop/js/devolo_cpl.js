@@ -30,25 +30,42 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 				.addEventListener("click", function (event) {
 					let _target = null
 
-					if ((_target = event.target.closest("#bt_syncDevolo"))) {
+					if (_target = event.target.closest("#bt_syncDevolo")) {
 						devolo_cplFrontEnd.syncDevolo()
 						return
 					}
 
-					if ((_target = event.target.closest("#bt_devoloNetwork"))) {
+					if (_target = event.target.closest("#bt_devoloNetwork")) {
 						devolo_cplFrontEnd.showNetwork()
 						return
 					}
 
-					if ((_target = event.target.closest("#bt_devoloMacInfo"))) {
+					if (_target = event.target.closest("#bt_devoloMacInfo")) {
 						devolo_cplFrontEnd.macAdresses()
 						return
 					}
 
-					if ((_target = event.target.closest(".macinfoAction[data-action=remove]"))) {
+					if (_target = event.target.closest(".macinfoAction[data-action=remove]")) {
 						devolo_cplFrontEnd.mod_MacAdresses.removeMac(_target)
 						return
 					}
+
+					if (_target = event.target.closest(".eqLogicAction[data-action=save_devolo")) {
+						devolo_cplFrontEnd.checkAndSave()
+						return
+					}
+
+					return
+				})
+			document
+				.getElementById("div_pageContainer")
+				.addEventListener("change", function (event) {
+					let _target = null
+
+					if (_target = event.target.closest(".eqLogicAttr[data-l1key=configuration][data-l2key=model]")) {
+						devolo_cplFrontEnd.changeModelImage(_target)
+					}
+
 					return
 				})
 		},
@@ -110,7 +127,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 								} else {
 									document.getElementById(devolo_cplFrontEnd.mId_macAdresses)._jeeDialog.close()
 									return
-								} 
+								}
 							},
 						},
 					},
@@ -125,177 +142,145 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			})
 		},
 
-		mod_MacAdresses: {
-			removeMac: function(btn) {
-				btn.closest('tr').remove()
+		checkAndSave: function() {
+			let select = document.getElementById('selectModel')
+			let eqManageable = select.options[select.selectedIndex].getAttribute('manageable')
+			if (eqManageable != 1) {
+				let cmdToRemove = "";
+				let cmds = document.getElementById("table_cmd").querySelectorAll(".cmd.manageable-only")
+				if (cmds.length) {
+					for (let i = 0; i < cmds.length; i++) {
+						let logicalId = cmds[i].querySelector(".cmdAttr[data-l1key=logicalId]").textContent
+						cmdToRemove += "<li>" + logicalId + "</li>"
+					}
+					let message = "{{Le changement de modèle implique la suppression des commandes suivantes:}}"
+					message += "<ul>" + cmdToRemove + "</ul>"
+					jeeDialog.confirm(message, function(result) {
+						if (result) {
+							document.getElementById("table_cmd").querySelectorAll(".cmd.manageable-only").remove()
+							document.querySelector(".eqLogicAction[data-action=save]").click()
+						}
+					})
+				}
+			} else {
+				document.querySelector(".eqLogicAction[data-action=save]").click()
 			}
-		}
+		},
+
+		changeModelImage: function(select) {
+			if (select.selectedIndex <  0) {
+				return
+			}
+			let model = select.value
+			let img = select.options[select.selectedIndex].getAttribute('img')
+			let manageable = select.options[select.selectedIndex].getAttribute('manageable')
+			if (manageable == 1) {
+				document.querySelectorAll('.manageable-only').seen()
+			} else {
+				document.querySelectorAll('.manageable-only').unseen()
+			}
+			document.getElementById('img_equipement').src = img
+			document.getElementById('code_equipement').html(model)
+		},
+
+		addCmdToTable: function(_cmd) {
+			if (!isset(_cmd)) {
+				let _cmd = { configuration: {} };
+			}
+			if (!isset(_cmd.configuration)) {
+				_cmd.configuration = {};
+			}
+			let manageable = "";
+			if (isset(_cmd.logicalId)) {
+				if (isset(cmdsDef[_cmd.logicalId])) {
+					if (isset(cmdsDef[_cmd.logicalId]["manageableOnly"])) {
+						if (cmdsDef[_cmd.logicalId]["manageableOnly"] == 1) {
+							manageable = "manageable-only";
+						}
+					}
+				}
+			}
+			let tr = '<tr>'
+			// ID
+			tr += '<td class="hidden-xs">'
+			tr += '<span class="cmdAttr" data-l1key="id"></span>'
+			tr += "</td>"
+
+			// NOM
+			tr += '<td>'
+			tr += '<div class="input-group">'
+			tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">'
+			tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>'
+			tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding:0 5px 0 0!important;"></span>'
+			tr += '</div>'
+			tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">'
+			tr += '<option value="">{{Aucune}}</option>'
+			tr += '</select>'
+			tr += '</td>'
+
+			// LOGICALID
+			tr += "<td>"
+			tr += '<span class="cmdAttr" data-l1key="logicalId"></span>'
+			tr += "</td>"
+
+			// TYPE
+			tr += "<td>"
+			tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + "</span>"
+			tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
+			tr += "</td>"
+
+			// OPTIONS
+			tr += "<td>"
+			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label> '
+			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label> '
+			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label> '
+			tr += '<div style="margin-top:7px;">'
+			tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
+			tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
+			tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
+			tr += "</div>"
+			tr += "</td>"
+
+			// ETAT
+			tr += "<td>"
+			tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'
+			tr += "</td>"
+
+			// ACTION
+			tr += "<td>"
+			if (is_numeric(_cmd.id)) {
+				tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> '
+				tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> Tester</a>'
+			}
+			tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>'
+			tr += "</td>"
+			tr += '</tr>'
+
+			let newRow = document.createElement("tr")
+			newRow.innerHTML = tr
+			newRow.addClass("cmd")
+			if (manageable) {
+				newRow.addClass(manageable)
+			}
+			newRow.setAttribute("data-cmd_id", init(_cmd.id))
+			document.getElementById("table_cmd").querySelector("tbody").appendChild(newRow)
+			jeedom.eqLogic.buildSelectCmd({
+				id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
+				filter: {type: 'info'},
+				error: function(error) {
+					jeedomUtils.showAlert({ message: error.message, level: 'danger' })
+				},
+				success: function(result) {
+					newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+					newRow.setJeeValues(_cmd, '.cmdAttr')
+					jeedom.cmd.changeType(newRow, init(_cmd.subType))
+				}
+			})
+		},
+
 	}
 }
 devolo_cplFrontEnd.init();
-
-// 
-// /* Permet la réorganisation des commandes dans l'équipement */
-// $("#table_cmd").sortable({
-//   axis: "y",
-//   cursor: "move",
-//   items: ".cmd",
-//   placeholder: "ui-state-highlight",
-//   tolerance: "intersect",
-//   forcePlaceholderSize: true,
-// });
-// 
-// /* Sauvegarde avec validation préliminaire */
-// $(".eqLogicAction[data-action=save_devolo")
-//   .off("click")
-//   .on("click", function () {
-//     var manageable = $(
-//       ".eqLogicAttr[data-l1key=configuration][data-l2key=model]",
-//     )
-//       .find("option:selected")
-//       .attr("manageable");
-//     if (manageable != 1) {
-//       var cmdToRemove = [];
-//       $(".cmd.manageable-only").each(function () {
-//         var logicalId = $(this).find(".cmdAttr[data-l1key=logicalId]").value();
-//         cmdToRemove.push(logicalId);
-//       });
-//       if (cmdToRemove.length > 0) {
-//         var message =
-//           "{{Le changement de modèle implique la suppression des commandes suivantes:}}";
-//         message += "<ul>";
-//         for (let i = 0; i < cmdToRemove.length; i++) {
-//           message += "<li>" + cmdToRemove[i] + "</li>";
-//         }
-//         message += "<ul>";
-//         bootbox.confirm(message, function (result) {
-//           if (!result) {
-//             return;
-//           }
-//           $(".cmd.manageable-only").remove();
-//           $(".eqLogicAction[data-action=save").trigger("click");
-//         });
-//       } else {
-//         $(".eqLogicAction[data-action=save").trigger("click");
-//       }
-//     } else {
-//       $(".eqLogicAction[data-action=save").trigger("click");
-//     }
-//   });
-// 
-// /* Mise à jour de l'image lors du changement de modèle */
-// $(".eqLogicAttr[data-l1key=configuration][data-l2key=model]").on(
-//   "change",
-//   function () {
-//     var img = $(this).find("option:selected").attr("img");
-//     var val = $(this).find("option:selected").attr("value");
-//     var manageable = $(this).find("option:selected").attr("manageable");
-//     if (manageable == 1) {
-//       $(".manageable-only").removeClass("hidden");
-//     } else {
-//       $(".manageable-only").addClass("hidden");
-//     }
-//     $("#img_equipement").attr("src", img);
-//     $("#code_equipement").html(val);
-//   },
-// );
-// 
-// /* Fonction permettant l'affichage des commandes dans l'équipement */
-// function addCmdToTable(_cmd) {
-//   if (!isset(_cmd)) {
-//     var _cmd = { configuration: {} };
-//   }
-//   if (!isset(_cmd.configuration)) {
-//     _cmd.configuration = {};
-//   }
-//   manageable = "";
-//   if (isset(_cmd.logicalId)) {
-//     if (isset(cmdsDef[_cmd.logicalId])) {
-//       if (isset(cmdsDef[_cmd.logicalId]["manageableOnly"])) {
-//         if (cmdsDef[_cmd.logicalId]["manageableOnly"] == 1) {
-//           manageable = " manageable-only";
-//         }
-//       }
-//     }
-//   }
-//   var tr =
-//     '<tr class="cmd' + manageable + '" data-cmd_id="' + init(_cmd.id) + '">';
-//   tr += '<td class="hidden-xs">';
-//   tr += '<span class="cmdAttr" data-l1key="id"></span>';
-//   tr += "</td>";
-//   tr += "<td>";
-//   tr += '<div class="input-group">';
-//   tr +=
-//     '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
-//   tr +=
-//     '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
-//   tr +=
-//     '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding:0 5px 0 0!important;"></span>';
-//   tr += "</div>";
-//   tr +=
-//     '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">';
-//   tr += '<option value="">{{Aucune}}</option>';
-//   tr += "</select>";
-//   tr += "</td>";
-//   tr += "<td>";
-//   tr += '<span class="cmdAttr" data-l1key="logicalId"></span>';
-//   tr += "</td>";
-//   tr += "<td>";
-//   tr +=
-//     '<span class="type" type="' +
-//     init(_cmd.type) +
-//     '">' +
-//     jeedom.cmd.availableType() +
-//     "</span>";
-//   tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
-//   tr += "</td>";
-//   tr += "<td>";
-//   tr +=
-//     '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label> ';
-//   tr +=
-//     '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label> ';
-//   tr +=
-//     '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label> ';
-//   tr += '<div style="margin-top:7px;">';
-//   tr +=
-//     '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">';
-//   tr +=
-//     '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">';
-//   tr +=
-//     '<input class="tooltips cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">';
-//   tr += "</div>";
-//   tr += "</td>";
-//   tr += "<td>";
-//   tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
-//   tr += "</td>";
-//   tr += "<td>";
-//   if (is_numeric(_cmd.id)) {
-//     tr +=
-//       '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
-//     tr +=
-//       '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> Tester</a>';
-//   }
-//   tr +=
-//     '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i></td>';
-//   tr += "</tr>";
-//   $("#table_cmd tbody").append(tr);
-//   var tr = $("#table_cmd tbody tr").last();
-//   jeedom.eqLogic.buildSelectCmd({
-//     id: $(".eqLogicAttr[data-l1key=id]").value(),
-//     filter: { type: "info" },
-//     error: function (error) {
-//       $("#div_alert").showAlert({ message: error.message, level: "danger" });
-//     },
-//     success: function (result) {
-//       tr.find(".cmdAttr[data-l1key=value]").append(result);
-//       tr.setValues(_cmd, ".cmdAttr");
-//       jeedom.cmd.changeType(tr, init(_cmd.subType));
-//       $(".eqLogicAttr[data-l1key=configuration][data-l2key=model]").trigger(
-//         "change",
-//       );
-//     },
-//   });
-// }
+addCmdToTable = devolo_cplFrontEnd.addCmdToTable
 
 // vim: tabstop=2 autoindent
-

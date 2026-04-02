@@ -1,6 +1,4 @@
-$("#table_macinfo tbody").on("input", ".macinfoAttr", function () {
-	macinfoChanged = true;
-});
+"use strict"
 
 if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 	devolo_cplFrontEnd.mod_macAdresses = {
@@ -124,45 +122,5 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 }
 devolo_cplFrontEnd.mod_macAdresses.init()
 devolo_cplFrontEnd.mod_macAdresses.loadAll();
-
-
-// $(".macinfoAction[data-action=save]").on("click", function () {
-// 	if (!macinfoChanged) {
-// 		$.fn.showAlert({
-// 			message: "{{Pas de modification à sauvegarder}}",
-// 			level: "success",
-// 		});
-// 		return;
-// 	}
-// 	macInfos = $("#table_macinfo .macinfo").getValues(".macinfoAttr");
-// 	$.ajax({
-// 		type: "POST",
-// 		url: "/plugins/devolo_cpl/core/ajax/devolo_macinfo.ajax.php",
-// 		data: {
-// 			action: "save",
-// 			macinfos: json_encode(macInfos),
-// 		},
-// 		dataType: "json",
-// 		error: function (request, status, error) {
-// 			handleAjaxError(request, status, error);
-// 		},
-// 		success: function (data) {
-// 			if (data.state != "ok") {
-// 				$.fn.showAlert({ message: data.result, level: "danger" });
-// 				return;
-// 			}
-// 			$.fn.showAlert({
-// 				message: "{{Sauvegarde effectuée avec succès}}",
-// 				level: "success",
-// 			});
-// 			$("#table_macinfo tbody tr").remove();
-// 			for (macinfo of json_decode(data.result)) {
-// 				addMacinfoToTable(macinfo);
-// 			}
-// 			macinfoChanged = false;
-// 		},
-// 	});
-// });
-
 
 // vim: tabstop=2 autoindent

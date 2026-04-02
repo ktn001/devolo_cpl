@@ -159,7 +159,7 @@ $("#devolo_cpl_wifi").on("click", "div.card .button.ok", function () {
         datas[entry.network].push(data);
       }
       chart_config = {
-        ...chart_defaults,
+        ...devolo_cplPanel.chart_defaults,
         ...{
           chart: {
             displayErrors: true,

@@ -228,7 +228,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Sélectionner le type d'équipement Devolo}}"></i></sup>
 				</label>
 				<div class="col-sm-7">
-				    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
+				    <select id="selectModel" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model">
 				    <?php
 					$options = '';
 					$models = devolo_model::all();
