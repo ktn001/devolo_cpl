@@ -3,7 +3,7 @@
 if (typeof devolo_cplPanel.rates === 'undefined') {
 	devolo_cplPanel.rates = {
 
-		rateId : 0,
+		rateId: 0,
 
 		init: function() {
 			document.getElementById('devolo_cpl_rates').addEventListener('click', function(event) {
