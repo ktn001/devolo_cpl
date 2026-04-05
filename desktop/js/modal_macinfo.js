@@ -83,7 +83,7 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 						return
 					}
 					document.getElementById("table_macinfo").tBodies[0].replaceChildren()
-		 			for (macinfo of json_decode(data.result)) {
+		 			for (let macinfo of json_decode(data.result)) {
 		 				devolo_cplFrontEnd.mod_macAdresses.addMacinfoToTable(macinfo);
 		 			}
 		 			devolo_cplFrontEnd.mod_macAdresses.setChanged('0')
@@ -92,7 +92,7 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 		},
 
 		addMacinfoToTable: function(_macinfo) {
-			tr = '<tr>';
+			let tr = '<tr>';
 			tr += '<td class="hidden-xs">';
 			tr += '<span class="macinfoAttr" data-l1key="id"></span>';
 			tr += "</td>";

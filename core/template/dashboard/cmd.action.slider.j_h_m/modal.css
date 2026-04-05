@@ -1,0 +1,31 @@
+.j_h_m-container {
+	max-width: 400px;
+	margin-left: auto;
+	margin-right:auto;
+}
+.j_h_m-container input {
+	width: 70px !important;
+	font-size 12px;
+	padding:2px;
+}
+.j_h_m-container .ui-button-icon.ui-icon {
+	margin-top: -8px;
+}
+.j_h_m-field {
+	display : inline-block;
+}
+.btn-container {
+	max-width: 370px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right:auto;
+}
+.btn-container a{
+	width: 100px;
+	margin-top: 6px;
+	margin-left: 2px;
+	margin-right:2px;
+}
+.btn-container a#set-0# {
+	width: 316px;
+}
