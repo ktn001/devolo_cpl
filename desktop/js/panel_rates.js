@@ -22,7 +22,6 @@ if (typeof devolo_cplPanel.rates === 'undefined') {
 
 			document.getElementById('devolo_cpl_rates').addEventListener('change', function(event) {
 				let _target=null
-
 				if (_target = event.target.closest('div.card select.from')) {
 					devolo_cplPanel.rates.sourceChanged(_target.closest('.card'))
 					return

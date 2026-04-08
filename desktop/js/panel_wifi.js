@@ -103,12 +103,6 @@ if (typeof devolo_cplPanel.wifi === 'undefined') {
 				actionAjax = "wifiHistorique_client";
 			}
 
-			console.log('graphId: ' + graphId)
-			console.log('selectedView: ' + selectedView)
-			console.log('title: ' + title)
-			console.log('key: ' + key)
-			console.log('actionAjax: ' + actionAjax)
-			
 			domUtils.ajax({
 				type: "POST",
 				async: false,
