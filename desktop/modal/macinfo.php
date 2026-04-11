@@ -1,4 +1,5 @@
 <?php
+// vim: tabstop=4 autoindent
 
 /* This file is part of Jeedom.
 *
@@ -28,7 +29,7 @@ include_file('desktop', 'modal_macinfo', 'css', 'devolo_cpl');
 	<h3 class="center">{{Adresses mac des composants découverts}}</h3>
 </div>
 <table id="table_macinfo" class="table table-condensed">
-	<thead>    
+	<thead>
 		<tr>
 			<th class='hidden-xs'>{{Id}}</th>
 			<th>{{Mac}}</th>
@@ -36,7 +37,7 @@ include_file('desktop', 'modal_macinfo', 'css', 'devolo_cpl');
 			<th>{{Nom}}</th>
 			<th><span class="pull-right">{{Action}}</span></th>
 		</tr>
-	</thead>    
+	</thead>
 	<tbody>
 	</tbody>
 </table>

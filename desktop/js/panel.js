@@ -66,7 +66,7 @@ if (typeof devolo_cplPanel === 'undefined') {
 				type: "datetime",
 			},
 		},
-		
+
 		init: function() {
 			document.getElementById('div_pageContainer').addEventListener("click", function(event) {
 				let _target = null

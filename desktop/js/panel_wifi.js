@@ -33,7 +33,7 @@ if (typeof devolo_cplPanel.wifi === 'undefined') {
 					return
 				}
 			})
-		}, 
+		},
 
 		addWifiCard: function() {
 			let card = "<div>";
@@ -224,7 +224,7 @@ if (typeof devolo_cplPanel.wifi === 'undefined') {
 				},
 			})
 		},
-		
+
 	}
 }
 devolo_cplPanel.wifi.init()

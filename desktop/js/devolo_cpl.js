@@ -168,7 +168,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 		},
 
 		changeModelImage: function(select) {
-			if (select.selectedIndex <  0) {
+			if (select.selectedIndex < 0) {
 				return
 			}
 			let model = select.value

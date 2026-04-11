@@ -73,7 +73,7 @@
 					},
 					confirm: {
 						callback: {
-							click: function() { 
+							click: function() {
 								let value = devolo_cplActionJHM_modal.getValue()
 								document.getElementById('GuestTimeInput')._jeeDialog.close()
 								setDisplayValue_#uid#(value)
@@ -84,88 +84,8 @@
 				},
 			})
 		}
-
-
-//		$('.cmd[data-cmd_uid=#uid#]:last .execute').off('click').on('click', function () {
-//			bootbox.dialog({
-//				title: "{{Durée de l'activation du WiFi guest}}",
-//				message: j_h_m_dialog(),
-//				size: 'large',
-//				onEscape: true,
-//				buttons: {
-//					cancel: {
-//						label: '{{Annuler}}',
-//						className: 'btn-warning',
-//						callback: true
-//					},
-//					success: {
-//						label: '{{Ok}}',
-//						className: 'btn-success',
-//						callback: function(){
-//							result  = $("#sliderInputDays").value() * 1440
-//							result += $("#sliderInputHours").value() * 60
-//							result += $("#sliderInputMinutes").value() * 1
-//							setDisplayValue_#uid#(result)
-//							jeedom.cmd.execute({id: '#id#', value: {slider: result}})
-//						}
-//					}
-//				}
-//			})
-//			$("#sliderInputDays").spinner({
-//				icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-//			})
-//			$("#sliderInputHours").spinner({
-//				icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-//			})
-//			$("#sliderInputMinutes").spinner({
-//				icons : {down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"}
-//			})
-//			$('#set-0').on('click', function () {
-//				j_h_m_init(0)
-//			})
-//			$('#set-30m').on('click', function () {
-//				j_h_m_init(30)
-//			})
-//			$('#set-1h').on('click', function () {
-//				j_h_m_init(60)
-//			})
-//			$('#set-2h').on('click', function () {
-//				j_h_m_init(120)
-//			})
-//			$('#set-3h').on('click', function () {
-//				j_h_m_init(180)
-//			})
-//			$('#set-6h').on('click', function () {
-//				j_h_m_init(360)
-//			})
-//			$('#set-12h').on('click', function () {
-//				j_h_m_init(720)
-//			})
-//			$('#set-1j').on('click', function () {
-//				j_h_m_init(1440)
-//			})
-//			$('#set-2j').on('click', function () {
-//				j_h_m_init(2880)
-//			})
-//			$('#set-7j').on('click', function () {
-//				j_h_m_init(10080)
-//			})
-//
-//			j_h_m_init($('.cmd[data-cmd_id=#id#] a.btn').data('updatedValue'))
-//		})
-//	
-//			if ($('.cmd[data-cmd_uid=#uid#]').last().prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]').last().prev().data('subtype') != 'other'
-//			&& $('.cmd[data-cmd_uid=#uid#]').last().prev().css('display') != 'block') {
-//				$('.cmd[data-cmd_uid=#uid#]').last().prepend('<br/>');
-//			}
-//			if ("#name#" != '#name_display#') {
-//				$('.cmd[data-cmd_uid=#uid#]:last .execute').attr('title',"#name#")
-//			}
-//		 	setDisplayValue_#uid#(#state#)
-
 	</script>
 </div>
-
 <!--
 vim: tabstop=2 autoindent
 -->

@@ -1,0 +1,87 @@
+<style>
+	.jhm-container {
+		width: 200px;
+		padding: 20px;
+	}
+
+	.jhm-field {
+		width: 5em;
+	}
+	.jhm-container .ui-btn {
+		width: 50%
+	}
+</style>
+<div id="JHM-modal">
+	<div id="JHM-container" class="jhm-container">
+		<center>
+		<div class="jhm-field">{{jours}}:
+			<input class="jours" type="number" min="0" max="14" step="1">
+		</div>
+		<div class="jhm-field">{{heures}}:
+			<input class="heures" type="number" min="0" max="23" step="1">
+		</div>
+		<div class="jhm-field">{{minutes}}:
+			<input class="minutes" type="number" min="0" max="59" step="1">
+		</div>
+		</center>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<a class="ui-btn clr-btn-deep-orange ui-mini btn-cancel">Cancel</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="ui-btn clr-btn-success ui-mini btn-success">OK</a>
+		</div>
+	</div>
+</div>
+<script>
+	if (typeof devolo_cplActionJHM_modal === 'undefined') {
+		devolo_cplActionJHM_modal = {
+			init: function(callback) {
+				devolo_cplActionJHM_modal.callback = callback
+				document.getElementById('JHM-modal').addEventListener('click',function(event){
+					let _target = null
+
+					if (_target = event.target.closest('.btn-cancel')) {
+						jeedomUtils.loadModal(false)
+						return
+					}
+
+					if (_target = event.target.closest('.btn-success')) {
+					let value = 0
+					value += parseInt(document.getElementById('JHM-container').querySelector('input.jours').value) * 24 * 60
+					value += parseInt(document.getElementById('JHM-container').querySelector('input.heures').value) * 60
+					value += parseInt(document.getElementById('JHM-container').querySelector('input.minutes').value)
+						
+						devolo_cplActionJHM_modal.callback(value)
+						jeedomUtils.loadModal(false)
+					}
+				})
+			},
+
+			setValue: function(value) {
+				let jour = Math.trunc(value / (24*60))
+				value = value % (24*60)
+				let heure = Math.trunc(value / 60)
+				let minute = value % 60
+				document.getElementById('JHM-container').querySelector('input.jours').value = jour
+				document.getElementById('JHM-container').querySelector('input.heures').value = heure
+				document.getElementById('JHM-container').querySelector('input.minutes').value = minute
+			},
+
+			getValue: function() {
+				let value = 0
+				value += parseInt(document.getElementById('JHM-container').querySelector('#sliderInputDays').value) * 24 * 60
+				value += parseInt(document.getElementById('JHM-container').querySelector('#sliderInputHours').value) * 60
+				value += parseInt(document.getElementById('GJHM-container').querySelector('#sliderInputMinutes').value)
+				return value
+			}
+		}
+	}
+
+</script>
+
+<!--
+vim: tabstop=2 autoindent
+-->
+

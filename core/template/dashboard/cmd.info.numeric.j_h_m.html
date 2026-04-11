@@ -1,13 +1,4 @@
-<div
-	class="cmd cmd-widget #history#"
-	data-type="info"
-	data-subtype="numeric"
-	data-template="badge"
-	data-cmd_id="#id#"
-	data-cmd_uid="#uid#"
-	data-version="#version#"
-	data-eqLogic_id="#eqLogic_id#"
->
+<div class="cmd cmd-widget #history#" data-type="info" data-subtype="numeric" data-template="badge" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#" >
 	<div class="title #hide_name#">
 		<div class="cmdName">#name_display#</div>
 	</div>
@@ -32,8 +23,8 @@
 	<script>
 		jeedom.cmd.addUpdateFunction("#id#", function (_options) {
 			let cmd = null
-			if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
-				cmd.querySelector('.content').setAttribute('title', '{{XDate de valeur}}: ' + _options.valueDate + '<br>{{XDate de collecte}}: ' + _options.collectDate)
+			if (is_object(cmd = document.querySelector('.cmd[data-cmd_id="#id#"]'))) {
+				cmd.querySelector('.content').setAttribute('title', '{{Date de valeur}}: ' + _options.valueDate + '<br>{{Date de collecte}}: ' + _options.collectDate)
 			}
 			let txt = "";
 			let heures = Math.trunc(_options.value / 60);
@@ -55,6 +46,7 @@
 					txt = jours.toString() + "{{j}} " + txt;
 				}
 			}
+			console.log(cmd)
 			cmd.querySelector('.value').innerHTML = txt
 		})
 		jeedom.cmd.refreshValue([

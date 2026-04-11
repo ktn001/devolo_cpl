@@ -1,4 +1,5 @@
 <?php
+// vim: tabstop=4 autoindent
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -54,7 +55,7 @@ try {
 			$macinfos = json_decode(init('macinfos'), true);
 			foreach ($macinfos as $macinfo) {
 				log::add("devolo_cpl","debug","SAVE: " . print_r($macinfo,true));
-    
+
 				if (array_key_exists($macinfo['id'],$macinfosDB)){
 					utils::a2o($macinfosDB[$macinfo['id']], $macinfo);
 					$macinfosDB[$macinfo['id']]->save();

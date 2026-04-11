@@ -127,8 +127,8 @@ class devolo_connection {
 			$found = false;
 			foreach ($connections as $connection) {
 				if (   ($connection->getSerial() == $serial)
-				    && ($connection->getMac() == $connected_device['mac'])
-				    && ($connection->getNetwork() == $connected_device['band'])
+					&& ($connection->getMac() == $connected_device['mac'])
+					&& ($connection->getNetwork() == $connected_device['band'])
 				) {
 					$found = true;
 				} else {

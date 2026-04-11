@@ -1,4 +1,5 @@
 <?php
+// vim: tabstop=4 autoindent
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,96 +17,96 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../php/devolo_cpl.inc.php';
-    include_file('core', 'authentification', 'php');
+	require_once dirname(__FILE__) . '/../php/devolo_cpl.inc.php';
+	include_file('core', 'authentification', 'php');
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
+	if (!isConnect('admin')) {
+		throw new Exception(__('401 - Accès non autorisé', __FILE__));
+	}
 
   /* Fonction permettant l'envoi de l'entête 'Content-Type: application/json'
-    En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
-    En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
+	En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
+	En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
   */
-    ajax::init();
-    $action = init('action');
-    log::add("devolo_cpl","debug","  Ajax devolo_cpl: action: " . $action);
+	ajax::init();
+	$action = init('action');
+	log::add("devolo_cpl","debug","  Ajax devolo_cpl: action: " . $action);
 
-    if ($action == 'syncDevolo'){
-	unautorizedInDemo();
-	if (!isConnect('admin')) {
-	    throw new Exception(__('401 - Accès non autorisé',__FILE__));
+	if ($action == 'syncDevolo'){
+		unautorizedInDemo();
+		if (!isConnect('admin')) {
+			throw new Exception(__('401 - Accès non autorisé',__FILE__));
+		}
+
+		try {
+			devolo_cpl::syncDevolo();
+			ajax::success();
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
 
-	try {
-	    devolo_cpl::syncDevolo();
-	    ajax::success();
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
+	if ($action == 'getCplNetworks') {
+		try {
+			$cplNetworks = devolo_cpl::getCplNetworksToModal();
+			ajax::success(json_encode($cplNetworks));
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
-    }
 
-    if ($action == 'getCplNetworks') {
-	try {
-	    $cplNetworks = devolo_cpl::getCplNetworksToModal();
-	    ajax::success(json_encode($cplNetworks));
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
+	if ($action == 'getCplRates') {
+		try {
+			$cplRates = devolo_cpl::getCplRatesToModal();
+			ajax::success(json_encode($cplRates));
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
-    }
 
-    if ($action == 'getCplRates') {
-	try {
-	    $cplRates = devolo_cpl::getCplRatesToModal();
-	    ajax::success(json_encode($cplRates));
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
+	if ($action == 'ratesHistorique') {
+		try {
+			$macFrom = init('macFrom');
+			$macTo = init('macTo');
+			if ($macFrom == '' || $macTo == '') {
+				throw new Exception(__("l'adresse mac source ou destination est indéfinie.",__FILE__));
+			}
+			$rates = devolo_cpl::getRatesHistorique($macFrom, $macTo);
+			ajax::success($rates);
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
-    }
 
-    if ($action == 'ratesHistorique') {
-	try {
-	    $macFrom = init('macFrom');
-	    $macTo = init('macTo');
-	    if ($macFrom == '' || $macTo == '') {
-		throw new Exception(__("l'adresse mac source ou destination est indéfinie.",__FILE__));
-	    }
-	    $rates = devolo_cpl::getRatesHistorique($macFrom, $macTo);
-	    ajax::success($rates);
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
+	if ($action == 'wifiHistorique_ap') {
+		try {
+			$serial = init('key');
+			if ($serial == '') {
+				throw new Exception(__("Le numéro de série est indéfinie.",__FILE__));
+			}
+			$histo = devolo_connection::getWifiHistorique_ap($serial);
+			ajax::success($histo);
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
-    }
 
-    if ($action == 'wifiHistorique_ap') {
-	try {
-	    $serial = init('key');
-	    if ($serial == '') {
-		throw new Exception(__("Le numéro de série est indéfinie.",__FILE__));
-	    }
-	    $histo = devolo_connection::getWifiHistorique_ap($serial);
-	    ajax::success($histo);
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
+	if ($action == 'wifiHistorique_client') {
+		try {
+			$mac = init('key');
+			if ($mac == '') {
+				throw new Exception(__("L'adresse mac du client est indéfinie.",__FILE__));
+			}
+			$histo = devolo_connection::getWifiHistorique_client($mac);
+			ajax::success($histo);
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
 	}
-    }
 
-    if ($action == 'wifiHistorique_client') {
-	try {
-	    $mac = init('key');
-	    if ($mac == '') {
-		throw new Exception(__("L'adresse mac du client est indéfinie.",__FILE__));
-	    }
-	    $histo = devolo_connection::getWifiHistorique_client($mac);
-	    ajax::success($histo);
-	} catch (Exception $e){
-	    ajax::error(displayException($e), $e->getCode());
-	}
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
-    /*     * *********Catch exeption*************** */
+	throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
+	/*     * *********Catch exeption*************** */
 }
 catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
+	ajax::error(displayException($e), $e->getCode());
 }
