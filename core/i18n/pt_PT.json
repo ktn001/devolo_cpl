@@ -104,19 +104,6 @@
         "option -i manquante": "opção -i em falta"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "1 heure": "1 hora",
-        "1 jour": "1 dia",
-        "12 heures": "12 horas",
-        "2 heures": "2 horas",
-        "2 jours": "2 dias",
-        "3 heures": "3 horas",
-        "30 minutes": "30 minutos",
-        "6 heures": "6 horas",
-        "7 jours": "7 dias",
-        "Annuler": "Cancelar",
-        "Durée de l'activation du WiFi guest": "Tempo de ativação de convidados WiFi",
-        "Ok": "OK",
-        "Zéro": "Zero",
         "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
@@ -124,39 +111,29 @@
         "Couleur du texte": "Cor do texto",
         "Date de collecte": "Data de coleta",
         "Date de valeur": "Data de validade",
-        "Max": "Máx.",
-        "Min": "Mínimo",
+        "Maximum": "Máximo",
+        "Minimum": "Mínimo",
         "Moyenne": "Média",
         "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/mobile\/cmd.action.slider.j_h_m.html": {
-        "Annuler": "Cancelar",
-        "OK": "Ok",
-        "heures": "horas",
-        "j": "j",
-        "jours": "dias",
-        "minutes": "minutos"
+        "j": "j"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
         "Afficher": "Mostrar",
+        "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Atenção está a deixar uma página com dados modificados que não foram guardados. Deseja continuar?",
         "Aucune": "Nenhuma",
         "Choisir une icône": "Escolha um ícone",
         "Commande info liée": "Comando de informação relacionado",
         "Historiser": "Histórico",
         "Inverser": "Inverter",
         "Le changement de modèle implique la suppression des commandes suivantes:": "A mudança de modelo implica a supressão dos seguintes comandos:",
-        "Mac adresses": "Endereços Mac",
         "Max": "Máx.",
         "Min": "Mínimo",
         "Nom de la commande": "Nome do comando",
-        "Réseaux CPL": "Redes PLC",
+        "Réseaux": "Redes",
         "Supprimer la commande": "Apagar comando",
         "Unité": "Unidade"
-    },
-    "plugins\/devolo_cpl\/desktop\/js\/modal_macinfo.js": {
-        "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Atenção está a deixar uma página com dados modificados que não foram guardados. Deseja continuar?",
-        "Pas de modification à sauvegarder": "Não há alterações a guardar",
-        "Sauvegarde effectuée avec succès": "Backup concluído com êxito"
     },
     "plugins\/devolo_cpl\/desktop\/js\/panel.js": {
         "Heure": "Hora",
@@ -188,17 +165,26 @@
         "client": "cliente",
         "connections WiFi": "ligações WiFi"
     },
+    "plugins\/devolo_cpl\/desktop\/modal\/cmd.action.slider.j_h_m.php": {
+        "1 heure": "1 hora",
+        "1 jour": "1 dia",
+        "12 heures": "12 horas",
+        "2 heures": "2 horas",
+        "2 jours": "2 dias",
+        "3 heures": "3 horas",
+        "30 minutes": "30 minutos",
+        "6 heures": "6 horas",
+        "7 jours": "7 dias",
+        "Zéro": "Zero"
+    },
     "plugins\/devolo_cpl\/desktop\/modal\/macinfo.php": {
         "401 - Accès non autorisé": "401 - Acesso não autorizado",
         "Action": "Ação",
         "Adresses mac des composants découverts": "Endereços Mac dos componentes detectados",
-        "Annuler": "Cancelar",
         "Fabriquant": "Fabricante",
         "Id": "EU IRIA",
         "Mac": "Mac",
-        "Nom": "Nome",
-        "Sauvegarder": "Guardar",
-        "fermer": "próximo"
+        "Nom": "Nome"
     },
     "plugins\/devolo_cpl\/desktop\/modal\/network.php": {
         "401 - Accès non autorisé": "401 - Acesso não autorizado",
@@ -218,7 +204,8 @@
         "Adresse mac de l'équipement": "Endereço Mac do equipamento",
         "Adresses mac": "Endereços Mac",
         "Ajouter": "Adicionar",
-        "Ajouter une commande": "Adicionar comando",
+        "Ajouter débit sortant": "Adicionar saída",
+        "Ajouter un débit entrant": "Adicionar uma entrada de débito",
         "Aucun": "Nenhum",
         "Aucun équipement Devolo trouvé, cliquer sur \"Ajouter\" pour commencer": "Não foi encontrado nenhum equipamento Devolo, clique em \"Adicionar\" para iniciar",
         "Catégorie": "Categoria",
@@ -281,7 +268,10 @@
         "Discret": "Discreto",
         "Durée de rétention de l'historique des débits CPL": "Tempo de retenção para taxas de dados históricos de PLC",
         "Démon": "Daemon",
+        "Flux descendant": "Fluxo descendente",
+        "Flux montant": "Fluxo ascendente",
         "France": "França",
+        "Infos de débits": "Informações sobre débitos",
         "Log debug des modules python (log warning sinon)": "Depurar o registo de módulos python (caso contrário, registar o aviso)",
         "Logs": "Registos",
         "Nom des équipements sans l'objet": "Nome do equipamento sem objeto",
@@ -292,6 +282,8 @@
         "Redémarrer le démon en cas de modification": "Reiniciar o daemon em caso de alteração",
         "Rétention": "Retenção",
         "Suisse": "Suíça",
+        "Une commande sera créée pour chaque flux depuis un autre équipement": "Será criado um comando para cada fluxo proveniente de outro equipamento",
+        "Une commande sera créée pour chaque flux vers un autre équipement": "Será criado um comando para cada fluxo para outro equipamento",
         "jour": "dia",
         "jours": "dias",
         "mois": "mês",
