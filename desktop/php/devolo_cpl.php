@@ -258,10 +258,12 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 	    <!-- Onglet des commandes de l'équipement -->
 	    <div role="tabpanel" class="tab-pane" id="commandtab">
 		<div class="input-group pull-right" style="display:inline;">
+			<!--
 			<span class="input-group-btn">
 				<a class="btn btn-default btn-sm roundedLeft cmdAction" data-action="addSpeedTo" style="margin-top:5px;"><i class="fas fa-arrow-circle-up"></i><span> {{Ajouter débit sortant}}</span>
 				</a><a class="btn btn-default btn-sm roundedRight cmdAction" data-action="addSpeedFrom" style="margin-top:5px;"><i class="fas fa-arrow-circle-down"></i><span> {{Ajouter un débit entrant}}</span></a>
 			</span>
+			-->
 		</div>
 		<br><br>
 		<div class="table-responsive">

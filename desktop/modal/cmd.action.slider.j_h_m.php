@@ -60,7 +60,6 @@
 	}
 
 </script>
-
 <!--
 vim: tabstop=2 autoindent
 -->
