@@ -104,19 +104,6 @@
         "option -i manquante": "option -i missing"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "1 heure": "1 hour",
-        "1 jour": "1 day",
-        "12 heures": "12 hours",
-        "2 heures": "2 hours",
-        "2 jours": "2 days",
-        "3 heures": "3 hours",
-        "30 minutes": "30 minutes",
-        "6 heures": "6 hours",
-        "7 jours": "7 days",
-        "Annuler": "Cancel",
-        "Durée de l'activation du WiFi guest": "WiFi guest activation time",
-        "Ok": "OK",
-        "Zéro": "Zero",
         "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
@@ -124,39 +111,29 @@
         "Couleur du texte": "Text color",
         "Date de collecte": "Date of collection",
         "Date de valeur": "Value date",
-        "Max": "Maximum",
-        "Min": "Minimum",
+        "Maximum": "Maximum",
+        "Minimum": "Minimum",
         "Moyenne": "Average",
         "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/mobile\/cmd.action.slider.j_h_m.html": {
-        "Annuler": "Cancel",
-        "OK": "OK",
-        "heures": "hours",
-        "j": "j",
-        "jours": "days",
-        "minutes": "minutes"
+        "j": "j"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
         "Afficher": "Show",
+        "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "You have modified settings that haven\\'t been saved. Are you sure you want to continue?",
         "Aucune": "None",
         "Choisir une icône": "Choose an icon",
         "Commande info liée": "Related info command",
         "Historiser": "Historize",
         "Inverser": "Invert",
         "Le changement de modèle implique la suppression des commandes suivantes:": "The change of model implies the deletion of the following commands:",
-        "Mac adresses": "Mac addresses",
         "Max": "Maximum",
         "Min": "Minimum",
         "Nom de la commande": "Command name",
-        "Réseaux CPL": "PLC networks",
+        "Réseaux": "Networks",
         "Supprimer la commande": "Delete command",
         "Unité": "Unit"
-    },
-    "plugins\/devolo_cpl\/desktop\/js\/modal_macinfo.js": {
-        "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "You have modified settings that haven\\'t been saved. Are you sure you want to continue?",
-        "Pas de modification à sauvegarder": "No changes to save",
-        "Sauvegarde effectuée avec succès": "Successfully saved"
     },
     "plugins\/devolo_cpl\/desktop\/js\/panel.js": {
         "Heure": "Hour",
@@ -188,17 +165,26 @@
         "client": "customer",
         "connections WiFi": "wiFi connections"
     },
+    "plugins\/devolo_cpl\/desktop\/modal\/cmd.action.slider.j_h_m.php": {
+        "1 heure": "1 hour",
+        "1 jour": "1 day",
+        "12 heures": "12 hours",
+        "2 heures": "2 hours",
+        "2 jours": "2 days",
+        "3 heures": "3 hours",
+        "30 minutes": "30 minutes",
+        "6 heures": "6 hours",
+        "7 jours": "7 days",
+        "Zéro": "Zero"
+    },
     "plugins\/devolo_cpl\/desktop\/modal\/macinfo.php": {
         "401 - Accès non autorisé": "401 - Unauthorized access",
         "Action": "Action",
         "Adresses mac des composants découverts": "Mac addresses of discovered components",
-        "Annuler": "Cancel",
         "Fabriquant": "Manufacturer",
         "Id": "ID",
         "Mac": "Mac",
-        "Nom": "Name",
-        "Sauvegarder": "Save",
-        "fermer": "close"
+        "Nom": "Name"
     },
     "plugins\/devolo_cpl\/desktop\/modal\/network.php": {
         "401 - Accès non autorisé": "401 - Unauthorized access",
@@ -218,7 +204,8 @@
         "Adresse mac de l'équipement": "Equipment mac address",
         "Adresses mac": "Mac addresses",
         "Ajouter": "Add",
-        "Ajouter une commande": "Add a command",
+        "Ajouter débit sortant": "Add outgoing flow",
+        "Ajouter un débit entrant": "Add an incoming flow",
         "Aucun": "None",
         "Aucun équipement Devolo trouvé, cliquer sur \"Ajouter\" pour commencer": "No Devolo equipment found, click on \"Add\" to start",
         "Catégorie": "Category",
@@ -281,7 +268,10 @@
         "Discret": "Discreet",
         "Durée de rétention de l'historique des débits CPL": "Retention time for PLC flow history",
         "Démon": "Daemon",
+        "Flux descendant": "Downstream flow",
+        "Flux montant": "Upward flow",
         "France": "France",
+        "Infos de débits": "Data rates",
         "Log debug des modules python (log warning sinon)": "Log debug of python modules (log warning otherwise)",
         "Logs": "Logs",
         "Nom des équipements sans l'objet": "Equipment name without object",
@@ -292,6 +282,8 @@
         "Redémarrer le démon en cas de modification": "Restart daemon in case of modification",
         "Rétention": "Retention",
         "Suisse": "Switzerland",
+        "Une commande sera créée pour chaque flux depuis un autre équipement": "A command will be created for each feed from another device",
+        "Une commande sera créée pour chaque flux vers un autre équipement": "A command will be created for each flow to another device",
         "jour": "day",
         "jours": "days",
         "mois": "month",
