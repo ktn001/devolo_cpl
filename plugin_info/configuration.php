@@ -96,7 +96,6 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 				</div>
 			</div>
 		</div>
-		<!--
 		<div class="row" style="margin:0; padding:0;">
 			<div class="form-group col-md-6 col-sm-12">
 				<legend><i class="fas fa-exchange-alt"></i> {{Infos de débits}}</legend>
@@ -117,7 +116,6 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 					</div>
 				</div>
 			</div>
-			-->
 		</div>
 	</fieldset>
 </form>

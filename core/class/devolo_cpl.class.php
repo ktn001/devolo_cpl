@@ -31,6 +31,7 @@ class devolo_cpl extends eqLogic {
 	 * Fonction exécutée automatiquement toutes les minutes par Jeedom
 	 */
 	public static function cron() {
+		devolo_cpl::getRates();
 		$equipements = eqLogic::byType(__CLASS__,True);
 		foreach($equipements as $equipement) {
 			if (! $equipement->isManageable()){
@@ -459,6 +460,20 @@ class devolo_cpl extends eqLogic {
 		$sql .=  "from `devolo_cpl_rates`";
 		$sql .= "where time = (select max(time) from `devolo_cpl_rates`)";
 		return  DB::Prepare($sql,array(), DB::FETCH_TYPE_ALL);
+	}
+
+	public static function updateRateCmds($macSrc,$macDst,$txRate,$rxRate) {
+		log::add("devolo_cpl","warning","updateRateCmds");
+		$eqLogicSrc = devolo_cpl::byMacAddress($macSrc);
+		if (! is_object($eqLogicSrc)) {
+			log::add("devolo_cpl","debug",sprintf(__("Equipement source avec la mac adresse %s introuvable",__FILE__),$macSrc));
+			return;
+		}
+		$eqLogicDst = devolo_cpl::byMacAddress($macDst);
+		if (! is_object($eqLogicDst)) {
+			log::add("devolo_cpl","debug",sprintf(__("Equipement destination avec la mac adresse %s introuvable",__FILE__),$macDst));
+			return;
+		}
 	}
 
 	public static function getRates() {

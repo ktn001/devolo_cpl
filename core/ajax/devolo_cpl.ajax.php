@@ -104,6 +104,22 @@ try {
 		}
 	}
 
+	if ($action == 'getPartners') {
+		try {
+			$partners = array();
+			foreach (devolo_cpl::byType('devolo_cpl') as $partner) {
+				$partners[] = array(
+					'id' => $partner->getId(),
+					'name' => $partner->getHumanName(),
+					'network' => $partner->getConfiguration('network')
+				);
+			}
+			ajax::success($partners);
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
+	}
+
 	throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
 	/*     * *********Catch exeption*************** */
 }

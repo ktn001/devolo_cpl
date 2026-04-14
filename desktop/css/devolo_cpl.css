@@ -1,0 +1,4 @@
+select.cmdAttr.form-control.danger {
+    color: var(--sc-lightTxt-color) !important;
+    background-color: var(--al-danger-color) !important;
+}

@@ -25,9 +25,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			/*
 			 * Initialisation après chargement de la page
 			 */
-			document
-				.getElementById("div_pageContainer")
-				.addEventListener("click", function (event) {
+			document.getElementById("div_pageContainer").addEventListener("click", function (event) {
 					let _target = null
 
 					if (_target = event.target.closest("#bt_syncDevolo")) {
@@ -55,18 +53,35 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 						return
 					}
 
-					return
-				})
-			document
-				.getElementById("div_pageContainer")
-				.addEventListener("change", function (event) {
-					let _target = null
+					if (_target = event.target.closest(".cmdAction[data-action=addRateDown]")) {
+						devolo_cplFrontEnd.createRateCmd("down")
+						return
+					}
 
-					if (_target = event.target.closest(".eqLogicAttr[data-l1key=configuration][data-l2key=model]")) {
-						devolo_cplFrontEnd.changeModelImage(_target)
+					if (_target = event.target.closest(".cmdAction[data-action=addRateUp]")) {
+						devolo_cplFrontEnd.createRateCmd("up")
+						return
 					}
 
 					return
+				})
+			document .getElementById("div_pageContainer") .addEventListener("change", function (event) {
+					let _target = null
+
+					if (_target = event.target.closest('.eqLogicAttr[data-l1key=configuration][data-l2key=model]')) {
+						devolo_cplFrontEnd.changeModelImage(_target)
+						return
+					}
+
+					if (_target = event.target.closest('.cmdAttr[data-l1key=configuration][data-l2key=cible]')) {
+						devolo_cplFrontEnd.checkRateCible(_target)
+						return
+					}
+
+					if (_target = event.target.closest('.eqLogicAttr[data-l1key=configuration][data-l2key=network]')) {
+						devolo_cplFrontEnd.checkAllRateCible()
+						return
+					}
 				})
 		},
 
@@ -183,6 +198,43 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			document.getElementById('code_equipement').html(model)
 		},
 
+		createRateCmd: function(direction) {
+			let cmd = {
+				type: 'info',
+				subType: 'numeric',
+			}
+			if (direction == 'up') {
+				cmd.logicalId = 'rate_upload'
+			} else if (direction == 'down') {
+				cmd.logicalId = 'rate_download'
+			}
+			devolo_cplFrontEnd.addCmdToTable(cmd)
+		},
+
+		checkRateCible: function(select) {
+			let network = document.getElementById('div_pageContainer').querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=network]').jeeValue()
+			let networkCible = select.options[select.selectedIndex].dataset.network
+			let ok = true
+			if (network != networkCible) {
+				select.addClass('danger')
+				ok = false
+			} else {
+				select.removeClass('danger')
+			}
+			return ok
+		},
+
+		checkAllRateCible: function() {
+			let ok = true
+			document.getElementById('table_cmd').querySelectorAll('select.cmdAttr[data-l1key=configuration][data-l2key=cible]').forEach(function(select){
+				if (! devolo_cplFrontEnd.checkRateCible(select)) {
+					ok = false
+				}
+			})
+			console.log(ok)
+			return ok
+		},
+
 		addCmdToTable: function(_cmd) {
 			if (!isset(_cmd)) {
 				let _cmd = { configuration: {} };
@@ -213,27 +265,46 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>'
 			tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding:0 5px 0 0!important;"></span>'
 			tr += '</div>'
-			tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">'
-			tr += '<option value="">{{Aucune}}</option>'
-			tr += '</select>'
+			tr += '<span class="cmdAttr hidden" data-l1key="value" style="display:none;"></span>'
+			tr += '<input class="valueName form-control input-sm" style="display:none;" disabled></input>'
 			tr += '</td>'
 
 			// LOGICALID
 			tr += "<td>"
-			tr += '<span class="cmdAttr" data-l1key="logicalId"></span>'
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="logicalId" disabled></input>'
 			tr += "</td>"
 
 			// TYPE
-			tr += "<td>"
-			tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + "</span>"
-			tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
-			tr += "</td>"
+			tr += '<td>'
+			tr += '<div>'
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" style="margin-bottom:1.2px" disabled></input>'
+			tr += '</div>'
+			tr += '<div>'
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="subType" disabled></input>'
+			tr += '</div>'
+			tr += '</td>'
+
+			// PARAMETRE
+			tr += '<td>'
+			if (_cmd.logicalId == 'rate_upload' || _cmd.logicalId == 'rate_download') {
+				let label = '{{Flux depuis}}:'
+				if (_cmd.logicalId == 'rate_upload'){
+					label = '{{Flux vers}}:'
+				}
+				tr += '<div>'
+				tr += '<span><b>' + label + '</b></span>'
+				tr += '</div>'
+				tr += '<div>'
+				tr += '<select class="cmdAttr form-control input-sm" data-l1key=configuration data-l2key=cible>'
+				tr += '</select>'
+				tr += '</div>'
+			}
+			tr += '</td>'
 
 			// OPTIONS
-			tr += "<td>"
+			tr += '<td>'
 			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label> '
 			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label> '
-			tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label> '
 			tr += '<div style="margin-top:7px;">'
 			tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
 			tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
@@ -263,21 +334,61 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 				newRow.addClass(manageable)
 			}
 			newRow.setAttribute("data-cmd_id", init(_cmd.id))
+			newRow.setJeeValues(_cmd, '.cmdAttr')
+			if (_cmd.logicalId == 'rate_upload' || _cmd.logicalId == 'rate_download') {
+				domUtils.ajax({
+					type: "POST",
+					async: true,
+					global: false,
+					url: devolo_cplFrontEnd.ajaxUrl,
+					data: {
+						action: "getPartners",
+						id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
+					},
+					dataType: "json",
+					success: function(data) {
+						if (data.state != "ok") {
+							jeedomUtils.showAlert({
+								message: data.result,
+								level: "danger",
+							})
+							return
+						}
+						let result = data.result
+						let options = ""
+						let eqLogic_id = document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue()
+						for (let i in result) {
+							if (result[i].id == eqLogic_id) {
+								continue
+							}
+							options += '<option value="' + result[i].id + '" data-network="' + result[i].network + '">' + result[i].name + '</option>'
+						}
+						newRow.querySelector('select[data-l1key=configuration][data-l2key=cible]').innerHTML = options
+						newRow.setJeeValues(_cmd, '.cmdAttr')
+					}
+				})
+			} else {
+				newRow.setJeeValues(_cmd, '.cmdAttr')
+			}
 			document.getElementById("table_cmd").querySelector("tbody").appendChild(newRow)
-			jeedom.eqLogic.buildSelectCmd({
-				id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
-				filter: {type: 'info'},
-				error: function(error) {
-					jeedomUtils.showAlert({ message: error.message, level: 'danger' })
-				},
-				success: function(result) {
-					newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
-					newRow.setJeeValues(_cmd, '.cmdAttr')
-					jeedom.cmd.changeType(newRow, init(_cmd.subType))
-				}
-			})
-		},
 
+			jeedom.cmd.changeType(newRow, init(_cmd.subType))
+			if (_cmd.value) {
+			 	jeedom.eqLogic.getCmd({
+					id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
+					async: false,
+					success: function(cmds) {
+						for (let i in cmds) {
+			 				if (cmds[i].id == _cmd.value) {
+								newRow.querySelector('.valueName').jeeValue(cmds[i].name)
+								newRow.querySelector('.valueName').seen()
+								break
+							}
+						}
+					}
+				})
+			}
+		},
 	}
 }
 devolo_cplFrontEnd.init();

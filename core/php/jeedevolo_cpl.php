@@ -64,6 +64,7 @@ try {
 					'rx_rate' => $data['rx_rate']
 				);
 				DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
+				devolo_cpl::updateRateCmds($mac_src,$mac_dst,$data['tx_rate'],$data['rx_rate']);
 			}
 		}
 	}

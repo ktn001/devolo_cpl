@@ -258,12 +258,38 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 	    <!-- Onglet des commandes de l'équipement -->
 	    <div role="tabpanel" class="tab-pane" id="commandtab">
 		<div class="input-group pull-right" style="display:inline;">
-			<!--
 			<span class="input-group-btn">
-				<a class="btn btn-default btn-sm roundedLeft cmdAction" data-action="addSpeedTo" style="margin-top:5px;"><i class="fas fa-arrow-circle-up"></i><span> {{Ajouter débit sortant}}</span>
-				</a><a class="btn btn-default btn-sm roundedRight cmdAction" data-action="addSpeedFrom" style="margin-top:5px;"><i class="fas fa-arrow-circle-down"></i><span> {{Ajouter un débit entrant}}</span></a>
+				<?php
+				$roundedUp = '';
+				$roundedDown = '';
+				$showUp = false;
+				$showDown = false;
+				if (config::byKey('cmd::upload','devolo_cpl','0') == 1) {
+					$roundedDown = 'roundedRight';
+					$showUp = true;
+				};
+				if (config::byKey('cmd::download','devolo_cpl','0') == 1) {
+					$roundedUp = 'roundedLeft';
+					$showDown = true;
+				};
+				if ($showUp xor $showDown) {
+					$roundedUp = "rounded";
+					$roundedDown = "rounded";
+				}
+				?>
+				<?php if ($showUp) { ?>
+					<a class="btn btn-default btn-sm <?= $roundedUp ?> cmdAction" data-action="addRateUp" style="margin-top:5px;">
+						<i class="fas fa-arrow-circle-up"></i>
+						<span> {{Ajouter débit sortant}}</span>
+					</a>
+				<?php } ?>
+				<?php if ($showDown) { ?>
+					<a class="btn btn-default btn-sm <?= $roundedDown ?> cmdAction" data-action="addRateDown" style="margin-top:5px;">
+						<i class="fas fa-arrow-circle-down"></i>
+						<span> {{Ajouter un débit entrant}}</span>
+					</a>
+				<?php } ?>
 			</span>
-			-->
 		</div>
 		<br><br>
 		<div class="table-responsive">
@@ -271,12 +297,13 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 			<thead>
 			    <tr>
 				<th class="hidden-xs" style="min-width:50px;width:70px;">ID</th>
-				<th style="min-width:200px;width:350px;">{{Nom}}</th>
-				<th>{{LogicalId}}</th>
-				<th>{{Type}}</th>
-				<th style="min-width:260px;">{{Options}}</th>
-				<th>{{Etat}}</th>
-				<th style="min-width:80px;width:200px;">{{Actions}}</th>
+				<th style="min-width:130px;width:200px">{{Nom}}</th>
+				<th style="width:130px;">{{LogicalId}}</th>
+				<th style="width:80px;">{{Type}}</th>
+				<th>{{Paramètres}}</th>
+				<th style="width:260px;">{{Options}}</th>
+				<th style="width:120px;">{{Etat}}</th>
+				<th style="width:150px;">{{Actions}}</th>
 			    </tr>
 			</thead>
 			<tbody>
@@ -289,10 +316,9 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
     </div><!-- /.eqLogic -->
 </div><!-- /.row row-overflow -->
 
-<!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'devolo_cpl', 'js', 'devolo_cpl');?>
-<!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js');?>
+<?php include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');?>
 
 <!--
 vim: tabstop=4 autoindent
