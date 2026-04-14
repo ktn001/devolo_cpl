@@ -21,30 +21,34 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 	<!-- Boutons de gestion du plugin -->
 	<div class="eqLogicThumbnailContainer">
 	    <div class="cursor eqLogicAction logoPrimary" data-action="add">
-		<i class="fas fa-plus-circle"></i>
-		<br>
-		<span>{{Ajouter}}</span>
+			<i class="fas fa-plus-circle"></i>
+			<br>
+			<span>{{Ajouter}}</span>
 	    </div>
 	    <div id="bt_syncDevolo" class="cursor eqLogicAction logoSecondary">
-		<i class="fas fa-sync-alt"></i>
-		<br>
-		<span>{{Synchronisation}}</span>
+			<i class="fas fa-sync-alt"></i>
+			<br>
+			<span>{{Synchronisation}}</span>
 	    </div>
 	    <div id="bt_devoloNetwork" class="cursor eqLogicAction logoSecondary">
-		<i class="fas fa-sitemap"></i>
-		<br>
-		<span>{{Réseaux CPL}}</span>
+			<i class="fas fa-sitemap"></i>
+			<br>
+			<span>{{Réseaux CPL}}</span>
 	    </div>
-	    <div id="bt_devoloMacInfo" class="cursor" eqLogicAction logoSecondary">
-		<i class="fas fa-microchip"></i>
-		<br>
-		<span>{{Adresses mac}}</span>
+	    <div id="bt_devoloMacInfo" class="cursor eqLogicAction logoSecondary">
+			<i class="fas fa-microchip"></i>
+			<br>
+			<span>{{Adresses mac}}</span>
 	    </div>
 	    <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
-		<i class="fas fa-wrench"></i>
-		<br>
-		<span>{{Configuration}}</span>
+			<i class="fas fa-wrench"></i>
+			<br>
+			<span>{{Configuration}}</span>
 	    </div>
+		<div class="cursor eqLogicAction warning" data-action="createComumunityPost" title="{{Ouvrir une demande d'aide sur le forum communautaire}}">
+			<i class="fas fa-ambulance"></i>
+			<span>{{Community}}</span>
+		</div>
 	</div>
 	<legend><i class="fas fa-table"></i> {{Mes équipements Devolo}}</legend>
 	<?php

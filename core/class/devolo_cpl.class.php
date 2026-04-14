@@ -538,6 +538,30 @@ class devolo_cpl extends eqLogic {
 		socket_close($socket);
 	}
 
+	/*
+	 * Informations pour les demandes d'aide sur à la communauté
+	 */
+	public static function getConfigForCommunity() {
+		$info = "#### Equipements:\n";
+		$info .= "```\n";
+		$index = 1;
+		foreach (self::byType(__CLASS__) as $eqLogic) {
+			$info .= $index. ". " . $eqLogic->getName() . "\n";
+			$info .= "     Id: " . $eqLogic->getId() . "\t";
+			$info .= "Modèle: " . $eqLogic->getConfiguration('sync_model') . "\t    ";
+			$info .= "Réseau: " . $eqLogic->getConfiguration('network') . "\n";
+			$index++;
+		}
+		$info .= "```\n";
+		$info .= "#### Python:\n";
+		$info .= "```\n";
+		$info .= shell_exec(self::PYTHON_PATH ." -V");
+		$info .= shell_exec(__DIR__ . "/../../resources/venv/bin/pip list"); 
+		$info .= "```\n";
+		return $info;
+
+	}
+
 	/*     * *********************Méthodes d'instance************************* */
 
 	/*
