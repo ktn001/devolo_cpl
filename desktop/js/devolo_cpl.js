@@ -202,6 +202,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			let cmd = {
 				type: 'info',
 				subType: 'numeric',
+				isHistorized: '0',
 			}
 			if (direction == 'up') {
 				cmd.logicalId = 'rate_upload'

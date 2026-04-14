@@ -474,6 +474,20 @@ class devolo_cpl extends eqLogic {
 			log::add("devolo_cpl","debug",sprintf(__("Equipement destination avec la mac adresse %s introuvable",__FILE__),$macDst));
 			return;
 		}
+		foreach($eqLogicSrc->searchCmdByConfiguration('"cible":"'.$eqLogicDst->getId().'"' ) as $cmd){
+			if ($cmd->getLogicalId() == 'rate_upload') {
+				$eqLogicSrc->checkAndUpdateCmd($cmd,$txRate);
+			} elseif ($cmd->getLogicalId() == 'rate_download') {
+				$eqLogicSrc->checkAndUpdateCmd($cmd,$rxRate);
+			}
+		}
+		foreach($eqLogicSrc->searchCmdByConfiguration('"cible":"'.$eqLogicSrc->getId().'"' ) as $cmd){
+			if ($cmd->getLogicalId() == 'rate_upload') {
+				$eqLogicSrc->checkAndUpdateCmd($cmd,$rxRate);
+			} elseif ($cmd->getLogicalId() == 'rate_download') {
+				$eqLogicSrc->checkAndUpdateCmd($cmd,$txRate);
+			}
+		}
 	}
 
 	public static function getRates() {
