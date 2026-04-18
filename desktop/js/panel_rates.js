@@ -127,9 +127,6 @@ if (typeof devolo_cplPanel.rates === 'undefined') {
 			let eqTo = selectTo.options[selectTo.selectedIndex].text
 
 			domUtils.ajax({
-				type: "POST",
-				async: false,
-				global: false,
 				url: devolo_cplPanel.ajaxUrl,
 				data: {
 					action: "ratesHistorique",

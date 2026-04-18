@@ -30,7 +30,6 @@ try {
   */
 	ajax::init();
 	$action = init('action');
-	log::add("devolo_cpl","debug","  Ajax devolo_cpl: action: " . $action);
 
 	if ($action == 'syncDevolo'){
 		unautorizedInDemo();
@@ -120,6 +119,15 @@ try {
 		}
 	}
 
+	if ($action == 'checkRateCmds'){
+		try {
+			$result = devolo_cpl::checkRateCmds();
+			ajax::success($result);
+		} catch (Exception $e){
+			ajax::error(displayException($e), $e->getCode());
+		}
+	}
+		 
 	throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
 	/*     * *********Catch exeption*************** */
 }

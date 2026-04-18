@@ -474,20 +474,119 @@ class devolo_cpl extends eqLogic {
 			log::add("devolo_cpl","debug",sprintf(__("Equipement destination avec la mac adresse %s introuvable",__FILE__),$macDst));
 			return;
 		}
-		foreach($eqLogicSrc->searchCmdByConfiguration('"cible":"'.$eqLogicDst->getId().'"' ) as $cmd){
+		foreach($eqLogicSrc->searchCmdByConfiguration('"target":"'.$eqLogicDst->getId().'"' ) as $cmd){
 			if ($cmd->getLogicalId() == 'rate_upload') {
 				$eqLogicSrc->checkAndUpdateCmd($cmd,$txRate);
 			} elseif ($cmd->getLogicalId() == 'rate_download') {
 				$eqLogicSrc->checkAndUpdateCmd($cmd,$rxRate);
 			}
 		}
-		foreach($eqLogicSrc->searchCmdByConfiguration('"cible":"'.$eqLogicSrc->getId().'"' ) as $cmd){
+		foreach($eqLogicSrc->searchCmdByConfiguration('"target":"'.$eqLogicSrc->getId().'"' ) as $cmd){
 			if ($cmd->getLogicalId() == 'rate_upload') {
 				$eqLogicSrc->checkAndUpdateCmd($cmd,$rxRate);
 			} elseif ($cmd->getLogicalId() == 'rate_download') {
 				$eqLogicSrc->checkAndUpdateCmd($cmd,$txRate);
 			}
 		}
+	}
+
+	public static function checkRateCmds() {
+		$result = [];
+		$createUp = config::byKey("cmd::upload","devolo_cpl",0);
+		$createDown = config::byKey("cmd::download","devolo_cpl",0);
+		foreach (self::byType(__CLASS__) as $eqLogic){
+			$eqName = $eqLogic->getHumanName();
+			$eqNetwork = $eqLogic->getConfiguration('network');
+			$upToRemove = [];
+			$downToRemove = [];
+			$noTarget = [];
+			$wrongType = [];
+			$wrongNetwork = [];
+			$cmdsUp = $eqLogic->getCmd('info','rate_upload',null,true);
+			$cmdsDown = $eqLogic->getCmd('info','rate_download',null,true);
+			if ($createUp == 0) {
+				if (count($cmdsUp)) {
+					foreach ($cmdsUp as $cmd) {
+						$result[$eqName] = [];
+						$upToRemove[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+						);
+					}
+				}
+			} else {
+				foreach ($cmdsUp as $cmd) {
+					$targetId = $cmd->getConfiguration('target');
+					$target = $eqLogic::byId($targetId);
+					if (!is_object($target)) {
+						$result[$eqName] = [];
+						$noTarget[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+						);
+					} elseif ($target->getEqType_name() != 'devolo_cpl') {
+						$result[$eqName] = [];
+						$wrongType[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+							'targetName' => $target->getHumanName(),
+							'targetType' => $target->getEqType_name(),
+						);
+					} elseif ($target->getConfiguration('network') != $eqNetowrk) {
+						$result[$eqName] = [];
+						$wrongNetwork[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+							'targetName' => $target->getHumanName(),
+						);
+					}
+				}
+			}
+			if ($createDown == 0) {
+				if (count($cmdsDown)) {
+					foreach ($cmdsUp as $cmd) {
+						$result[$eqName] = [];
+						$downToRemove[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+						);
+					}
+				}
+			} else {
+				foreach ($cmdsDown as $cmd) {
+					$targetId = $cmd->getConfiguration('target');
+					$target = $eqLogic::byId($targetId);
+					if (!is_object($target)) {
+						$result[$eqName] = [];
+						$noTarget[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+						);
+					} elseif ($target->getEqType_name() != 'devolo_cpl') {
+						$result[$eqName] = [];
+						$wrongType[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+							'targetName' => $target->getHumanName(),
+							'targetType' => $target->getEqType_name(),
+						);
+					} elseif ($target->getConfiguration('network') != $eqNetowrk) {
+						$result[$eqName] = [];
+						$wrongNetwork[] = array(
+							'cmdId' => $cmd->getId(),
+							'cmdName' => $cmd->getName(),
+							'targetName' => $target->getHumanName(),
+						);
+					}
+				}
+			}
+			if (count($upToRemove))   { $result[$eqName]['upToRemove']   = $upToRemove; }
+			if (count($downToRemove)) { $result[$eqName]['downToRemove'] = $downToRemove; }
+			if (count($noTarget))     { $result[$eqName]['noTarget']     = $noTarget; }
+			if (count($wrongType))    { $result[$eqName]['wrongType']    = $wrongType; }
+			if (count($wrongNetwork)) { $result[$eqName]['wrongNetwork'] = $wrongNetwork; }
+		}
+		return $result;
 	}
 
 	public static function getRates() {

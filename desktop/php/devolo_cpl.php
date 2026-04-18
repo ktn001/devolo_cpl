@@ -40,12 +40,19 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 			<br>
 			<span>{{Adresses mac}}</span>
 	    </div>
+		<div id="bt_checkRateCmds", class="cursor eqLogicAction logoSecondary">
+			<span class="fa-stack fa-lg">
+				<i class="fas fa-exchange-alt fa-stack-2x"></i>
+				<i class="fa fa-check fa-stack-2x" style="color:green;"></i>
+			</span>
+			<span>{{Commandes de débit}}</span>
+		</div>
 	    <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
 			<i class="fas fa-wrench"></i>
 			<br>
 			<span>{{Configuration}}</span>
 	    </div>
-		<div class="cursor eqLogicAction warning" data-action="createComumunityPost" title="{{Ouvrir une demande d'aide sur le forum communautaire}}">
+		<div id="bt_community" class="cursor eqLogicAction warning" title="{{Ouvrir une demande d'aide sur le forum communautaire}}">
 			<i class="fas fa-ambulance"></i>
 			<span>{{Community}}</span>
 		</div>

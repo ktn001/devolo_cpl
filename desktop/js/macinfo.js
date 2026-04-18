@@ -40,15 +40,11 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 			}
 			macInfos = document.getElementById("table_macinfo").querySelectorAll(".macinfo").getJeeValues(".macinfoAttr")
 			domUtils.ajax({
-				type: "POST",
-				async: false,
-				global: false,
 				url: devolo_cplFrontEnd.mod_macAdresses.ajaxUrl,
 				data: {
 		 			action: "save",
  					macinfos: json_encode(macInfos),
  				},
- 				dataType: "json",
 				success: function (data) {
 		 			if (data.state != "ok") {
 						jeedomUtils.showAlert({
@@ -66,14 +62,10 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 
 		loadAll: function() {
 			domUtils.ajax({
-				type: "POST",
-				async: false,
-				global: false,
 				url: devolo_cplFrontEnd.mod_macAdresses.ajaxUrl,
 				data: {
 					action: "getAll",
 				},
-				dataType: "json",
 				success: function (data) {
 		 			if (data.state != "ok") {
 						jeedomUtils.showAlert({

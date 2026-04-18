@@ -1,0 +1,14 @@
+div.equipement {
+	color: var(--eqTitle-color);
+	font-size: 1.5em;
+	font-weight: 500;
+}
+
+div.equipement:not(:first-child) {
+	border-top: 1px solid;
+}
+
+div.errorTypeTitle {
+	font-size: 1.3em;
+}
+# vim: tabstop=4 autoindent

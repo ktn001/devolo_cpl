@@ -17,29 +17,10 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
-}
-
-require_once __DIR__ . '/../../core/php/devolo_cpl.inc.php';
-include_file('desktop', 'macinfo', 'css', 'devolo_cpl');
+require_once __DIR__ . '/../../core/php/devolo_cpl.inc.php'; 
+include_file('desktop', 'checkRateCmds', 'css', 'devolo_cpl');
 ?>
-
-<div id='div_devoloMacInfo'>
-	<h3 class="center">{{Adresses mac des composants découverts}}</h3>
-</div>
-<table id="table_macinfo" class="table table-condensed">
-	<thead>
-		<tr>
-			<th class='hidden-xs'>{{Id}}</th>
-			<th>{{Mac}}</th>
-			<th>{{Fabriquant}}</th>
-			<th>{{Nom}}</th>
-			<th><span class="pull-right">{{Action}}</span></th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
-
-<?php include_file('desktop', 'macinfo', 'js', 'devolo_cpl'); ?>
+<div id="resultContent"></div>
+<?php
+include_file('desktop', 'checkRateCmds', 'js', 'devolo_cpl');
+?>

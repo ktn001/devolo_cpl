@@ -19,6 +19,8 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 	var devolo_cplFrontEnd = {
 		mId_showNetwork: "mod_showNetwork",
 		mId_macAdresses: "mod_macAdresses",
+		mId_checkRateCmds: "mod_checkRateCmds",
+
 		ajaxUrl: "plugins/devolo_cpl/core/ajax/devolo_cpl.ajax.php",
 
 		init: function() {
@@ -40,6 +42,15 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 
 					if (_target = event.target.closest("#bt_devoloMacInfo")) {
 						devolo_cplFrontEnd.macAdresses()
+						return
+					}
+					if (_target = event.target.closest("#bt_checkRateCmds")) {
+						devolo_cplFrontEnd.checkRateCmds()
+						return
+					}
+
+					if (_target = event.target.closest("#bt_community")) {
+						devolo_cplFrontEnd.community()
 						return
 					}
 
@@ -73,13 +84,13 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 						return
 					}
 
-					if (_target = event.target.closest('.cmdAttr[data-l1key=configuration][data-l2key=cible]')) {
-						devolo_cplFrontEnd.checkRateCible(_target)
+					if (_target = event.target.closest('.cmdAttr[data-l1key=configuration][data-l2key=target]')) {
+						devolo_cplFrontEnd.checkRateTarget(_target)
 						return
 					}
 
 					if (_target = event.target.closest('.eqLogicAttr[data-l1key=configuration][data-l2key=network]')) {
-						devolo_cplFrontEnd.checkAllRateCible()
+						devolo_cplFrontEnd.checkAllRateTarget()
 						return
 					}
 				})
@@ -89,14 +100,10 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			domUtils.showLoading()
 			setTimeout(function () {
 				domUtils.ajax({
-					type: "POST",
-					async: false,
-					global: false,
 					url: devolo_cplFrontEnd.ajaxUrl,
 					data: {
 						action: "syncDevolo",
 					},
-					dataType: "json",
 					success: function(data) {
 						if (data.state != "ok") {
 							jeedomUtils.showAlert({
@@ -157,6 +164,46 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			})
 		},
 
+		checkRateCmds: function() {
+			jeeDialog.dialog({
+				id: devolo_cplFrontEnd.mId_checkRateCmds,
+				title: '{{Titre checkRates}}',
+				contentUrl: 'index.php?v=d&plugin=devolo_cpl&modal=checkRateCmds',
+				buttons: {
+					confirm: {
+						callback: {
+							click: function() {
+								devolo_cplFrontEnd.mod_checkRateCmds.close()
+							}
+						}
+					}
+				},
+			})
+		},
+
+		community: function() {
+			jeedom.plugin.createCommunityPost({
+				type: ('devolo_cpl'),
+				error: function(error) {
+					domUtils.hideLoading()
+					jeedomUtils.showAlert({
+						message: error.message,
+						level: 'danger'
+					})
+				},
+				success: function(data) {
+					let element = document.createElement('a')
+					element.setAttribute('href', data.url)
+					element.setAttribute('target', '_blank')
+					element.style.display = 'none'
+					document.body.appendChild(element)
+					element.click()
+					document.body.removeChild(element)
+				}
+			})
+			return
+		},
+
 		checkAndSave: function() {
 			let select = document.getElementById('selectModel')
 			let eqManageable = select.options[select.selectedIndex].getAttribute('manageable')
@@ -212,11 +259,11 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			devolo_cplFrontEnd.addCmdToTable(cmd)
 		},
 
-		checkRateCible: function(select) {
+		checkRateTarget: function(select) {
 			let network = document.getElementById('div_pageContainer').querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=network]').jeeValue()
-			let networkCible = select.options[select.selectedIndex].dataset.network
+			let networkTarget = select.options[select.selectedIndex].dataset.network
 			let ok = true
-			if (network != networkCible) {
+			if (network != networkTarget) {
 				select.addClass('danger')
 				ok = false
 			} else {
@@ -225,14 +272,13 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			return ok
 		},
 
-		checkAllRateCible: function() {
+		checkAllRateTarget: function() {
 			let ok = true
-			document.getElementById('table_cmd').querySelectorAll('select.cmdAttr[data-l1key=configuration][data-l2key=cible]').forEach(function(select){
-				if (! devolo_cplFrontEnd.checkRateCible(select)) {
+			document.getElementById('table_cmd').querySelectorAll('select.cmdAttr[data-l1key=configuration][data-l2key=target]').forEach(function(select){
+				if (! devolo_cplFrontEnd.checkRateTarget(select)) {
 					ok = false
 				}
 			})
-			console.log(ok)
 			return ok
 		},
 
@@ -296,7 +342,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 				tr += '<span><b>' + label + '</b></span>'
 				tr += '</div>'
 				tr += '<div>'
-				tr += '<select class="cmdAttr form-control input-sm" data-l1key=configuration data-l2key=cible>'
+				tr += '<select class="cmdAttr form-control input-sm" data-l1key=configuration data-l2key=target>'
 				tr += '</select>'
 				tr += '</div>'
 			}
@@ -338,15 +384,11 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			newRow.setJeeValues(_cmd, '.cmdAttr')
 			if (_cmd.logicalId == 'rate_upload' || _cmd.logicalId == 'rate_download') {
 				domUtils.ajax({
-					type: "POST",
-					async: true,
-					global: false,
 					url: devolo_cplFrontEnd.ajaxUrl,
 					data: {
 						action: "getPartners",
 						id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
 					},
-					dataType: "json",
 					success: function(data) {
 						if (data.state != "ok") {
 							jeedomUtils.showAlert({
@@ -364,7 +406,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 							}
 							options += '<option value="' + result[i].id + '" data-network="' + result[i].network + '">' + result[i].name + '</option>'
 						}
-						newRow.querySelector('select[data-l1key=configuration][data-l2key=cible]').innerHTML = options
+						newRow.querySelector('select[data-l1key=configuration][data-l2key=target]').innerHTML = options
 						newRow.setJeeValues(_cmd, '.cmdAttr')
 					}
 				})
@@ -377,7 +419,6 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			if (_cmd.value) {
 			 	jeedom.eqLogic.getCmd({
 					id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
-					async: false,
 					success: function(cmds) {
 						for (let i in cmds) {
 			 				if (cmds[i].id == _cmd.value) {

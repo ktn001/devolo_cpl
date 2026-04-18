@@ -104,15 +104,11 @@ if (typeof devolo_cplPanel.wifi === 'undefined') {
 			}
 
 			domUtils.ajax({
-				type: "POST",
-				async: false,
-				global: false,
 				url: devolo_cplPanel.ajaxUrl,
 				data: {
 					action: actionAjax,
 					key: key
 				},
-				dataType: 'json',
 				success: function(data) {
 					if (data.state != "ok") {
 						jeedomUtils.showAlert({
