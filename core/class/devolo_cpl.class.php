@@ -31,7 +31,6 @@ class devolo_cpl extends eqLogic {
 	 * Fonction exécutée automatiquement toutes les minutes par Jeedom
 	 */
 	public static function cron() {
-		devolo_cpl::getRates();
 		$equipements = eqLogic::byType(__CLASS__,True);
 		foreach($equipements as $equipement) {
 			if (! $equipement->isManageable()){
@@ -311,6 +310,13 @@ class devolo_cpl extends eqLogic {
 	}
 
 	/*
+	 * Recherche les equipements d'un réseau
+	 */
+	public static function byNetwork($_network) {
+		return devolo_cpl::byTypeAndSearchConfiguration(__CLASS__,['network' => $_network]);
+	}
+
+	/*
 	 * Création ou mise à jour d'un équipment suite à une synchro
 	 */
 	public static function createOrUpdate($equipement){
@@ -463,7 +469,6 @@ class devolo_cpl extends eqLogic {
 	}
 
 	public static function updateRateCmds($macSrc,$macDst,$txRate,$rxRate) {
-		log::add("devolo_cpl","warning","updateRateCmds");
 		$eqLogicSrc = devolo_cpl::byMacAddress($macSrc);
 		if (! is_object($eqLogicSrc)) {
 			log::add("devolo_cpl","debug",sprintf(__("Equipement source avec la mac adresse %s introuvable",__FILE__),$macSrc));
@@ -497,94 +502,137 @@ class devolo_cpl extends eqLogic {
 		foreach (self::byType(__CLASS__) as $eqLogic){
 			$eqName = $eqLogic->getHumanName();
 			$eqNetwork = $eqLogic->getConfiguration('network');
+			$info = [];
 			$upToRemove = [];
 			$downToRemove = [];
 			$noTarget = [];
 			$wrongType = [];
 			$wrongNetwork = [];
+			$loop = [];
+			$partners = self::byNetwork($eqLogic->getConfiguration('network'));
+			$missingUp = [];
+			$missingDown = [];
+			log::add('devolo_cpl','warning',print_r($partners,true));
+			foreach ($partners as $partner){
+				log::add('devolo_cpl','warning',print_r($partner,true));
+				$partnerId = $partner->getId();
+				if ($partnerId == $eqLogic->getId()){
+					continue;
+				}
+				if ($createUp == 1){
+					$missingUp[$partnerId] = array(
+						'eqName' => $partner->getHumanName(),
+					);
+				}
+				if ($createDown == 1){
+					$missingDown[$partnerId] = array(
+						'eqName' => $partner->getHumanName(),
+					);
+				}
+			}
 			$cmdsUp = $eqLogic->getCmd('info','rate_upload',null,true);
 			$cmdsDown = $eqLogic->getCmd('info','rate_download',null,true);
-			if ($createUp == 0) {
-				if (count($cmdsUp)) {
-					foreach ($cmdsUp as $cmd) {
-						$result[$eqName] = [];
-						$upToRemove[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-						);
-					}
+			foreach (array_merge($cmdsUp, $cmdsDown) as $cmd) {
+				$targetId = $cmd->getConfiguration('target');
+				$target = eqLogic::byId($targetId);
+				$targetName = "{{introuvable}}";
+				if (is_object($target)) {
+					$targetName = $target->getHumanName();
 				}
-			} else {
-				foreach ($cmdsUp as $cmd) {
-					$targetId = $cmd->getConfiguration('target');
-					$target = $eqLogic::byId($targetId);
-					if (!is_object($target)) {
-						$result[$eqName] = [];
-						$noTarget[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-						);
-					} elseif ($target->getEqType_name() != 'devolo_cpl') {
-						$result[$eqName] = [];
-						$wrongType[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-							'targetName' => $target->getHumanName(),
-							'targetType' => $target->getEqType_name(),
-						);
-					} elseif ($target->getConfiguration('network') != $eqNetowrk) {
-						$result[$eqName] = [];
-						$wrongNetwork[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-							'targetName' => $target->getHumanName(),
-						);
-					}
+				
+				// UPTOPREMOVE
+				if ($createUp == 0 and $cmd->getLogicalId() == 'rate_upload') {
+					$result[$eqName] = [];
+					$upToRemove[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+						'targetId' => $targetId,
+						'targetName' => $targetName,
+					);
+				}
+				
+				// DOWNTOREMOVE
+				if ($createDown == 0 and $cmd->getLogicalId() == 'rate_download') {
+					$result[$eqName] = [];
+					$downToRemove[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+						'targetId' => $targetId,
+						'targetName' => $targetName,
+					);
+				}
+				
+				// NOTARGET
+				if (!is_object($target)) {
+					$result[$eqName] = [];
+					$noTarget[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+					);
+					continue;
+				}
+
+				// MISSINGUP
+				if ($cmd->getLogicalId() == 'rate_upload') {
+					unset($missingUp[$targetId]);
+				}
+				// MISSINGDOWN
+				if ($cmd->getLogicalId() == 'rate_download') {
+					unset($missingDown[$targetId]);
+				}
+
+				// WRONGTYPE
+				if ($target->getEqType_name() != 'devolo_cpl') {
+					$result[$eqName] = [];
+					$wrongType[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+						'targetId' => $targetId,
+						'targetName' => $target->getHumanName(),
+						'targetType' => $target->getEqType_name(),
+					);
+					continue;
+				}
+
+				// LOOP
+				if ($targetId == $eqLogic->getId()) {
+					$result[$eqName] = [];
+					$loop[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+						'targetId' => $targetId,
+						'targetName' => $target->getHumanName(),
+					);
+					$info['id'] = $eqLogic->getId();
+					continue;
+				}
+
+				// WRONGNETWORK
+				$targetNetwork = $target->getConfiguration('network');
+				if ($targetNetwork != $eqNetwork) {
+					$result[$eqName] = [];
+					$wrongNetwork[] = array(
+						'cmdId' => $cmd->getId(),
+						'cmdName' => $cmd->getHumanName(),
+						'targetId' => $targetId,
+						'targetName' => $target->getHumanName(),
+						'targetNetwork' => $targetNetwork,
+						'eqNetwork' => $eqNetwork,
+					);
+					$info['network'] = $eqLogic->getConfiguration('network');
+					continue;
 				}
 			}
-			if ($createDown == 0) {
-				if (count($cmdsDown)) {
-					foreach ($cmdsUp as $cmd) {
-						$result[$eqName] = [];
-						$downToRemove[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-						);
-					}
-				}
-			} else {
-				foreach ($cmdsDown as $cmd) {
-					$targetId = $cmd->getConfiguration('target');
-					$target = $eqLogic::byId($targetId);
-					if (!is_object($target)) {
-						$result[$eqName] = [];
-						$noTarget[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-						);
-					} elseif ($target->getEqType_name() != 'devolo_cpl') {
-						$result[$eqName] = [];
-						$wrongType[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-							'targetName' => $target->getHumanName(),
-							'targetType' => $target->getEqType_name(),
-						);
-					} elseif ($target->getConfiguration('network') != $eqNetowrk) {
-						$result[$eqName] = [];
-						$wrongNetwork[] = array(
-							'cmdId' => $cmd->getId(),
-							'cmdName' => $cmd->getName(),
-							'targetName' => $target->getHumanName(),
-						);
-					}
-				}
-			}
-			if (count($upToRemove))   { $result[$eqName]['upToRemove']   = $upToRemove; }
+
+			if (count($upToRemove))   { $result[$eqName]['upToRemove']   = $upToRemove;   }
 			if (count($downToRemove)) { $result[$eqName]['downToRemove'] = $downToRemove; }
-			if (count($noTarget))     { $result[$eqName]['noTarget']     = $noTarget; }
-			if (count($wrongType))    { $result[$eqName]['wrongType']    = $wrongType; }
+			if (count($missingUp))    { $result[$eqName]['missingUp']    = $missingUp;    }
+			if (count($missingDown))  { $result[$eqName]['missingDown']  = $missingDown;  }
+			if (count($noTarget))     { $result[$eqName]['noTarget']     = $noTarget;     }
+			if (count($wrongType))    { $result[$eqName]['wrongType']    = $wrongType;    }
+			if (count($loop))         { $result[$eqName]['loop']         = $loop;         }
 			if (count($wrongNetwork)) { $result[$eqName]['wrongNetwork'] = $wrongNetwork; }
+			if (count($info))         { $result[$eqName]['info']         = $info;         }
 		}
 		return $result;
 	}

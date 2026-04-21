@@ -1,14 +1,23 @@
 div.equipement {
-	color: var(--eqTitle-color);
+	color: var(--link-color);
 	font-size: 1.5em;
 	font-weight: 500;
+	margin-bottom: 10px;
+}
+
+div.equipement div {
+	font-size: 0.7em;
+	padding-left: 20px;
 }
 
 div.equipement:not(:first-child) {
 	border-top: 1px solid;
+	margin-top: 20px;
+	padding-top: 20px
 }
 
 div.errorTypeTitle {
+	color: var(--link-color);
 	font-size: 1.3em;
 }
 # vim: tabstop=4 autoindent

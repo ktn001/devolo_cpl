@@ -261,7 +261,11 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 
 		checkRateTarget: function(select) {
 			let network = document.getElementById('div_pageContainer').querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=network]').jeeValue()
-			let networkTarget = select.options[select.selectedIndex].dataset.network
+			let selectedIndex = select.selectedIndex
+			let networkTarget = null
+			if (selectedIndex >= 0) {
+				networkTarget = select.options[selectedIndex].dataset.network
+			}
 			let ok = true
 			if (network != networkTarget) {
 				select.addClass('danger')
@@ -338,10 +342,10 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 				if (_cmd.logicalId == 'rate_upload'){
 					label = '{{Flux vers}}:'
 				}
-				tr += '<div>'
-				tr += '<span><b>' + label + '</b></span>'
+				tr += '<div style="margin-top:8px;">'
+				tr += '<span>' + label + '</span>'
 				tr += '</div>'
-				tr += '<div>'
+				tr += '<div style="margin-top:8px;">'
 				tr += '<select class="cmdAttr form-control input-sm" data-l1key=configuration data-l2key=target>'
 				tr += '</select>'
 				tr += '</div>'
