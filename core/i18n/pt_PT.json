@@ -21,6 +21,8 @@
         "Configuration pour le modèle %s introuvable": "Configuração para o modelo %s não encontrada",
         "Création de '%s'": "Criação de \"%s",
         "Création des commandes manquantes pour l'équipement %s (%s)": "Criar comandos em falta para o equipamento %s (%s)",
+        "Equipement destination avec la mac adresse %s introuvable": "Equipamento de destino com o endereço MAC %s não encontrado",
+        "Equipement source avec la mac adresse %s introuvable": "Equipamento de origem com o endereço MAC %s não encontrado",
         "Erreur lors de l'exécution de syncDevolo.py": "Erro ao executar syncDevolo.py",
         "Erreur lors du lancement de syncDevolo.py": "Erro ao iniciar syncDevolo.py",
         "Il y a plusieurs équipements avec l'adresse mac %s :": "Existem vários dispositivos com o endereço mac %s :",
@@ -40,7 +42,8 @@
         "Module python %s : version installée trop ancienne!": "Módulo Python %s: versão instalada demasiado antiga!",
         "Module python %s introuvable!": "Módulo Python %s não encontrado!",
         "Tri des commandes pour l'équipement %s (%s)": "Comandos de ordenação para o equipamento %s (%s)",
-        "Veuillez vérifier la configuration": "Verificar a configuração"
+        "Veuillez vérifier la configuration": "Verificar a configuração",
+        "introuvable": "não encontrado"
     },
     "plugins\/devolo_cpl\/core\/class\/devolo_macinfo.class.php": {
         "Erreur lors de l'exécution de %s": "Erro na execução de %s",
@@ -119,20 +122,41 @@
     "plugins\/devolo_cpl\/core\/template\/mobile\/cmd.action.slider.j_h_m.html": {
         "j": "j"
     },
+    "plugins\/devolo_cpl\/desktop\/js\/checkRateCmds.js": {
+        "L'équipement cible de la commande suivante est l'équipement de la commande": "O equipamento de destino do comando seguinte é o equipamento do comando",
+        "L'équipement cible de la commandes suivante est dans un autre réseau devolo_cpl": "O equipamento de destino do comando seguinte encontra-se noutra rede devolo_cpl",
+        "L'équipement cible de la commandes suivante n'est pas un devolo_cpl": "O equipamento de destino do comando seguinte não é um devolo_cpl",
+        "L'équipement cible des commandes suivantes est dans un autre réseau devolo_cpl": "O equipamento alvo dos seguintes comandos encontra-se noutra rede devolo_cpl",
+        "L'équipement cible des commandes suivantes est l'équipement de la commande": "O equipamento de destino dos seguintes comandos é o equipamento do comando",
+        "L'équipement cible des commandes suivantes n'est pas un devolo_cpl": "O equipamento alvo dos seguintes comandos não é um devolo_cpl",
+        "La commande de débit descendant suivante devrait être supprimée": "A seguinte ordem de débito descendente deve ser eliminada",
+        "La commande de débit montant suivante devrait être supprimée": "A seguinte ordem de débito ascendente deve ser cancelada",
+        "La commande pour le débit descendant depuis l'équipement suivant est introuvable": "Não foi possível encontrar o comando para o fluxo descendente proveniente do equipamento seguinte",
+        "La commande pour le débit montant vers l'équipement suivant est introuvable": "Não foi possível encontrar o comando para o fluxo de dados de entrada para o equipamento seguinte",
+        "La commande suivante n\\'a pas d\\'équipement cible défini": "O comando seguinte não tem nenhum equipamento de destino definido",
+        "Les commandes de débit descendant suivantes devraient être supprimées": "Os seguintes comandos de fluxo descendente devem ser eliminados",
+        "Les commandes de débit montant suivantes devraient être supprimées": "As seguintes ordens de débito devem ser canceladas",
+        "Les commandes pour les débits descendants depuis les équipements suivants sont introuvables": "Não é possível encontrar os comandos para os fluxos descendentes provenientes dos seguintes equipamentos",
+        "Les commandes pour les débits montants vers les équipements suivants sont introuvables": "Não foi possível encontrar os comandos para os fluxos de entrada para os seguintes equipamentos",
+        "Les commandes suivantes n\\'ont pas d\\'équipement cible défini": "Os seguintes comandos não têm nenhum equipamento de destino definido",
+        "Toutes les commandes de débits sont OK": "Todos os comandos de fluxo estão OK",
+        "réseau cpl": "rede PLC",
+        "équipement cible": "equipamento alvo"
+    },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
         "Afficher": "Mostrar",
         "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Atenção está a deixar uma página com dados modificados que não foram guardados. Deseja continuar?",
-        "Aucune": "Nenhuma",
         "Choisir une icône": "Escolha um ícone",
-        "Commande info liée": "Comando de informação relacionado",
+        "Flux depuis": "Fluxo desde",
+        "Flux vers": "Fluxo para",
         "Historiser": "Histórico",
-        "Inverser": "Inverter",
         "Le changement de modèle implique la suppression des commandes suivantes:": "A mudança de modelo implica a supressão dos seguintes comandos:",
         "Max": "Máx.",
         "Min": "Mínimo",
         "Nom de la commande": "Nome do comando",
         "Réseaux": "Redes",
         "Supprimer la commande": "Apagar comando",
+        "Titre checkRates": "Título checkRates",
         "Unité": "Unidade"
     },
     "plugins\/devolo_cpl\/desktop\/js\/panel.js": {
@@ -212,6 +236,8 @@
         "Code du produit remonté par l'équipement lors de la synchronisation": "Código do produto recuperado pelo equipamento durante a sincronização",
         "Code produit": "Código do produto",
         "Commandes": "Comandos",
+        "Commandes de débit": "Controles de vazão",
+        "Community": "Comunidade",
         "Configuration": "Configuração",
         "Configuration avancée": "Configuração avançada",
         "Description": "Descrição",
@@ -233,6 +259,8 @@
         "Objet parent": "Objeto pai",
         "Offline": "Fora de linha",
         "Options": "Opções",
+        "Ouvrir une demande d'aide sur le forum communautaire": "Abrir um pedido de ajuda no fórum da comunidade",
+        "Paramètres": "Parâmetros",
         "Paramètres généraux": "Parâmetros gerais",
         "Paramètres spécifiques": "Parâmetros específicos",
         "Password": "Palavra-passe",
@@ -258,6 +286,11 @@
     },
     "plugins\/devolo_cpl\/desktop\/php\/panel_wifi.php": {
         "Ajouter un graphique": "Adicionar um gráfico"
+    },
+    "plugins\/devolo_cpl\/mobile\/modal\/cmd.action.slider.j_h_m.html": {
+        "heures": "horas",
+        "jours": "dias",
+        "minutes": "minutos"
     },
     "plugins\/devolo_cpl\/plugin_info\/configuration.php": {
         "Afficher 'nom_appareil' au lieu de '[objet][nom_appareil] dans les graphiques et tableaux'": "Mostrar 'nome_do_dispositivo' em vez de '[objeto][nome_do_dispositivo] em gráficos e tabelas'",
