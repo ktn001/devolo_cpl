@@ -1,4 +1,5 @@
 <?php
+// vim: tabstop=4 autoindent
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -30,6 +31,16 @@ function devolo_cpl_checkMac() {
 	}
 	if (! $ok) {
 		message::add("devolo_cpl",__("Veuillez renseigner l'adresse mac dans la configuration des équipements",__FILE__));
+	}
+}
+
+function devolo_cpl_goto_16() {
+	foreach (devolo_cpl::byType('devolo_cpl') as $eqLogic){
+		$default = "AaBbCcDdEeFfGgHhIiJj";
+		if ($eqLogic->getConfiguration('network',$default) == $default) {
+			$eqLogic->setConfiguration('network','');
+			$eqLogic->save();
+		}
 	}
 }
 
@@ -159,7 +170,7 @@ function devolo_cpl_upgrade() {
 	if (file_exists($packagesFile)) {
 		unlink($packagesFile);
 	}
-	$lastLevel = 15;
+	$lastLevel = 16;
 
 	$pluginLevel = config::byKey('pluginLevel','devolo_cpl',0);
 	log::add("devolo_cpl","info","pluginLevel: " . $pluginLevel . " => " . $lastLevel);
