@@ -1,14 +1,14 @@
 <div class="j_h_m-container row">
 	<div class="col-sm-4 j_h_m-field">
-		<div>Jours</div>
+		<div>{{Jours}}</div>
 		<input id="sliderInputDays" class='ispin' type="number" min="0" max="14" step="1" style="width:50%">
 	</div>
 	<div class="col-sm-4 j_h_m-field">
-		<div>Heures</div>
+		<div>{{Heures}}</div>
 		<input id="sliderInputHours" class='ispin' type="number" min="0" max="23" step="1">
 	</div>
 	<div class="col-sm-4 j_h_m-field">
-		<div>minutes</div>
+		<div>{{Minutes}}</div>
 		<input id="sliderInputMinutes" class='ispin' type="number" min="0" max="59" step="1">
 	</div>
 </div>
