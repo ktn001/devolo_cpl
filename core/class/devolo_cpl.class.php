@@ -514,6 +514,9 @@ class devolo_cpl extends eqLogic {
 			$missingDown = [];
 			log::add('devolo_cpl','warning',print_r($partners,true));
 			foreach ($partners as $partner){
+				if ((! $eqLogic->isManageable()) and (! $partner->isManageable())) { 
+					continue;
+				}
 				log::add('devolo_cpl','warning',print_r($partner,true));
 				$partnerId = $partner->getId();
 				if ($partnerId == $eqLogic->getId()){

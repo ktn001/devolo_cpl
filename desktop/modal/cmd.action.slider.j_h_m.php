@@ -12,7 +12,7 @@
 		<input id="sliderInputMinutes" class='ispin' type="number" min="0" max="59" step="1">
 	</div>
 </div>
-<div class="row btn-container">
+<div class="row btn-container center">
 	<a id="set-30m" class="btn btn-sm btn-primary settime" data-time="30">{{30 minutes}}</a>
 	<a id="set-1h" class="btn btn-sm btn-primary settime" data-time="60">{{1 heure}}</a>
 	<a id="set-2h" class="btn btn-sm btn-primary settime" data-time="120">{{2 heures}}</a>
