@@ -107,7 +107,6 @@
         "option -i manquante": "opção -i em falta"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "Durée d'activation du wifi Guest": "Duração da ativação do Wi-Fi para convidados",
         "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
@@ -200,6 +199,7 @@
         "30 minutes": "30 minutos",
         "6 heures": "6 horas",
         "7 jours": "7 dias",
+        "Durée d'activation du wifi Guest": "Duração da ativação do Wi-Fi para convidados",
         "Heures": "Horário",
         "Jours": "Dias",
         "Minutes": "Atas",
