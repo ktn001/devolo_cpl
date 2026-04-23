@@ -1,3 +1,5 @@
+<?php
+sendToJs('modalTimeWifiGuestTitel', "{{Durée d'activation du wifi Guest}}");
 <div class="j_h_m-container row">
 	<div class="col-sm-4 j_h_m-field">
 		<div>{{Jours}}</div>
