@@ -12,6 +12,8 @@ sendVarToJs('createDownloadCmd', config::byKey('cmd::download','devolo_cpl','0')
 
 $cmdsFile = __DIR__ . "/../../core/config/cmds.json";
 sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
+
+include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');
 ?>
 
 <div class="row row-overflow">
@@ -45,6 +47,7 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 				<i class="fas fa-exchange-alt fa-stack-2x"></i>
 				<i class="fa fa-check fa-stack-2x" style="color:green;"></i>
 			</span>
+			<br>
 			<span>{{Commandes de débit}}</span>
 		</div>
 	    <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
@@ -329,7 +332,6 @@ sendVarToJs('cmdsDef', json_decode(file_get_contents($cmdsFile),true));
 
 <?php include_file('desktop', 'devolo_cpl', 'js', 'devolo_cpl');?>
 <?php include_file('core', 'plugin.template', 'js');?>
-<?php include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');?>
 
 <!--
 vim: tabstop=4 autoindent

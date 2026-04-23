@@ -52,7 +52,7 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 			<div class="form-group col-md-6 col-sm-12">
 				<legend><i class="fas fa-database"></i> {{Base de données}}</legend>
 				<div class="row">
-					<label class="col-sm-5 control-label">{{Rétention}}
+					<label class="col-sm-4 control-label">{{Rétention}}
 						<sup><i class="fas fa-question-circle" title="{{Durée de rétention de l'historique des débits CPL}}"></i></sup>
 					</label>
 					<select class="configKey col-sm-4 form-control" data-l1key="data-retention">
@@ -79,18 +79,19 @@ $defaultPort = config::getDefaultConfiguration('devolo_cpl')['devolo_cpl']['daem
 			<div class="form-group col-md-6 col-sm-12">
 				<legend><i class="fas fa-file"></i> {{Logs}}</legend>
 				<div class="row">
-					<label class="col-sm-5 control-label">{{Discret}}
+					<label class="col-sm-4 control-label">{{Discret}}
 						<sup><i class="fas fa-question-circle" title="{{Cacher les passwords et autres données sensibles}}"></i></sup>
 					</label>
-					<div class="col-sm-3">
+					<div class="col-sm-8">
 						<input class="configKey form-control" type="checkbox" data-l1key="logDiscrets" checked></input>
+						<span class="warning">Les log du démon peuvent contenir des données sensibles</span>
 					</div>
 				</div>
 				<div class="row">
-					<label class="col-sm-5 control-label">{{Debug complet}}
+					<label class="col-sm-4 control-label">{{Debug complet}}
 						<sup><i class="fas fa-question-circle" title="{{Log debug des modules python (log warning sinon)}}"></i></sup>
 					</label>
-					<div class="col-sm-3">
+					<div class="col-sm-8">
 						<input class="configKey form-control" type="checkbox" data-l1key="fullDebug"></input>
 					</div>
 				</div>
