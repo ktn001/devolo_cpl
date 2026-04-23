@@ -200,6 +200,9 @@
         "30 minutes": "30 minutes",
         "6 heures": "6 hours",
         "7 jours": "7 days",
+        "Heures": "Hours",
+        "Jours": "Days",
+        "Minutes": "Minutes",
         "Zéro": "Zero"
     },
     "plugins\/devolo_cpl\/desktop\/modal\/macinfo.php": {
