@@ -1,5 +1,3 @@
-<?php
-sendToJs('modalTimeWifiGuestTitel', "{{Durée d'activation du wifi Guest}}");
 <div class="j_h_m-container row">
 	<div class="col-sm-4 j_h_m-field">
 		<div>{{Jours}}</div>
@@ -19,11 +17,11 @@ sendToJs('modalTimeWifiGuestTitel', "{{Durée d'activation du wifi Guest}}");
 	<a id="set-1h" class="btn btn-sm btn-primary settime" data-time="60">{{1 heure}}</a>
 	<a id="set-2h" class="btn btn-sm btn-primary settime" data-time="120">{{2 heures}}</a>
 	<a id="set-3h" class="btn btn-sm btn-primary settime" data-time="180">{{3 heures}}</a>
-	<a id="set-6h" class="btn btn-sm btn-primary settime" data-time="360"> {{6 heures}}</a>
-	<a id="set-12h" class="btn btn-sm btn-primary settime" data-time="720"> {{12 heures}}</a>
-	<a id="set-1j" class="btn btn-sm btn-primary settime" data-time="1440"> {{1 jour}}</a>
-	<a id="set-2j" class="btn btn-sm btn-primary settime" data-time="2880"> {{2 jours}}</a>
-	<a id="set-7j" class="btn btn-sm btn-primary settime" data-time="10080"> {{7 jours}}</a>
+	<a id="set-6h" class="btn btn-sm btn-primary settime" data-time="360">{{6 heures}}</a>
+	<a id="set-12h" class="btn btn-sm btn-primary settime" data-time="720">{{12 heures}}</a>
+	<a id="set-1j" class="btn btn-sm btn-primary settime" data-time="1440">{{1 jour}}</a>
+	<a id="set-2j" class="btn btn-sm btn-primary settime" data-time="2880">{{2 jours}}</a>
+	<a id="set-7j" class="btn btn-sm btn-primary settime" data-time="10080">{{7 jours}}</a>
 	<a id="set-0" class="btn btn-sm btn-primary settime" data-time="0"> {{Zéro}}</a>
 </div>
 <script>
@@ -51,6 +49,7 @@ sendToJs('modalTimeWifiGuestTitel', "{{Durée d'activation du wifi Guest}}");
 			},
 
 			getValue: function() {
+				console.log("getValue")
 				let value = 0
 				value += parseInt(document.getElementById('GuestTimeInput').querySelector('#sliderInputDays').value) * 24 * 60
 				value += parseInt(document.getElementById('GuestTimeInput').querySelector('#sliderInputHours').value) * 60

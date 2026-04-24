@@ -1,5 +1,5 @@
 <div
-	class="cmd cmd-widget reportModeHidden"
+	class="cmd cmd-widget"
 	data-type="action"
 	data-subtype="slider"
 	data-template="j_h_m"
@@ -19,44 +19,10 @@
 	<script>
 
 		document.querySelector('.cmd[data-cmd_uid=#uid#] .execute').addEventListener('click',function(event) {
-			cmd = document.querySelector('.cmd[data-cmd_uid=#uid#]')
-			inputModal_#uid#(cmd)
-		})
-
-
-		function setDisplayValue_#uid# (value){
-			let cmd = document.querySelector('.cmd[data-cmd_uid=#uid#]')
-			let txt = ""
-			let heures = Math.trunc(value / 60)
-			let minutes = value % 60
-			let jours = Math.trunc(heures / 24)
-			heures = heures % 24
-			if (jours == 0 && heures == 0) {
-				txt = minutes + " min."
-			} else {
-				txt = minutes
-				if (minutes < 10) {
-					txt = '0' + txt
-				}
-				txt = heures + ":" + txt
-				if (jours > 0) {
-					if (heures < 10) {
-						txt = '0' + txt
-					}
-					txt = jours + '{{j}} ' + txt
-				}
-			}
-			cmd.querySelector('a.btn').innerText = txt
-			cmd.querySelector('a.btn').dataset.value = value
-		}
-
-		setDisplayValue_#uid#("#state#")
-
-		function inputModal_#uid# () {
-			let cmd = document.querySelector('.cmd[data-cmd_uid=#uid#]')
+			let cmd = event.target.closest('.cmd[data-cmd_uid]')
 			jeeDialog.dialog({
 				id: "GuestTimeInput",
-				title: modalTimeWifiGuestTitel,
+				title: "#modalTimeWifiGuestTitel#",
 				width: "400px",
 				height: "320px",
 				contentUrl: "index.php?v=d&plugin=devolo_cpl&modal=cmd.action.slider.j_h_m",
@@ -70,6 +36,7 @@
 						callback: {
 							click: function() {
 								document.getElementById('GuestTimeInput')._jeeDialog.close()
+								document.getElementById('GuestTimeInput')._jeeDialog.destroy()
 							}
 						}
 					},
@@ -78,14 +45,36 @@
 							click: function() {
 								let value = devolo_cplActionJHM_modal.getValue()
 								document.getElementById('GuestTimeInput')._jeeDialog.close()
-								setDisplayValue_#uid#(value)
-								jeedom.cmd.execute({id: #id#, value: {slider: value}})
+								document.getElementById('GuestTimeInput')._jeeDialog.destroy()
+								console.log(cmd)
+								console.log(cmd.dataset.cmd_id)
+								jeedom.cmd.execute({id: cmd.dataset.cmd_id, value: {slider: value}})
 							}
 						}
 					}
 				},
 			})
-		}
+		})
+
+		jeedom.cmd.addUpdateFunction('#id#', function(_options) {
+			console.log(_options)
+			if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
+				let jours = Math.trunc(_options.display_value / (24*60))
+        let value = _options.display_value % (24*60)
+        let heures = Math.trunc(value / 60)
+        let minutes = value % 60
+				let txt = ''
+				if (jours > 0) {txt = jours + 'J '}
+				if (heures < 10) { txt += '0' }
+				txt += heures + ":"
+				if (minutes < 10) { txt += '0' }
+				txt += minutes
+				cmd.querySelector('a.execute').innerText = txt
+				cmd.querySelector('a.execute').dataset.value = _options.display_value
+			}
+		})
+
+		jeedom.cmd.refreshValue([{ cmd_id: '#id#', display_value: '#state#', XXXx: "XXXX" }])
 	</script>
 </div>
 <!--

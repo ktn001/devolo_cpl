@@ -997,6 +997,22 @@ class devolo_cplCmd extends cmd {
 		$this->getEqLogic()->PrepareToDaemon($params);
 	}
 
+	public function getWidgetTemplateCode($_version = 'dashboard', $_clean = true, $_widgetName = '') {
+		$v = jeedom::versionAlias($_version);
+		if ($this->getTemplate($v) == 'devolo_cpl::j_h_m') {
+			if ($this->getType() == 'action' and $this->getSubType()) {
+				$template = getTemplate('core', $v, 'cmd.action.slider.j_h_m', 'devolo_cpl');
+				$replace = array (
+					'#modalTimeWifiGuestTitel#' => __("Durée d'activation du Wifi guest",__FILE__),
+					'#uid#' => '#uid#',
+				);
+				$template = template_replace($replace, $template);
+				return array('template' => $template, 'isCoreWidget' => false);
+			}
+		}
+		return parent::getWidgetTemplateCode($_version, $_clean, $_widgetName);
+	}
+
 	// Exécution d'une commande
 	public function execute($_options = array()) {
 		switch ($this->getLogicalId()) {
