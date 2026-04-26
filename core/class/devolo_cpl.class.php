@@ -1003,8 +1003,9 @@ class devolo_cplCmd extends cmd {
 			if ($this->getType() == 'action' and $this->getSubType()) {
 				$template = getTemplate('core', $v, 'cmd.action.slider.j_h_m', 'devolo_cpl');
 				$replace = array (
-					'#modalTimeWifiGuestTitel#' => __("Durée d'activation du Wifi guest",__FILE__),
 					'#uid#' => '#uid#',
+					'#modalTimeWifiGuestTitel#' => __("Durée d'activation du Wifi guest",__FILE__),
+					'#Jours#' => __("Jours",__FILE__),
 				);
 				$template = template_replace($replace, $template);
 				return array('template' => $template, 'isCoreWidget' => false);

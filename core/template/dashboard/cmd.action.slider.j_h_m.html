@@ -64,7 +64,7 @@
         let heures = Math.trunc(value / 60)
         let minutes = value % 60
 				let txt = ''
-				if (jours > 0) {txt = jours + 'J '}
+				if (jours > 0) {txt = jours + '#Jours#'.substring(0,1) + ' '}
 				if (heures < 10) { txt += '0' }
 				txt += heures + ":"
 				if (minutes < 10) { txt += '0' }
