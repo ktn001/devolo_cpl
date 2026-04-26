@@ -21,6 +21,7 @@
         "Configuration pour le modèle %s introuvable": "Configuration for %s model not found",
         "Création de '%s'": "Create '%s",
         "Création des commandes manquantes pour l'équipement %s (%s)": "Create missing commands for %s equipment (%s)",
+        "Durée d'activation du Wifi guest": "Duration of guest Wi-Fi activation",
         "Equipement destination avec la mac adresse %s introuvable": "Destination device with MAC address %s not found",
         "Equipement source avec la mac adresse %s introuvable": "Source device with MAC address %s not found",
         "Erreur lors de l'exécution de syncDevolo.py": "Error executing syncDevolo.py",
@@ -28,6 +29,7 @@
         "Il y a plusieurs équipements avec l'adresse mac %s :": "There are several devices with the mac address %s :",
         "Impossible de lancer le démon, vérifiez le log": "Unable to start daemon, check log",
         "Information reçues incorrectes": "Incorrect information received",
+        "Jours": "Days",
         "L'adresse mac de l'équipement %s été changé:": "The mac address of the %s device has been changed:",
         "L'ip de l'équipement %s été changé:": "The ip of the %s equipment has been changed:",
         "La commande '%s' est introuvable": "Command '%s' not found",
@@ -105,9 +107,6 @@
         "Le logicalId de la commande %s n'est pas guest": "The logicalId of the %s command is not guest",
         "getstate pour %s": "getstate for %s",
         "option -i manquante": "option -i missing"
-    },
-    "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
         "Couleur de fond": "Background color",
@@ -199,7 +198,6 @@
         "30 minutes": "30 minutes",
         "6 heures": "6 hours",
         "7 jours": "7 days",
-        "Durée d'activation du wifi Guest": "Guest Wi-Fi activation duration",
         "Heures": "Hours",
         "Jours": "Days",
         "Minutes": "Minutes",

@@ -21,6 +21,7 @@
         "Configuration pour le modèle %s introuvable": "Configurazione per il modello %s non trovata",
         "Création de '%s'": "Creazione di '%s",
         "Création des commandes manquantes pour l'équipement %s (%s)": "Creare comandi mancanti per l'apparecchiatura %s (%s)",
+        "Durée d'activation du Wifi guest": "Durata di attivazione del Wi-Fi per gli ospiti",
         "Equipement destination avec la mac adresse %s introuvable": "Impianto di destinazione con indirizzo MAC %s non trovato",
         "Equipement source avec la mac adresse %s introuvable": "Dispositivo sorgente con indirizzo MAC %s non trovato",
         "Erreur lors de l'exécution de syncDevolo.py": "Errore nell'esecuzione di syncDevolo.py",
@@ -28,6 +29,7 @@
         "Il y a plusieurs équipements avec l'adresse mac %s :": "Ci sono diversi dispositivi con il mac address %s :",
         "Impossible de lancer le démon, vérifiez le log": "Impossibile avviare il demone, controllare il registro",
         "Information reçues incorrectes": "Informazioni errate ricevute",
+        "Jours": "Giorni",
         "L'adresse mac de l'équipement %s été changé:": "L'indirizzo mac del dispositivo %s è stato modificato:",
         "L'ip de l'équipement %s été changé:": "L'ip dell'apparecchiatura %s è stato modificato:",
         "La commande '%s' est introuvable": "Il comando '%s' non può essere trovato",
@@ -105,9 +107,6 @@
         "Le logicalId de la commande %s n'est pas guest": "Il logicalId del comando %s non è ospite",
         "getstate pour %s": "getstate per %s",
         "option -i manquante": "opzione -i mancante"
-    },
-    "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
         "Couleur de fond": "Colore sfondo",
@@ -199,7 +198,6 @@
         "30 minutes": "30 minuti",
         "6 heures": "6 ore",
         "7 jours": "7 giorni",
-        "Durée d'activation du wifi Guest": "Durata di attivazione del Wi-Fi per gli ospiti",
         "Heures": "Orari",
         "Jours": "Giorni",
         "Minutes": "Verbale",
