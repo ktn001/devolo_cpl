@@ -1000,12 +1000,31 @@ class devolo_cplCmd extends cmd {
 	public function getWidgetTemplateCode($_version = 'dashboard', $_clean = true, $_widgetName = '') {
 		$v = jeedom::versionAlias($_version);
 		if ($this->getTemplate($v) == 'devolo_cpl::j_h_m') {
-			if ($this->getType() == 'action' and $this->getSubType()) {
+			if ($this->getType() == 'action' and $this->getSubType() == 'slider') {
 				$template = getTemplate('core', $v, 'cmd.action.slider.j_h_m', 'devolo_cpl');
 				$replace = array (
 					'#uid#' => '#uid#',
 					'#modalTimeWifiGuestTitel#' => __("Durée d'activation du Wifi guest",__FILE__),
-					'#Jours#' => __("Jours",__FILE__),
+					'#jour#' => __("jour",__FILE__),
+					'#jours#' => __("jours",__FILE__),
+					'#heure#' => __("heure",__FILE__),
+					'#heures#' => __("heures",__FILE__),
+					'#minute#' => __("minute",__FILE__),
+					'#minutes#' => __("minutes",__FILE__),
+				);
+				$template = template_replace($replace, $template);
+				return array('template' => $template, 'isCoreWidget' => false);
+			}
+			if ($this->getType() == 'info' and $this->getSubType() == 'numeric') {
+				$template = getTemplate('core', $v, 'cmd.info.numeric.j_h_m', 'devolo_cpl');
+				$replace = array (
+					'#uid#' => '#uid#',
+					'#jour#' => __("jour",__FILE__),
+					'#jours#' => __("jours",__FILE__),
+					'#heure#' => __("heure",__FILE__),
+					'#heures#' => __("heures",__FILE__),
+					'#minute#' => __("minute",__FILE__),
+					'#minutes#' => __("minutes",__FILE__),
 				);
 				$template = template_replace($replace, $template);
 				return array('template' => $template, 'isCoreWidget' => false);

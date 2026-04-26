@@ -46,8 +46,6 @@
 								let value = devolo_cplActionJHM_modal.getValue()
 								document.getElementById('GuestTimeInput')._jeeDialog.close()
 								document.getElementById('GuestTimeInput')._jeeDialog.destroy()
-								console.log(cmd)
-								console.log(cmd.dataset.cmd_id)
 								jeedom.cmd.execute({id: cmd.dataset.cmd_id, value: {slider: value}})
 							}
 						}
@@ -57,24 +55,69 @@
 		})
 
 		jeedom.cmd.addUpdateFunction('#id#', function(_options) {
-			console.log(_options)
 			if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
-				let jours = Math.trunc(_options.display_value / (24*60))
-        let value = _options.display_value % (24*60)
-        let heures = Math.trunc(value / 60)
-        let minutes = value % 60
 				let txt = ''
-				if (jours > 0) {txt = jours + '#Jours#'.substring(0,1) + ' '}
-				if (heures < 10) { txt += '0' }
-				txt += heures + ":"
-				if (minutes < 10) { txt += '0' }
-				txt += minutes
+
+				if (_options.value < 60) {
+					if (_options.display_value > 1) {
+						txt = _options.display_value + ' #minutes#'
+					} else {
+						txt = _options.display_value + ' #minute#'
+					}
+				} else {
+					let jours = Math.trunc(_options.display_value / (24*60))
+					let value = _options.display_value % (24*60)
+					let heures = Math.trunc(value / 60)
+					let minutes = value % 60
+
+					if (jours > 0) {
+						if ((heures == 0) || (minutes == 0)){
+							if (jours > 1) {
+								txt = jours + ' #jours#'
+							} else {
+								txt = jours + ' #jour#'
+							}
+						} else {
+							txt = jours + '#jour#'.substring(0,1) + '. '
+						}
+					}
+					if (minutes == 0) {
+						if (heures > 1) {
+							txt += heures + ' #heures#'
+						} else if (heures == 1) {
+							txt += heures + ' #heure#'
+						}
+					} else {
+						if (heures > 0) {
+							if (heures < 10) {
+								txt += '0'
+							}
+							txt += heures + ':'
+							if (minutes < 10)  {
+								txt += '0'
+							}
+							txt += minutes
+						} else {
+							if (jours > 0) {
+								txt += minutes + ' #minutes#'.substring(0,4) + '.'
+							} else {
+								if (minutes > 1) {
+									txt += minutes + ' #minutes#'
+								} else {
+									txt += minutes + ' #minute#'
+								}
+							}
+						}
+					}
+
+				}
+
 				cmd.querySelector('a.execute').innerText = txt
 				cmd.querySelector('a.execute').dataset.value = _options.display_value
 			}
 		})
 
-		jeedom.cmd.refreshValue([{ cmd_id: '#id#', display_value: '#state#', XXXx: "XXXX" }])
+		jeedom.cmd.refreshValue([{ cmd_id: '#id#', display_value: '#state#'}])
 	</script>
 </div>
 <!--

@@ -10,37 +10,6 @@
 	
 		document.querySelector('.cmd[data-cmd_uid=#uid#] .execute').addEventListener('click', function(even) {
 			cmd = document.querySelector('.cmd[data-cmd_uid=#uid#]')
-	    inputModal_#uid#(cmd)
-		})
-	
-		function setDisplayValue_#uid#(value) {
-			let cmd = document.querySelector('.cmd[data-cmd_uid=#uid#]')
-			let txt = ""
-			let heures = Math.trunc(value / 60)
-			let minutes = value % 60
-			let jours = Math.trunc(heures / 24)
-			heures = heures % 24
-			if (jours == 0 && heures == 0) {
-				txt = minutes + " min."
-			} else {
-				txt = minutes
-				if (minutes < 10) {
-					txt = '0' + txt
-				}
-				txt = heures + ":" + txt
-				if (jours > 0) {
-					if (heures < 10) {
-						txt = '0' + txt
-					}
-					txt = jours + '{{j}} ' + txt
-				}
-			}
-			cmd.querySelector('a.execute').innerText = txt
-			cmd.querySelector('a.execute').dataset.value = value
-		}
-		setDisplayValue_#uid#(#state#)
-	
-		function inputModal_#uid#() {
 			jeedomUtils.loadModal("index.php?v=m&plugin=devolo_cpl&modal=cmd.action.slider.j_h_m",function() {
 				setTimeout(function() {
 					let popup = document.getElementById('div_popup-popup')
@@ -55,7 +24,74 @@
 				})
 				devolo_cplActionJHM_modal.setValue(value)
 			})
-	  }
+		})
+
+		jeedom.cmd.addUpdateFunction('#id#', function(_options) {
+			if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
+				let txt = ''
+
+				if (_options.value < 60) {
+					if (_options.display_value > 1) {
+						txt = _options.display_value + ' #minutes#'
+					} else {
+						txt = _options.display_value + ' #minute#'
+					}
+				} else {
+					let jours = Math.trunc(_options.display_value / (24*60))
+					let value = _options.display_value % (24*60)
+					let heures = Math.trunc(value / 60)
+					let minutes = value % 60
+
+					if (jours > 0) {
+						if ((heures == 0) || (minutes == 0)){
+							if (jours > 1) {
+								txt = jours + ' #jours#'
+							} else {
+								txt = jours + ' #jour#'
+							}
+						} else {
+							txt = jours + '#jour#'.substring(0,1) + '. '
+						}
+					}
+					if (minutes == 0) {
+						if (heures > 1) {
+							txt += heures + ' #heures#'
+						} else if (heures == 1) {
+							txt += heures + ' #heure#'
+						}
+					} else {
+						if (heures > 0) {
+							if (heures < 10) {
+								txt += '0'
+							}
+							txt += heures + ':'
+							if (minutes < 10)  {
+								txt += '0'
+							}
+							txt += minutes
+						} else {
+							if (jours > 0) {
+								txt += minutes + ' #minutes#'.substring(0,4) + '.'
+							} else {
+								if (minutes > 1) {
+									txt += minutes + ' #minutes#'
+								} else {
+									txt += minutes + ' #minute#'
+								}
+							}
+						}
+					}
+
+				}
+
+				cmd.querySelector('a.execute').innerText = txt
+				cmd.querySelector('a.execute').dataset.value = _options.display_value
+			}
+		})
+
+		jeedom.cmd.refreshValue([{ cmd_id: '#id#', display_value: '#state#'}])
+
+	
 	</script>
 </div>
 <!--
