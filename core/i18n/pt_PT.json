@@ -21,6 +21,7 @@
         "Configuration pour le modèle %s introuvable": "Configuração para o modelo %s não encontrada",
         "Création de '%s'": "Criação de \"%s",
         "Création des commandes manquantes pour l'équipement %s (%s)": "Criar comandos em falta para o equipamento %s (%s)",
+        "Durée d'activation du Wifi guest": "Duração da ativação do Wi-Fi para convidados",
         "Equipement destination avec la mac adresse %s introuvable": "Equipamento de destino com o endereço MAC %s não encontrado",
         "Equipement source avec la mac adresse %s introuvable": "Equipamento de origem com o endereço MAC %s não encontrado",
         "Erreur lors de l'exécution de syncDevolo.py": "Erro ao executar syncDevolo.py",
@@ -28,6 +29,7 @@
         "Il y a plusieurs équipements avec l'adresse mac %s :": "Existem vários dispositivos com o endereço mac %s :",
         "Impossible de lancer le démon, vérifiez le log": "Não é possível iniciar o daemon, verificar o registo",
         "Information reçues incorrectes": "Informações incorrectas recebidas",
+        "Jours": "Dias",
         "L'adresse mac de l'équipement %s été changé:": "O endereço MAC do dispositivo %s foi alterado:",
         "L'ip de l'équipement %s été changé:": "O ip do equipamento %s foi alterado:",
         "La commande '%s' est introuvable": "O comando \"%s\" não pode ser encontrado",
@@ -105,9 +107,6 @@
         "Le logicalId de la commande %s n'est pas guest": "O ID lógico do comando %s não é um convidado",
         "getstate pour %s": "getstate para %s",
         "option -i manquante": "opção -i em falta"
-    },
-    "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
         "Couleur de fond": "Cor de fundo",
@@ -199,7 +198,6 @@
         "30 minutes": "30 minutos",
         "6 heures": "6 horas",
         "7 jours": "7 dias",
-        "Durée d'activation du wifi Guest": "Duração da ativação do Wi-Fi para convidados",
         "Heures": "Horário",
         "Jours": "Dias",
         "Minutes": "Atas",

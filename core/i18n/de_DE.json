@@ -21,6 +21,7 @@
         "Configuration pour le modèle %s introuvable": "Konfiguration für die Vorlage %s nicht gefunden",
         "Création de '%s'": "Erstellen von '%s",
         "Création des commandes manquantes pour l'équipement %s (%s)": "Erstellung der fehlenden Befehle für das Gerät %s (%s)",
+        "Durée d'activation du Wifi guest": "Dauer der Aktivierung des Gast-WLANs",
         "Equipement destination avec la mac adresse %s introuvable": "Zielgerät mit der MAC-Adresse %s nicht gefunden",
         "Equipement source avec la mac adresse %s introuvable": "Quellgerät mit der MAC-Adresse %s nicht gefunden",
         "Erreur lors de l'exécution de syncDevolo.py": "Fehler beim Ausführen von syncDevolo.py",
@@ -28,6 +29,7 @@
         "Il y a plusieurs équipements avec l'adresse mac %s :": "Es gibt mehrere Geräte mit der Mac-Adresse %s :",
         "Impossible de lancer le démon, vérifiez le log": "Der Dämon kann nicht gestartet werden, überprüfen Sie das Log",
         "Information reçues incorrectes": "Unkorrekte empfangene Informationen",
+        "Jours": "Tage",
         "L'adresse mac de l'équipement %s été changé:": "Die Mac-Adresse des Geräts %s wurde geändert:",
         "L'ip de l'équipement %s été changé:": "Die IP des Geräts %s wurde geändert:",
         "La commande '%s' est introuvable": "Der Befehl '%s' wurde nicht gefunden",
@@ -105,9 +107,6 @@
         "Le logicalId de la commande %s n'est pas guest": "Die logicalId des Befehls %s ist nicht guest",
         "getstate pour %s": "getstate für %s",
         "option -i manquante": "option -i fehlt"
-    },
-    "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.action.slider.j_h_m.html": {
-        "j": "j"
     },
     "plugins\/devolo_cpl\/core\/template\/dashboard\/cmd.info.numeric.j_h_m.html": {
         "Couleur de fond": "Hintergrundfarbe",
@@ -199,7 +198,6 @@
         "30 minutes": "30 Minuten",
         "6 heures": "6 Stunden",
         "7 jours": "7 Tage",
-        "Durée d'activation du wifi Guest": "Dauer der Aktivierung des Gast-WLANs",
         "Heures": "Öffnungszeiten",
         "Jours": "Tage",
         "Minutes": "Protokoll",
