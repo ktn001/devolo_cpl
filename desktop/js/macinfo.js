@@ -38,7 +38,7 @@ if (typeof devolo_cplFrontEnd.mod_macAdresses === 'undefined') {
 				}
 				return
 			}
-			macInfos = document.getElementById("table_macinfo").querySelectorAll(".macinfo").getJeeValues(".macinfoAttr")
+			let macInfos = document.getElementById("table_macinfo").querySelectorAll(".macinfo").getJeeValues(".macinfoAttr")
 			domUtils.ajax({
 				url: devolo_cplFrontEnd.mod_macAdresses.ajaxUrl,
 				data: {
