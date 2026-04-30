@@ -1082,6 +1082,16 @@ class devolo_cplCmd extends cmd {
 		}
 	}
 
+	public function formatValueWidget ($value) {
+		if ($this->getLogicalId() == 'next_firmware') {
+			if ($value == '') {
+				return __("aucun",__FILE__);
+			}
+		}
+		return $value;
+	}
+
+
 	/*     * **********************Getteur Setteur*************************** */
 
 }
