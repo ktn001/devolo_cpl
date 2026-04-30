@@ -44,6 +44,7 @@
         "Module python %s introuvable!": "Módulo Python %s não encontrado!",
         "Tri des commandes pour l'équipement %s (%s)": "Classificação de comandos para o equipamento %s (%s)",
         "Veuillez vérifier la configuration": "Por favor, verifique a configuração",
+        "aucun": "nenhum",
         "heure": "hora",
         "heures": "horas",
         "introuvable": "não encontrado",

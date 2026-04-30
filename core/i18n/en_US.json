@@ -44,6 +44,7 @@
         "Module python %s introuvable!": "Python module %s not found!",
         "Tri des commandes pour l'équipement %s (%s)": "Sorting commands for the %s device (%s)",
         "Veuillez vérifier la configuration": "Please check the configuration",
+        "aucun": "none",
         "heure": "hour",
         "heures": "hours",
         "introuvable": "not found",

@@ -44,6 +44,7 @@
         "Module python %s introuvable!": "Python-Modul %s nicht gefunden!",
         "Tri des commandes pour l'équipement %s (%s)": "Sortieren der Befehle für das Gerät %s (%s)",
         "Veuillez vérifier la configuration": "Bitte überprüfen Sie die Konfiguration",
+        "aucun": "keine",
         "heure": "Stunde",
         "heures": "Stunden",
         "introuvable": "nicht gefunden",
