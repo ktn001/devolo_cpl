@@ -257,7 +257,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			}
 			cmd.configuration = {}
 			cmd.configuration.target = -1
-			cmd.unite = '{{Mbit/s}}'
+			cmd.unite = '{{Mb/s}}'
 			cmd.configuration.minValue = 0
 			cmd.configuration.maxValue = 1000
 			devolo_cplFrontEnd.addCmdToTable(cmd)
