@@ -122,7 +122,6 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			jeeDialog.dialog({
 				id: devolo_cplFrontEnd.mId_showNetwork,
 				title: "{{Réseaux}}",
-				backdrop: false,
 				contentUrl: "index.php?v=d&plugin=devolo_cpl&modal=network",
 			})
 		},
@@ -256,6 +255,11 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			} else if (direction == 'down') {
 				cmd.logicalId = 'rate_download'
 			}
+			cmd.configuration = {}
+			cmd.configuration.target = -1
+			cmd.unite = '{{Mbit/s}}'
+			cmd.configuration.minValue = 0
+			cmd.configuration.maxValue = 1000
 			devolo_cplFrontEnd.addCmdToTable(cmd)
 		},
 
@@ -266,14 +270,26 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 			if (selectedIndex >= 0) {
 				networkTarget = select.options[selectedIndex].dataset.network
 			}
-			let ok = true
 			if (network != networkTarget) {
-				select.addClass('danger')
-				ok = false
-			} else {
-				select.removeClass('danger')
+				select.addClass('warning')
+				return false
 			}
-			return ok
+			let counter = 0
+			let logicalId = select.closest('tr').querySelector('[data-l1key=logicalId]').jeeValue()
+			let targetId = select.closest('tr').querySelector('[data-l1key=configuration][data-l2key=target]').jeeValue()
+			document.getElementById('table_cmd').querySelectorAll('[data-l1key=configuration][data-l2key=target]').forEach(function(elem) {
+				if (elem.jeeValue() == targetId) {
+					if (elem.closest('tr').querySelector('[data-l1key=logicalId]').jeeValue() == logicalId) {
+						counter++
+					}
+				}
+			})
+			if (counter > 1 ) {
+				select.addClass('warning')
+				return false
+			}
+			select.removeClass('warning')
+			return true
 		},
 
 		checkAllRateTarget: function() {
@@ -402,6 +418,21 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 							return
 						}
 						let result = data.result
+
+						let usedTarget = []
+						if (_cmd.configuration.target == -1) {
+							document.getElementById('table_cmd').querySelectorAll('[data-l1key=configuration][data-l2key=target]').forEach(function(elem){
+								if (elem.jeeValue() == '') {
+									return
+								}
+								let logicalId = elem.closest('tr').querySelector('[data-l1key=logicalId]').jeeValue()
+								if (logicalId != _cmd.logicalId) {
+									return
+								}
+								usedTarget.push (elem.jeeValue())
+							})
+						}
+
 						let options = ""
 						let eqLogic_id = document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue()
 						for (let i in result) {
@@ -409,6 +440,9 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 								continue
 							}
 							options += '<option value="' + result[i].id + '" data-network="' + result[i].network + '">' + result[i].name + '</option>'
+							if ((_cmd.configuration.target == -1) && (! usedTarget.includes(result[i].id))) {
+								_cmd.configuration.target = result[i].id
+							}
 						}
 						newRow.querySelector('select[data-l1key=configuration][data-l2key=target]').innerHTML = options
 						newRow.setJeeValues(_cmd, '.cmdAttr')

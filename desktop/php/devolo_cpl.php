@@ -167,7 +167,7 @@ include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');
 				<label class="col-sm-4 control-label">{{N° de série}}
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Numéro se série de l'équipement}}"></i></sup>
 				</label>
-				<div class="col-sm-6 input-group">
+				<div class="col-sm-6">
 				    <input type="text" class="eqLogicAttr form-control" data-l1key="logicalId" />
 				</div>
 			    </div>
@@ -175,34 +175,34 @@ include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');
 				<label class="col-sm-4 control-label">{{Adresse mac}}
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Adresse mac de l'équipement}}"></i></sup>
 				</label>
-				<div class="col-sm-6 input-group">
+				<div class="col-sm-6">
 				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mac"/>
 				</div>
 			    </div>
 			    <div class="form-group manageable-only">
-				<label class="col-sm-4 control-label">{{Adresse IP}}
-				    <sup><i class="fas fa-question-circle tooltips" title="{{Adresse IP de l'équipement}}"></i></sup>
-				</label>
-				<div class="col-sm-6 input-group">
-				    <input type="text" class="eqLogicAttr form-control" data-l1key='configuration' data-l2key="ip" />
-				</div>
+					<label class="col-sm-4 control-label">{{Adresse IP}}
+				    	<sup><i class="fas fa-question-circle tooltips" title="{{Adresse IP de l'équipement}}"></i></sup>
+					</label>
+					<div class="col-sm-6">
+					    <input type="text" class="eqLogicAttr form-control" data-l1key='configuration' data-l2key="ip" />
+					</div>
 			    </div>
 			    <div class="form-group manageable-only">
-				<label class="col-sm-4 control-label">{{Password}}
-				    <sup><i class="fas fa-question-circle tooltips" title="{{Même password que pour l'accès à l'interface web de l'équipement}}"></i></sup>
-				</label>
-				<div class="col-sm-6 input-group">
-				    <input type="text" class="inputPassword eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" />
-				    <span class="input-group-btn">
-					<a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
-				    </span>
-				</div>
+					<label class="col-sm-4 control-label">{{Password}}
+				    	<sup><i class="fas fa-question-circle tooltips" title="{{Même password que pour l'accès à l'interface web de l'équipement}}"></i></sup>
+					</label>
+					<div class="col-sm-6 input-group">
+					    <input type="text" class="inputPassword eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" />
+					    <span class="input-group-btn">
+						<a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+				    	</span>
+					</div>
 			    </div>
 			    <div class="form-group">
 				<label class="col-sm-4 control-label">{{Réseau}}
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Réseau CPL}}"></i></sup>
 				</label>
-				<div class="col-sm-6 input-group">
+				<div class="col-sm-6">
 				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="network"/>
 				</div>
 			    </div>
@@ -210,7 +210,7 @@ include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');
 				<label class="col-sm-4 control-label">{{Code produit}}
 				    <sup><i class="fas fa-question-circle tooltips" title="{{Code du produit remonté par l'équipement lors de la synchronisation}}"></i></sup>
 				</label>
-				<div class="col-sm-6 input-group">
+				<div class="col-sm-6">
 				    <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="sync_model" disabled />
 				</div>
 			    </div>

@@ -969,23 +969,6 @@ class devolo_cpl extends eqLogic {
 }
 
 class devolo_cplCmd extends cmd {
-	/*     * *************************Attributs****************************** */
-
-	/*
-	public static $_widgetPossibility = array();
-	*/
-
-	/*     * ***********************Methode static*************************** */
-
-
-	/*     * *********************Methode d'instance************************* */
-
-	/*
-	* Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-	public function dontRemoveCmd() {
-		return true;
-	}
-	*/
 
 	private function sendActionToDaemon ($action, $param = Null, $refresh=true) {
 		$params = [
@@ -995,6 +978,12 @@ class devolo_cplCmd extends cmd {
 			'refresh' => $refresh
 		];
 		$this->getEqLogic()->PrepareToDaemon($params);
+	}
+
+	public function preInsert() {
+		if (in_array($this->getLogicalId(),['rate_upload', 'rate_download'])) {
+			$this->setConfiguration('historizeRound', 0);
+		}
 	}
 
 	public function getWidgetTemplateCode($_version = 'dashboard', $_clean = true, $_widgetName = '') {
