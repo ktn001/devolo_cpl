@@ -129,8 +129,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 		macAdresses: function() {
 			jeeDialog.dialog({
 				id: devolo_cplFrontEnd.mId_macAdresses,
-				setTitle: false,
-				backdrop: false,
+				title: "{{Adresses mac}}",
 				contentUrl: "index.php?v=d&plugin=devolo_cpl&modal=macinfo",
 				callback: function() {
 					devolo_cplFrontEnd.mod_macAdresses.setChanged('0')
