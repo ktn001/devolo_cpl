@@ -45,7 +45,7 @@ include_file('desktop', 'devolo_cpl', 'css', 'devolo_cpl');
 		<div id="bt_checkRateCmds", class="cursor eqLogicAction logoSecondary">
 			<span class="fa-stack fa-lg">
 				<i class="fas fa-exchange-alt fa-stack-2x"></i>
-				<i class="fa fa-check fa-stack-2x" style="color:green;"></i>
+				<i class="fa fa-check fa-stack-2x" style="color:var(--logo-primary-color);font-size:3em;opacity:75%;"></i>
 			</span>
 			<br>
 			<span>{{Commandes de débit}}</span>

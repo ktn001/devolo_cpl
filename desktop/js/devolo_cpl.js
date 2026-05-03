@@ -166,7 +166,7 @@ if (typeof devolo_cplFrontEnd === "undefined") {
 		checkRateCmds: function() {
 			jeeDialog.dialog({
 				id: devolo_cplFrontEnd.mId_checkRateCmds,
-				title: '{{Titre checkRates}}',
+				title: '{{Vérification des commandes de débit}}',
 				contentUrl: 'index.php?v=d&plugin=devolo_cpl&modal=checkRateCmds',
 				buttons: {
 					confirm: {
