@@ -145,6 +145,7 @@
         "équipement cible": "target equipment"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
+        "Adresses mac": "MAC addresses",
         "Afficher": "Show",
         "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "You have modified settings that haven\\'t been saved. Are you sure you want to continue?",
         "Choisir une icône": "Choose an icon",

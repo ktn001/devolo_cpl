@@ -145,6 +145,7 @@
         "équipement cible": "Zielausrüstung"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
+        "Adresses mac": "MAC-Adressen",
         "Afficher": "Anzeige",
         "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Vorsicht! Sie verlassen einer Seite mit modifizierten und nicht gespeicherten Daten. Wollen Sie weitermachen?",
         "Choisir une icône": "Wählen Sie ein Symbol",

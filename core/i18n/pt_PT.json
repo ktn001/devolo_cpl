@@ -145,6 +145,7 @@
         "équipement cible": "equipamento alvo"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
+        "Adresses mac": "Endereços MAC",
         "Afficher": "Mostrar",
         "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Atenção está a deixar uma página com dados modificados que não foram guardados. Deseja continuar?",
         "Choisir une icône": "Escolha um ícone",
