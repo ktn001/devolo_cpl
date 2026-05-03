@@ -145,6 +145,7 @@
         "équipement cible": "equipos de destino"
     },
     "plugins\/devolo_cpl\/desktop\/js\/devolo_cpl.js": {
+        "Adresses mac": "Direcciones MAC",
         "Afficher": "Mostrar",
         "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Advertencia: Usted está dejando una página con datos modificados sin guardar. ¿Quiere continuar?",
         "Choisir une icône": "Elija el icono",
