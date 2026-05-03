@@ -158,8 +158,8 @@
         "Nom de la commande": "Nome do comando",
         "Réseaux": "Redes",
         "Supprimer la commande": "Eliminar o pedido",
-        "Titre checkRates": "Título checkRates",
-        "Unité": "Unidade"
+        "Unité": "Unidade",
+        "Vérification des commandes de débit": "Verificação dos comandos de fluxo"
     },
     "plugins\/devolo_cpl\/desktop\/js\/panel.js": {
         "Heure": "Hora",
